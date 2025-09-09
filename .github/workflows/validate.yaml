@@ -1,0 +1,26 @@
+---
+name: Basic CI flow to validate commits
+on:
+    push:
+    pull_request:
+jobs:
+    lint:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Pull the repository
+              uses: actions/checkout@v5
+
+            - name: Spell check everything
+              uses: crate-ci/typos@v1.36.2
+
+            - name: Install Node.js
+              uses: actions/setup-node@v5
+              with:
+                  node-version: 24.x
+                  cache: npm
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Run linter and formatter checks
+              run: npx biome check

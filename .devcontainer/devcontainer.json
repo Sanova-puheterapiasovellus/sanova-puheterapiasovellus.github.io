@@ -1,0 +1,22 @@
+{
+    "name": "Development Environment",
+    "image": "mcr.microsoft.com/devcontainers/javascript-node:4-22-trixie",
+    "postCreateCommand": "npm ci",
+    "features": {
+        "ghcr.io/michidk/devcontainers-features/typos:1": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "-dbaeumer.vscode-eslint",
+                "biomejs.biome",
+                "davidanson.vscode-markdownlint",
+                "editorconfig.editorconfig",
+                "ms-vscode.live-server",
+                "ms-vsliveshare.vsliveshare",
+                "redhat.vscode-yaml",
+                "tekumara.typos-vscode"
+            ]
+        }
+    }
+}

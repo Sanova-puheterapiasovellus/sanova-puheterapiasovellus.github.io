@@ -1,0 +1,4 @@
+{
+    // Suggest Dev Containers extension if not installed.
+    "recommendations": ["ms-vscode-remote.remote-containers"]
+}
