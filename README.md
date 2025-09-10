@@ -20,5 +20,10 @@ available on your host system.
 
 GitHub actions is configured to publish the main branch to [here using GitHub Pages][public].
 
+## License Terms
+
+The project source code is licensed under the MIT license, however the utilized assets (picture and
+audio) originate from Papunet's picture and sound banks, being under the CC BY-NC-SA 3.0 license.
+
 [tutorial]: https://code.visualstudio.com/docs/devcontainers/tutorial/
 [public]: https://ottomakitalo.github.io/Sanova/
