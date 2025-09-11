@@ -2,9 +2,11 @@
     "private": true,
     "type": "module",
     "devDependencies": {
-        "@biomejs/biome": "^2.2.3"
+        "@biomejs/biome": "^2.2.4",
+        "rolldown-vite": "^7.1.9"
     },
     "optionalDependencies": {
-        "@biomejs/biome": "^2.2.3"
+        "@biomejs/biome": "^2.2.4",
+        "rolldown-vite": "^7.1.9"
     }
 }

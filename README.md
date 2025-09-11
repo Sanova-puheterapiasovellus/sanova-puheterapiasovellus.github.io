@@ -5,9 +5,8 @@ COMP.SE.610/620 project course.
 
 ## Project Structure
 
-The application is implemented as a minimal static website using vanilla JavaScript with JSDoc
-annotations for type checking to avoid the build step with more typical TypeScript tooling, which
-doesn't seem appropriate for such a small project, but this could change along the way.
+The application is implemented as a minimal single page application using TypeScript and with Vite
+as the bundler.
 
 ## Development Environment
 

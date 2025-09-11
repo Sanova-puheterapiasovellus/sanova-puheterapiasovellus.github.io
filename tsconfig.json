@@ -2,13 +2,13 @@
     "compilerOptions": {
         "target": "esnext",
         "lib": ["ESNext", "DOM"],
-        "module": "nodenext",
+        "module": "esnext",
 
-        "allowJs": true,
-        "checkJs": true,
         "isolatedModules": true,
         "moduleDetection": "force",
+        "moduleResolution": "bundler",
         "noEmit": true,
+        "verbatimModuleSyntax": true,
 
         "strict": true,
         "strictBindCallApply": true,
@@ -17,8 +17,10 @@
         "strictNullChecks": true,
         "strictPropertyInitialization": true,
 
+        "allowImportingTsExtensions": true,
         "allowUnreachableCode": false,
         "allowUnusedLabels": false,
+        "erasableSyntaxOnly": true,
         "exactOptionalPropertyTypes": true,
         "noFallthroughCasesInSwitch": true,
         "noImplicitAny": true,
@@ -32,5 +34,5 @@
         "useDefineForClassFields": true,
         "useUnknownInCatchVariables": true
     },
-    "include": ["src/**/*.js"]
+    "include": ["src/**/*.ts"]
 }

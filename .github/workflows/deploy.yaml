@@ -29,10 +29,22 @@ jobs:
             - name: Configure GitHub Pages
               uses: actions/configure-pages@v5
 
+            - name: Install Node.js
+              uses: actions/setup-node@v5
+              with:
+                  node-version: 24.x
+                  cache: npm
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Run the build process
+              run: npx vite build
+
             - name: Upload contents to GitHub Pages
               uses: actions/upload-pages-artifact@v4
               with:
-                  path: src
+                  path: dist
 
             - name: Deploy to GitHub Pages
               id: deployment
