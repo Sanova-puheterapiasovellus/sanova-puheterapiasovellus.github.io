@@ -7,5 +7,39 @@
     <script type="module" src="src"></script>
 </head>
 <body>
+    <header>
+        <h1>Sanova</h1>
+    </header>
+
+    <footer>
+        <h2>Työkalut</h2>
+
+        <syllable-player />
+    </footer>
+
+    <template id="syllable-player">
+        <details open>
+            <summary>Tavutoistin</summary>
+
+            <p>
+                Tavutoistin mahdollistaa koneellisen tavuäänien kuuntelemisen, käyttäen
+                <a href="https://papunet.net/materiaalit/aanipankki/">
+                    Papunet Äänipankin Äännetiedostoja
+                </a>
+                muokattuina ilman hiljaisia kohtia äänteiden alussa ja lopussa ominaisuuden
+                toteuttamisen mahdollistamiseksi.
+            </p>
+
+
+            <form>
+                <label>
+                    Tavut toistettavaksi
+                    <input type="text" required>
+                </label>
+                <output></output>
+                <button type="button" disabled>Toista tavut</button>
+            </form>
+        </details>
+    </template>
 </body>
 </html>
