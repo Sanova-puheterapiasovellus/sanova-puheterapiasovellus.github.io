@@ -1,5 +1,22 @@
 /** All previously loaded audio snippets as there's a reasonable finite amount of them. */
-const snippetCache = new Map<string, AudioBuffer>();
+const snippetCache = new Map<string, Promise<AudioBuffer>>();
+
+/** The internal logic of doing an asynchronous cached load. */
+async function loadCachedValue<T>(
+    storage: Map<string, Promise<T>>,
+    key: string,
+    source: () => Promise<T>,
+): Promise<T> {
+    const existing = storage.get(key);
+    if (existing !== undefined) {
+        return existing;
+    }
+
+    const promise = source();
+    storage.set(key, promise);
+
+    return promise;
+}
 
 /**
  * Determine the common sample rate, channel count and total length of audio snippets,
@@ -57,29 +74,22 @@ function combineAudioBuffers(
     return output;
 }
 
-/** Load a sound clip with caching. */
-async function loadSoundClip(
+/** Load a sound clip. */
+function loadSoundClip(
     signal: AbortSignal,
     context: AudioContext,
     name: string,
 ): Promise<AudioBuffer> {
-    const existing = snippetCache.get(name);
-    if (existing !== undefined) {
-        return existing;
-    }
+    return loadCachedValue(snippetCache, name, async () => {
+        const response = await fetch(`assets/${name}.opus`, { signal });
+        if (!response.ok) {
+            throw new Error(`failed to fetch sound clip for ${name}`, {
+                cause: response,
+            });
+        }
 
-    const response = await fetch(`assets/${name}.opus`, { signal });
-    if (!response.ok) {
-        throw new Error(`failed to fetch sound clip for ${name}`, {
-            cause: response,
-        });
-    }
-
-    const data = await response.arrayBuffer();
-    const audio = await context.decodeAudioData(data);
-
-    snippetCache.set(name, audio);
-    return audio;
+        return context.decodeAudioData(await response.arrayBuffer());
+    });
 }
 
 /** Build up a cached syllable sound out of individual character sounds. */
@@ -88,20 +98,14 @@ async function formSyllableSound(
     context: AudioContext,
     value: string,
 ): Promise<AudioBuffer> {
-    const existing = snippetCache.get(value);
-    if (existing !== undefined) {
-        return existing;
-    }
-
-    const output = combineAudioBuffers(
-        context,
-        await Promise.all(
-            value.split("").map((character) => loadSoundClip(cancellation, context, character)),
+    return loadCachedValue(snippetCache, value, async () =>
+        combineAudioBuffers(
+            context,
+            await Promise.all(
+                value.split("").map((character) => loadSoundClip(cancellation, context, character)),
+            ),
         ),
     );
-
-    snippetCache.set(value, output);
-    return output;
 }
 
 /** Spell out the given syllables with a separation in seconds. */
