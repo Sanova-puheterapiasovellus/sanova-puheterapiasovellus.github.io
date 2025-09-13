@@ -4,5 +4,10 @@
         "indentStyle": "space",
         "indentWidth": 4,
         "lineWidth": 100
+    },
+    "html": {
+        "formatter": {
+            "enabled": true
+        }
     }
 }
