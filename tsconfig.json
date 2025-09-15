@@ -1,23 +1,19 @@
 {
     "compilerOptions": {
+        // Specify that we're doing the latest and greatest.
         "target": "esnext",
         "lib": ["ESNext", "DOM"],
         "module": "esnext",
 
+        // Appropriate options for using an bundler.
+        "allowImportingTsExtensions": true,
         "isolatedModules": true,
         "moduleDetection": "force",
         "moduleResolution": "bundler",
         "noEmit": true,
         "verbatimModuleSyntax": true,
 
-        "strict": true,
-        "strictBindCallApply": true,
-        "strictBuiltinIteratorReturn": true,
-        "strictFunctionTypes": true,
-        "strictNullChecks": true,
-        "strictPropertyInitialization": true,
-
-        "allowImportingTsExtensions": true,
+        // Make everything be as strict as possible.
         "allowUnreachableCode": false,
         "allowUnusedLabels": false,
         "erasableSyntaxOnly": true,
@@ -31,7 +27,12 @@
         "noUncheckedSideEffectImports": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "useDefineForClassFields": true,
+        "strict": true,
+        "strictBindCallApply": true,
+        "strictBuiltinIteratorReturn": true,
+        "strictFunctionTypes": true,
+        "strictNullChecks": true,
+        "strictPropertyInitialization": true,
         "useUnknownInCatchVariables": true
     },
     "include": ["src/**/*.ts"]

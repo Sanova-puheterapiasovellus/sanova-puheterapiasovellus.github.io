@@ -23,4 +23,4 @@ jobs:
               run: npm ci
 
             - name: Run linter and formatter checks
-              run: npx biome check
+              run: npx biome ci
