@@ -1,7 +1,7 @@
 {
     "name": "Development Environment",
     "image": "mcr.microsoft.com/devcontainers/javascript-node:4-22-trixie",
-    "postCreateCommand": "npm ci",
+    "postCreateCommand": "npm ci && npx playwright install --with-deps firefox",
     "waitFor": "postCreateCommand",
     "features": {
         "ghcr.io/michidk/devcontainers-features/typos:1": {}
@@ -14,6 +14,7 @@
                 "biomejs.biome",
                 "davidanson.vscode-markdownlint",
                 "editorconfig.editorconfig",
+                "ms-playwright.playwright",
                 "ms-vsliveshare.vsliveshare",
                 "redhat.vscode-yaml",
                 "tekumara.typos-vscode"

@@ -1,0 +1,37 @@
+name: Playwright Tests
+on:
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    test:
+        timeout-minutes: 60
+        runs-on: ubuntu-latest
+        env:
+            CI: true
+
+        steps:
+            - name: Pull the repository
+              uses: actions/checkout@v5
+
+            - name: Configure GitHub Pages
+              uses: actions/configure-pages@v5
+
+            - name: Install Node.js
+              uses: actions/setup-node@v5
+              with:
+                  node-version: 24.x
+                  cache: npm
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Run the build process
+              run: npx vite build
+
+            - name: Install Playwright Browsers
+              run: npx playwright install --with-deps firefox
+
+            - name: Run Playwright tests
+              run: npx playwright test
