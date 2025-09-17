@@ -35,8 +35,8 @@ export class SyllablePlayer extends BaseComponent {
     /** Utilize a debounced automatic submit for input changes. */
     #handleInputChange(_: Event): void {
         // Submit the form after some inactivity, resetting the timeout on input.
-        clearTimeout(this.#autoSubmitDebounce);
-        this.#autoSubmitDebounce = setTimeout(
+        window.clearTimeout(this.#autoSubmitDebounce);
+        this.#autoSubmitDebounce = window.setTimeout(
             () => this.#rootForm.requestSubmit(),
             SyllablePlayer.#inputDebounceMilliseconds,
         );
