@@ -14,31 +14,29 @@
         <footer>
             <h2>Työkalut</h2>
 
-            <syllable-player/>
+            <button id="syllable-player-open" type="button">Tavutoistin</button>
         </footer>
 
-        <template id="syllable-player">
-            <details open>
-                <summary>Tavutoistin</summary>
+        <dialog id="syllable-player-dialog" closedby="any">
+            <h3>Tavutoistin</h3>
 
-                <p>
-                    Tavutoistin mahdollistaa koneellisen tavuäänien kuuntelemisen, käyttäen
-                    <a href="https://papunet.net/materiaalit/aanipankki/">
-                        Papunet Äänipankin Äännetiedostoja
-                    </a>
-                    muokattuina ilman hiljaisia kohtia äänteiden alussa ja lopussa ominaisuuden
-                    toteuttamisen mahdollistamiseksi.
-                </p>
+            <p>
+                Tavutoistin mahdollistaa koneellisen tavuäänien kuuntelemisen, käyttäen
+                <a href="https://papunet.net/materiaalit/aanipankki/">
+                    Papunet Äänipankin Äännetiedostoja
+                </a>
+                muokattuina ilman hiljaisia kohtia äänteiden alussa ja lopussa ominaisuuden
+                toteuttamisen mahdollistamiseksi.
+            </p>
 
-                <form>
-                    <label>
-                        Tavut toistettavaksi
-                        <input type="text" required>
-                    </label>
-                    <output></output>
-                    <button type="button" disabled>Toista tavut</button>
-                </form>
-            </details>
-        </template>
+            <form id="syllable-player-form">
+                <label for="syllable-player-input">Tavut toistettavaksi</label>
+                <input id="syllable-player-input" type="text" required>
+                <output id="syllable-player-output" for="syllable-player-input"></output>
+                <button id="syllable-player-play" type="button" disabled>Toista tavut</button>
+            </form>
+
+            <button id="syllable-player-close" type="button">Sulje</button>
+        </dialog>
     </body>
 </html>
