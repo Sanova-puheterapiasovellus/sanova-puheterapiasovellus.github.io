@@ -1,5 +1,5 @@
-import { expectElement } from "../utilities/dom.ts";
-import { playSyllableSounds } from "../utilities/playback.ts";
+import { expectElement } from "../common/dom.ts";
+import { playSyllableSounds } from "../common/playback.ts";
 
 const inputDebounceMilliseconds = 100;
 const syllableSeparationSeconds = 1;

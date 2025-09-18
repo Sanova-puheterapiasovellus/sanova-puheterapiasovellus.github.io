@@ -17,3 +17,15 @@ export function expectElement<T extends HTMLElement>(
 
     return element;
 }
+
+/** Build HTML content in a somewhat JSX-y way. */
+export function buildHtml<T extends keyof HTMLElementTagNameMap>(
+    name: T,
+    properties: Partial<HTMLElementTagNameMap[T]> = {},
+    ...children: (string | HTMLElement)[]
+): HTMLElementTagNameMap[T] {
+    const element = document.createElement(name);
+    Object.assign(element, properties);
+    element.append(...children);
+    return element;
+}
