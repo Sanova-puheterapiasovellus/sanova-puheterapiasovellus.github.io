@@ -1,0 +1,35 @@
+{
+    // Build on top of typical Node.js environment.
+    "name": "Development Environment",
+    "image": "mcr.microsoft.com/devcontainers/javascript-node:4-22-trixie",
+    // Ensure the dependencies are set up before continuing to open editor.
+    "postCreateCommand": "npm ci && npx playwright install --with-deps firefox",
+    "waitFor": "postCreateCommand",
+    // Start the development server on open, letting it run in the background.
+    "postStartCommand": "nohup bash -c 'npx vite dev &' > /dev/null",
+    "features": {
+        // Install the actual spell checker binary used by extension below.
+        "ghcr.io/michidk/devcontainers-features/typos:1": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                // Use Biome instead of ESLint.
+                "-dbaeumer.vscode-eslint",
+                "biomejs.biome",
+                // Might as well complain about Markdown style even if unenforced in CI.
+                "davidanson.vscode-markdownlint",
+                // Make VSCode respect the EditorConfig file.
+                "editorconfig.editorconfig",
+                // Integrate Playwright into the VSCode test runner.
+                "ms-playwright.playwright",
+                // Collaborative editing for potential pair/group programming.
+                "ms-vsliveshare.vsliveshare",
+                // Formatting and LSP help for the GitHub Actions configuration.
+                "redhat.vscode-yaml",
+                // Spell checker based on common mistypings.
+                "tekumara.typos-vscode"
+            ]
+        }
+    }
+}

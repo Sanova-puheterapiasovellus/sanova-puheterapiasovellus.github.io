@@ -1,0 +1,14 @@
+{
+    "private": true,
+    "type": "module",
+    "devDependencies": {
+        "@biomejs/biome": "^2.2.4",
+        "@playwright/test": "^1.55.0",
+        "@types/node": "^24.5.0",
+        "rolldown-vite": "^7.1.9"
+    },
+    "optionalDependencies": {
+        "@biomejs/biome": "^2.2.4",
+        "rolldown-vite": "^7.1.9"
+    }
+}

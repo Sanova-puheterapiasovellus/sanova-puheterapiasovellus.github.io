@@ -1,1 +1,30 @@
 # Sanova
+
+Training application for Finnish individuals with Aphasia as a part of Tampere University's
+COMP.SE.610/620 project course.
+
+## Project Structure
+
+The application is implemented as a minimal single page application using TypeScript and with Vite
+as the bundler.
+
+## Development Environment
+
+The repository has a containerized development environment that is supported at least by VS Code,
+see the official documentation for a [tutorial about the prerequisites][tutorial]. The simple
+version is that you need the Dev Containers extension and Docker or a compatible tool (like Podman)
+available on your host system.
+
+After starting up the environment the application should be accessible on <http://localhost:5173/>.
+
+## Site Deployment
+
+GitHub actions is configured to publish the main branch to [here using GitHub Pages][public].
+
+## License Terms
+
+The project source code is licensed under the MIT license, however the utilized assets (picture and
+audio) originate from Papunet's picture and sound banks, being under the CC BY-NC-SA 3.0 license.
+
+[tutorial]: https://code.visualstudio.com/docs/devcontainers/tutorial/
+[public]: https://ottomakitalo.github.io/Sanova/

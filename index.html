@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sanova</title>
+        <script type="module" src="src"></script>
+    </head>
+    <body>
+        <header>
+            <h1>Sanova</h1>
+        </header>
+
+        <main>
+            <h2>Kategoriat</h2>
+
+            <ul id="category-selector-list"></ul>
+        </main>
+
+        <footer>
+            <h2>Työkalut</h2>
+
+            <button id="syllable-player-open" type="button">Tavutoistin</button>
+        </footer>
+
+        <dialog id="word-guess-dialog" closedby="any">
+            <h3>Sanaharjoittelu</h3>
+
+            <p id="word-guess-debug"></p>
+
+            <button id="word-guess-close" type="button">Sulje</button>
+        </dialog>
+
+        <dialog id="syllable-player-dialog" closedby="any">
+            <h3>Tavutoistin</h3>
+
+            <p>
+                Tavutoistin mahdollistaa koneellisen tavuäänien kuuntelemisen, käyttäen
+                <a href="https://papunet.net/materiaalit/aanipankki/">
+                    Papunet Äänipankin Äännetiedostoja
+                </a>
+                muokattuina ilman hiljaisia kohtia äänteiden alussa ja lopussa ominaisuuden
+                toteuttamisen mahdollistamiseksi.
+            </p>
+
+            <form id="syllable-player-form">
+                <label for="syllable-player-input">Tavut toistettavaksi</label>
+                <input id="syllable-player-input" type="text" required>
+                <output id="syllable-player-output" for="syllable-player-input"></output>
+                <button id="syllable-player-play" type="button" disabled>Toista tavut</button>
+            </form>
+
+            <button id="syllable-player-close" type="button">Sulje</button>
+        </dialog>
+    </body>
+</html>
