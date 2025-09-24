@@ -15,6 +15,8 @@ see the official documentation for a [tutorial about the prerequisites][tutorial
 version is that you need the Dev Containers extension and Docker or a compatible tool (like Podman)
 available on your host system.
 
+After starting up the environment the application should be accessible on <http://localhost:5173/>.
+
 ## Site Deployment
 
 GitHub actions is configured to publish the main branch to [here using GitHub Pages][public].

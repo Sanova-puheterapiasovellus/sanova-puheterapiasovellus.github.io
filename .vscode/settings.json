@@ -31,7 +31,5 @@
     },
     "[html]": {
         "editor.defaultFormatter": "biomejs.biome"
-    },
-    // Configure Vite devserver port to match CLI default.
-    "vite.port": 5173
+    }
 }
