@@ -15,9 +15,6 @@ jobs:
             - name: Pull the repository
               uses: actions/checkout@v5
 
-            - name: Configure GitHub Pages
-              uses: actions/configure-pages@v5
-
             - name: Install Node.js
               uses: actions/setup-node@v5
               with:
