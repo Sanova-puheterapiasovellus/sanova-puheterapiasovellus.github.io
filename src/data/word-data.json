@@ -1,0 +1,193 @@
+{
+    "categories": [
+        {
+            "name": "ruoat ja juomat",
+            "image": "",
+            "words": [
+                {
+                    "name": "banaani",
+                    "image": "",
+                    "subcategory": "hedelmä"
+                },
+                {
+                    "name": "kahvi",
+                    "image": "",
+                    "subcategory": "juoma"
+                },
+                {
+                    "name": "tee",
+                    "image": "",
+                    "subcategory": "juoma"
+                }
+            ]
+        },
+        {
+            "name": "vaatteet",
+            "image": "",
+            "words": [
+                {
+                    "name": "housut",
+                    "image": "",
+                    "subcategory": ""
+                },
+                {
+                    "name": "t-paita",
+                    "image": "",
+                    "subcategory": ""
+                },
+                {
+                    "name": "takki",
+                    "image": "",
+                    "subcategory": ""
+                }
+            ]
+        },
+        {
+            "name": "säätilat",
+            "image": "",
+            "words": [
+                {
+                    "name": "sade",
+                    "image": "",
+                    "subcategory": ""
+                },
+                {
+                    "name": "aurinko",
+                    "image": "",
+                    "subcategory": ""
+                },
+                {
+                    "name": "ukkonen",
+                    "image": "",
+                    "subcategory": ""
+                }
+            ]
+        },
+        {
+            "name": "eläimet",
+            "image": "",
+            "words": [
+                {
+                    "name": "koira",
+                    "image": "",
+                    "subcategory": ""
+                },
+                {
+                    "name": "kissa",
+                    "image": "",
+                    "subcategory": ""
+                },
+                {
+                    "name": "lehmä",
+                    "image": "",
+                    "subcategory": ""
+                }
+            ]
+        },
+        {
+            "name": "ammatit",
+            "image": "",
+            "words": [
+                {
+                    "name": "poliisi",
+                    "image": "",
+                    "subcategory": ""
+                },
+                {
+                    "name": "opettaja",
+                    "image": "",
+                    "subcategory": ""
+                },
+                {
+                    "name": "kokki",
+                    "image": "",
+                    "subcategory": ""
+                }
+            ]
+        },
+        {
+            "name": "kulkuneuvot",
+            "image": "",
+            "words": [
+                {
+                    "name": "auto",
+                    "image": "",
+                    "subcategory": ""
+                },
+                {
+                    "name": "juna",
+                    "image": "",
+                    "subcategory": ""
+                },
+                {
+                    "name": "laiva",
+                    "image": "",
+                    "subcategory": ""
+                }
+            ]
+        },
+        {
+            "name": "tekeminen",
+            "image": "",
+            "words": [
+                {
+                    "name": "nukkua",
+                    "image": "",
+                    "subcategory": ""
+                },
+                {
+                    "name": "kävellä",
+                    "image": "",
+                    "subcategory": ""
+                },
+                {
+                    "name": "juosta",
+                    "image": "",
+                    "subcategory": ""
+                }
+            ]
+        },
+        {
+            "name": "harrastukset",
+            "image": "",
+            "words": [
+                {
+                    "name": "jalkapallo",
+                    "image": "",
+                    "subcategory": ""
+                },
+                {
+                    "name": "maalaaminen",
+                    "image": "",
+                    "subcategory": ""
+                },
+                {
+                    "name": "tanssiminen",
+                    "image": "",
+                    "subcategory": ""
+                }
+            ]
+        },
+        {
+            "name": "arkipäiväiset esineet",
+            "image": "",
+            "words": [
+                {
+                    "name": "kaukosäädin",
+                    "image": "",
+                    "subcategory": ""
+                },
+                {
+                    "name": "hammasharja",
+                    "image": "",
+                    "subcategory": ""
+                },
+                {
+                    "name": "juomapullo",
+                    "image": "",
+                    "subcategory": ""
+                }
+            ]
+        }
+    ]
+}
