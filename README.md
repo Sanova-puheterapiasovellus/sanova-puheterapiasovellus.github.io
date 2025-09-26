@@ -27,4 +27,4 @@ The project source code is licensed under the MIT license, however the utilized 
 audio) originate from Papunet's picture and sound banks, being under the CC BY-NC-SA 3.0 license.
 
 [tutorial]: https://code.visualstudio.com/docs/devcontainers/tutorial/
-[public]: https://ottomakitalo.github.io/Sanova/
+[public]: https://sanova-puheterapiasovellus.github.io/
