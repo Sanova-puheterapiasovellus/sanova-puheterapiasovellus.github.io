@@ -1,3 +1,4 @@
+import { defineConfig } from "@playwright/test";
 import type { UserConfig } from "rolldown-vite";
 
 export default {
@@ -17,5 +18,9 @@ export default {
         },
         // Might as well expose the source for browser devtools clarity even in production.
         sourcemap: true,
+    },
+    server: {
+        host: "0.0.0.0",
+        port: 5173,
     },
 } satisfies UserConfig;
