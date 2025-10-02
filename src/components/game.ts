@@ -7,8 +7,6 @@ const guessDialog = expectElement("word-guess-dialog", HTMLDialogElement);
 const closeButton = expectElement("word-guess-close", HTMLButtonElement);
 const answerButton = expectElement("word-guess-submit", HTMLButtonElement);
 const letterHintButton = expectElement("word-guess-letter-hint", HTMLButtonElement);
-// const inputField = expectElement("word-guess-input", HTMLInputElement);
-// const debugText = expectElement("word-guess-debug", HTMLParagraphElement);
 const wordImage = expectElement("word-guess-image", HTMLImageElement);
 const letterSlots = expectElement("word-guess-slots", HTMLDivElement);
 
@@ -68,8 +66,16 @@ function handleUseVocalHint(): void {
 }
 
 function handleUseLetterHint(): void {
-    console.log("Handling letter hint!");
-    getGameSession().useLetterHint();
+    if (!gameSession) return;
+    const wordGuess = gameSession.getCurrentWordGuess();
+    const done = wordGuess.useLetterHint();
+
+    wordGuess.render(letterSlots);
+
+    if (done) {
+        // word completed with hints, move to next word
+        handleAnswer(wordGuess);
+    }
 }
 
 /** Check if the user's answer is correct */
