@@ -1,3 +1,5 @@
+import { WordGuess } from "./WordGuess";
+
 /** Keep track of the game progress for one category */
 export class GameSession {
     private category: string; // Will be used to fetch a word from the correct category
@@ -6,15 +8,22 @@ export class GameSession {
     private letterHintsCounter: number = 0; // Will be used to determine how many letters to show
     private guessedWords = new Set<string>();
     private placeHolderWords: string[] = ["makkara", "peruna", "kurkkusalaatti"];
+    private currentWordGuess: WordGuess | null = null;
 
     constructor(category: string) {
         this.category = category;
         // Fetch all the words from this category, for now, use the placeholder words
         this.currentWord = this.placeHolderWords[0]!;
+        this.currentWordGuess = new WordGuess(this.currentWord);
     }
 
     getCurrentWord(): string {
         return this.currentWord;
+    }
+
+    getCurrentWordGuess(): WordGuess {
+        if (!this.currentWordGuess) throw new Error("No current word guess!");
+        return this.currentWordGuess;
     }
 
     getVocalHintsUsed(): number {
@@ -33,7 +42,7 @@ export class GameSession {
         this.letterHintsCounter++;
     }
 
-    markGuessed(): void {
+    private markGuessed(): void {
         this.guessedWords.add(this.currentWord);
     }
 
@@ -42,9 +51,10 @@ export class GameSession {
         const nextWord = this.placeHolderWords.find((word) => !this.guessedWords.has(word));
         if (nextWord) {
             this.currentWord = nextWord;
+            this.currentWordGuess = new WordGuess(nextWord);
         } else {
-            // No more words, handle logic
             this.currentWord = "NoMoreWords";
+            this.currentWordGuess = null;
         }
         this.vocalHintsCounter = 0;
         this.letterHintsCounter = 0;
