@@ -1,0 +1,18 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-dark: hsl(220, 85%, 55%);
+    --bg: hsl(0, 0, 95%);
+    --bg-light: hsl(0, 0, 100%);
+    --text: hsl(222, 77%, 5%);
+    --text-muted: hsl(0, 0, 30%);
+    --border: hsl(0, 0, 70%);
+}
+
+body {
+    min-height: 100vh;
+}
