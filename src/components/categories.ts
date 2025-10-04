@@ -10,8 +10,8 @@ function createCategoryEntry(name: string, imagePath: string): HTMLElement {
         alt: name,
     });
     Object.assign(img.style, {
-        width: "50px",
-        height: "50px",
+        width: "auto",
+        height: "auto",
         marginRight: "8px",
     });
     const button = buildHtml("button", { type: "button", innerText: name });
@@ -22,7 +22,7 @@ function createCategoryEntry(name: string, imagePath: string): HTMLElement {
 
 /** Build up the category selection list. */
 export function initializeCategorySelector() {
-    categoryList.appendChild(createCategoryEntry("Lemmikkieläimet", "/public/assets/kissa.png"));
-    categoryList.appendChild(createCategoryEntry("Ruoka", "/public/assets/ruokatarvikkeet.png"));
-    categoryList.appendChild(createCategoryEntry("Esineet", "/public/assets/esineet.png"));
+    categoryList.appendChild(createCategoryEntry("", "/public/assets/images/kissa.png"));
+    categoryList.appendChild(createCategoryEntry("", "/public/assets/images/ruokatarvikkeet.png"));
+    categoryList.appendChild(createCategoryEntry("", "/public/assets/images/esineet.png"));
 }
