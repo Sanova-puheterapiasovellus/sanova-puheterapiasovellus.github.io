@@ -5,7 +5,7 @@ import {
 } from "../data/syllable-split-phonology.ts";
 
 /**
- * Splits a Finnish word to syllables.
+ * Splits a Finnish word into syllables.
  *
  * @param word The Finnish word to be split
  * @returns Split word string with hyphens at syllable boundaries
@@ -18,7 +18,7 @@ export function splitToSyllables(word: string): string {
         const nextChar = word.charAt(i + 1);
         const secondNextChar = word.charAt(i + 2);
 
-        currentSyllable = currentSyllable + currentChar;
+        currentSyllable += currentChar;
 
         // Consonant rule
         // Split if one or more consonants follow vowels of current syllable.
