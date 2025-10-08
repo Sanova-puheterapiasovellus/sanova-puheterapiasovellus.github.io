@@ -65,6 +65,7 @@ function handleUseVocalHint(): void {
     getGameSession().useVocalHint();
 }
 
+/** Handle the letter hint logic when the letter hint is requested */
 function handleUseLetterHint(): void {
     if (!gameSession) return;
     const wordGuess = gameSession.getCurrentWordGuess();
@@ -86,6 +87,7 @@ function isCorrectAnswer(correctAnswer: string, answer: string): boolean {
     return false;
 }
 
+/** Handle the user's guess when the answer btn is pressed */
 function handleAnswer(wordGuess: WordGuess): void {
     const answer = wordGuess.getGuess().toLowerCase();
     const correctAnswer: string = wordImage.alt;

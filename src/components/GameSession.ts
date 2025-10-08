@@ -9,6 +9,7 @@ export class GameSession {
     private placeHolderWords: string[] = ["makkara", "peruna", "kurkkusalaatti"];
     private currentWordGuess: WordGuess | null = null;
 
+    /** Set a word to be guessed and create a new word guess object based on that */
     constructor(category: string) {
         this.category = category;
         // Fetch all the words from this category, for now, use the placeholder words
@@ -16,10 +17,12 @@ export class GameSession {
         this.currentWordGuess = new WordGuess(this.currentWord);
     }
 
+    /** Get the word that is being guessed at the moment */
     getCurrentWord(): string {
         return this.currentWord;
     }
 
+    /** Get the WordGuess object for the current word */
     getCurrentWordGuess(): WordGuess {
         if (!this.currentWordGuess) throw new Error("No current word guess!");
         return this.currentWordGuess;
@@ -33,10 +36,12 @@ export class GameSession {
         this.vocalHintsCounter++;
     }
 
+    /** Mark the current word as guessed so it won't be shown again */
     private markGuessed(): void {
         this.guessedWords.add(this.currentWord);
     }
 
+    /** Get the next word to be guessed and create a new WordGuess object */
     getNextWord(): string {
         this.markGuessed();
         const nextWord = this.placeHolderWords.find((word) => !this.guessedWords.has(word));
