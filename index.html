@@ -15,6 +15,8 @@
 
         <main class="mainview-main">
             <ul id="category-selector-list"></ul>
+
+            <ul id="notification-list"></ul>
         </main>
 
         <footer>
@@ -60,5 +62,17 @@
 
             <button id="syllable-player-close" type="button">Sulje</button>
         </dialog>
+
+        <template id="notification-item">
+            <li>
+                <details>
+                    <summary>
+                        <slot name="header"></slot>
+                    </summary>
+
+                    <slot name="content"></slot>
+                </details>
+            </li>
+        </template>
     </body>
 </html>
