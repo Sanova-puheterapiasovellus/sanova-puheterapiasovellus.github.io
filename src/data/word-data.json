@@ -6,82 +6,82 @@
             "words": [
                 {
                     "name": "banaani",
-                    "image": "",
+                    "image": "banaani.png",
                     "subcategory": "hedelmä"
                 },
                 {
                     "name": "kahvi",
-                    "image": "",
+                    "image": "kahvi.png",
                     "subcategory": "juoma"
                 },
                 {
                     "name": "tee",
-                    "image": "",
+                    "image": "tee.png",
                     "subcategory": "juoma"
                 },
                 {
                     "name": "leipä",
-                    "image": "",
+                    "image": "leipa.png",
                     "subcategory": ""
                 },
                 {
                     "name": "puuro",
-                    "image": "",
+                    "image": "puuro.png",
                     "subcategory": ""
                 },
                 {
                     "name": "salaatti",
-                    "image": "",
+                    "image": "salaatti.png",
                     "subcategory": ""
                 },
                 {
                     "name": "spagetti",
-                    "image": "",
+                    "image": "spagetti.png",
                     "subcategory": ""
                 },
                 {
                     "name": "peruna",
-                    "image": "",
+                    "image": "peruna.png",
                     "subcategory": ""
                 },
                 {
                     "name": "makkara",
-                    "image": "",
+                    "image": "makkara.png",
                     "subcategory": ""
                 },
                 {
                     "name": "omena",
-                    "image": "",
+                    "image": "omena.png",
                     "subcategory": ""
                 },
                 {
                     "name": "tomaatti",
-                    "image": "",
+                    "image": "tomaatti.png",
                     "subcategory": ""
                 },
                 {
                     "name": "kurkku",
-                    "image": "",
+                    "image": "kurkku.png",
                     "subcategory": ""
                 },
                 {
                     "name": "juusto",
-                    "image": "",
+                    "image": "juusto.png",
                     "subcategory": ""
                 },
                 {
                     "name": "keitto",
-                    "image": "",
+                    "image": "keitto.png",
                     "subcategory": ""
                 },
                 {
                     "name": "suklaa",
-                    "image": "",
+                    "image": "suklaa.png",
                     "subcategory": ""
                 },
                 {
                     "name": "jäätelö",
-                    "image": "",
+                    "image": "jaatelo.png",
                     "subcategory": ""
                 }
             ]
@@ -92,82 +92,72 @@
             "words": [
                 {
                     "name": "housut",
-                    "image": "",
+                    "image": "housut.png",
                     "subcategory": ""
                 },
                 {
                     "name": "t-paita",
-                    "image": "",
+                    "image": "t-paita.png",
                     "subcategory": ""
                 },
                 {
                     "name": "takki",
-                    "image": "",
+                    "image": "takki.png",
                     "subcategory": ""
                 },
                 {
                     "name": "hame",
-                    "image": "",
+                    "image": "hame.png",
                     "subcategory": ""
                 },
                 {
                     "name": "mekko",
-                    "image": "",
+                    "image": "mekko.png",
                     "subcategory": ""
                 },
                 {
                     "name": "pipo",
-                    "image": "",
+                    "image": "pipo.png",
                     "subcategory": ""
                 },
                 {
                     "name": "hanskat",
-                    "image": "",
+                    "image": "hanskat.png",
                     "subcategory": ""
                 },
                 {
                     "name": "huivi",
-                    "image": "",
-                    "subcategory": ""
-                },
-                {
-                    "name": "lippis",
-                    "image": "",
+                    "image": "huivi.png",
                     "subcategory": ""
                 },
                 {
                     "name": "saappaat",
-                    "image": "",
-                    "subcategory": ""
-                },
-                {
-                    "name": "lenkkarit",
-                    "image": "",
+                    "image": "saappaat.png",
                     "subcategory": ""
                 },
                 {
                     "name": "sukat",
-                    "image": "",
+                    "image": "sukat.png",
                     "subcategory": ""
                 },
                 {
                     "name": "farkut",
-                    "image": "",
+                    "image": "farkut.png",
                     "subcategory": ""
                 },
                 {
                     "name": "neule",
-                    "image": "",
+                    "image": "neule.png",
                     "subcategory": ""
                 },
                 {
                     "name": "alusvaatteet",
-                    "image": "",
+                    "image": "alusvaatteet.png",
                     "subcategory": ""
                 },
                 {
                     "name": "uimapuku",
-                    "image": "",
+                    "image": "uimapuku.png",
                     "subcategory": ""
                 }
             ]
@@ -178,47 +168,47 @@
             "words": [
                 {
                     "name": "sade",
-                    "image": "",
+                    "image": "sade.png",
                     "subcategory": ""
                 },
                 {
                     "name": "aurinko",
-                    "image": "",
+                    "image": "aurinko.png",
                     "subcategory": ""
                 },
                 {
                     "name": "ukkonen",
-                    "image": "",
+                    "image": "ukkonen.png",
                     "subcategory": ""
                 },
                 {
                     "name": "lumisade",
-                    "image": "",
+                    "image": "lumisade.png",
                     "subcategory": ""
                 },
                 {
                     "name": "pilvinen",
-                    "image": "",
+                    "image": "pilvinen.png",
                     "subcategory": ""
                 },
                 {
                     "name": "tuuli",
-                    "image": "",
+                    "image": "tuuli.png",
                     "subcategory": ""
                 },
                 {
                     "name": "myrsky",
-                    "image": "",
+                    "image": "myrsky.png",
                     "subcategory": ""
                 },
                 {
                     "name": "pakkanen",
-                    "image": "",
+                    "image": "pakkanen.png",
                     "subcategory": ""
                 },
                 {
                     "name": "helle",
-                    "image": "",
+                    "image": "helle.png",
                     "subcategory": ""
                 }
             ]
@@ -229,67 +219,67 @@
             "words": [
                 {
                     "name": "koira",
-                    "image": "",
+                    "image": "koira.png",
                     "subcategory": ""
                 },
                 {
                     "name": "kissa",
-                    "image": "",
+                    "image": "kissa.png",
                     "subcategory": ""
                 },
                 {
                     "name": "lehmä",
-                    "image": "",
+                    "image": "lehma.png",
                     "subcategory": ""
                 },
                 {
                     "name": "possu",
-                    "image": "",
+                    "image": "possu.png",
                     "subcategory": ""
                 },
                 {
                     "name": "hevonen",
-                    "image": "",
+                    "image": "hevonen.png",
                     "subcategory": ""
                 },
                 {
                     "name": "käärme",
-                    "image": "",
+                    "image": "kaarme.png",
                     "subcategory": ""
                 },
                 {
                     "name": "kala",
-                    "image": "",
+                    "image": "kala.png",
                     "subcategory": ""
                 },
                 {
                     "name": "lintu",
-                    "image": "",
+                    "image": "lintu.png",
                     "subcategory": ""
                 },
                 {
                     "name": "lammas",
-                    "image": "",
+                    "image": "lammas.png",
                     "subcategory": ""
                 },
                 {
                     "name": "perhonen",
-                    "image": "",
+                    "image": "perhonen.png",
                     "subcategory": ""
                 },
                 {
                     "name": "ampiainen",
-                    "image": "",
+                    "image": "ampiainen.png",
                     "subcategory": ""
                 },
                 {
                     "name": "sammakko",
-                    "image": "",
+                    "image": "sammakko.png",
                     "subcategory": ""
                 },
                 {
                     "name": "sudenkorento",
-                    "image": "",
+                    "image": "sudenkorento.png",
                     "subcategory": ""
                 }
             ]
@@ -300,57 +290,57 @@
             "words": [
                 {
                     "name": "poliisi",
-                    "image": "",
+                    "image": "poliisi.png",
                     "subcategory": ""
                 },
                 {
                     "name": "opettaja",
-                    "image": "",
+                    "image": "opettaja.png",
                     "subcategory": ""
                 },
                 {
                     "name": "kokki",
-                    "image": "",
+                    "image": "kokki.png",
                     "subcategory": ""
                 },
                 {
                     "name": "leipuri",
-                    "image": "",
+                    "image": "leipuri.png",
                     "subcategory": ""
                 },
                 {
                     "name": "lääkäri",
-                    "image": "",
+                    "image": "laakari.png",
                     "subcategory": ""
                 },
                 {
                     "name": "palomies",
-                    "image": "",
+                    "image": "palomies.png",
                     "subcategory": ""
                 },
                 {
                     "name": "maalari",
-                    "image": "",
+                    "image": "maalari.png",
                     "subcategory": ""
                 },
                 {
                     "name": "putkimies",
-                    "image": "",
+                    "image": "putkimies.png",
                     "subcategory": ""
                 },
                 {
                     "name": "sähköasentaja",
-                    "image": "",
+                    "image": "sahkoasentaja.png",
                     "subcategory": ""
                 },
                 {
                     "name": "myyjä/kauppias",
-                    "image": "",
+                    "image": "myyja-kauppias.png",
                     "subcategory": ""
                 },
                 {
                     "name": "rekkakuski",
-                    "image": "",
+                    "image": "rekkakuski.png",
                     "subcategory": ""
                 }
             ]
@@ -361,67 +351,67 @@
             "words": [
                 {
                     "name": "auto",
-                    "image": "",
+                    "image": "auto.png",
                     "subcategory": ""
                 },
                 {
                     "name": "juna",
-                    "image": "",
+                    "image": "juna.png",
                     "subcategory": ""
                 },
                 {
                     "name": "laiva",
-                    "image": "",
+                    "image": "laiva.png",
                     "subcategory": ""
                 },
                 {
                     "name": "lentokone",
-                    "image": "",
+                    "image": "lentokone.png",
                     "subcategory": ""
                 },
                 {
                     "name": "raitiovaunu",
-                    "image": "",
+                    "image": "raitiovaunu.png",
                     "subcategory": ""
                 },
                 {
                     "name": "metro",
-                    "image": "",
+                    "image": "metro.png",
                     "subcategory": ""
                 },
                 {
                     "name": "bussi",
-                    "image": "",
+                    "image": "bussi.png",
                     "subcategory": ""
                 },
                 {
                     "name": "polkupyörä",
-                    "image": "",
+                    "image": "polkupyora.png",
                     "subcategory": ""
                 },
                 {
                     "name": "moottoripyörä",
-                    "image": "",
+                    "image": "moottoripyora.png",
                     "subcategory": ""
                 },
                 {
                     "name": "potkulauta",
-                    "image": "",
+                    "image": "potkulauta.png",
                     "subcategory": ""
                 },
                 {
                     "name": "pakettiauto",
-                    "image": "",
+                    "image": "pakettiauto.png",
                     "subcategory": ""
                 },
                 {
                     "name": "rekka/kuorma-auto",
-                    "image": "",
+                    "image": "rekka-kuorma-auto.png",
                     "subcategory": ""
                 },
                 {
                     "name": "vene",
-                    "image": "",
+                    "image": "vene.png",
                     "subcategory": ""
                 }
             ]
@@ -432,82 +422,82 @@
             "words": [
                 {
                     "name": "nukkua",
-                    "image": "",
+                    "image": "nukkua.png",
                     "subcategory": ""
                 },
                 {
                     "name": "kävellä",
-                    "image": "",
+                    "image": "kavella.png",
                     "subcategory": ""
                 },
                 {
                     "name": "juosta",
-                    "image": "",
+                    "image": "juosta.png",
                     "subcategory": ""
                 },
                 {
                     "name": "syödä",
-                    "image": "",
+                    "image": "syoda.png",
                     "subcategory": ""
                 },
                 {
                     "name": "juoda",
-                    "image": "",
+                    "image": "juoda.png",
                     "subcategory": ""
                 },
                 {
                     "name": "piirtää",
-                    "image": "",
+                    "image": "piirtaa.png",
                     "subcategory": ""
                 },
                 {
                     "name": "laulaa",
-                    "image": "",
+                    "image": "laulaa.png",
                     "subcategory": ""
                 },
                 {
                     "name": "tanssia",
-                    "image": "",
+                    "image": "tanssia.png",
                     "subcategory": ""
                 },
                 {
                     "name": "soittaa",
-                    "image": "",
+                    "image": "soittaa.png",
                     "subcategory": ""
                 },
                 {
                     "name": "pelata",
-                    "image": "",
+                    "image": "pelata.png",
                     "subcategory": ""
                 },
                 {
                     "name": "katsoa (tv:tä)",
-                    "image": "",
+                    "image": "katsoa.png",
                     "subcategory": ""
                 },
                 {
                     "name": "nauraa",
-                    "image": "",
+                    "image": "nauraa.png",
                     "subcategory": ""
                 },
                 {
                     "name": "puhua",
-                    "image": "",
+                    "image": "puhua.png",
                     "subcategory": ""
                 },
                 {
                     "name": "kuunnella",
-                    "image": "",
+                    "image": "kuunnella.png",
                     "subcategory": ""
                 },
                 {
                     "name": "kirjoittaa",
-                    "image": "",
+                    "image": "kirjoittaa.png",
                     "subcategory": ""
                 },
                 {
                     "name": "lukea",
-                    "image": "",
+                    "image": "lukea.png",
                     "subcategory": ""
                 }
             ]
@@ -518,77 +508,77 @@
             "words": [
                 {
                     "name": "jalkapallo",
-                    "image": "",
+                    "image": "jalkapallo.png",
                     "subcategory": ""
                 },
                 {
                     "name": "maalaaminen",
-                    "image": "",
+                    "image": "maalaaminen.png",
                     "subcategory": ""
                 },
                 {
                     "name": "tanssiminen",
-                    "image": "",
+                    "image": "tanssiminen.png",
                     "subcategory": ""
                 },
                 {
                     "name": "laulaminen",
-                    "image": "",
+                    "image": "laulaminen.png",
                     "subcategory": ""
                 },
                 {
                     "name": "koripallo",
-                    "image": "",
+                    "image": "koripallo.png",
                     "subcategory": ""
                 },
                 {
                     "name": "pesäpallo",
-                    "image": "",
+                    "image": "pesapallo.png",
                     "subcategory": ""
                 },
                 {
                     "name": "salibandy",
-                    "image": "",
+                    "image": "salibandy.png",
                     "subcategory": ""
                 },
                 {
                     "name": "jääkiekko",
-                    "image": "",
+                    "image": "jaakiekko.png",
                     "subcategory": ""
                 },
                 {
                     "name": "teatteri",
-                    "image": "",
+                    "image": "teatteri.png",
                     "subcategory": ""
                 },
                 {
                     "name": "kiipeily",
-                    "image": "",
+                    "image": "kiipeily.png",
                     "subcategory": ""
                 },
                 {
                     "name": "kuntosali",
-                    "image": "",
+                    "image": "kuntosali.png",
                     "subcategory": ""
                 },
                 {
                     "name": "kalastus",
-                    "image": "",
+                    "image": "kalastus.png",
                     "subcategory": ""
                 },
                 {
                     "name": "metsästys",
-                    "image": "",
+                    "image": "metsastys.png",
                     "subcategory": ""
                 },
                 {
                     "name": "lenkkeily",
-                    "image": "",
+                    "image": "lenkkeily.png",
                     "subcategory": ""
                 },
                 {
                     "name": "purjehdus",
-                    "image": "",
+                    "image": "purjehdus.png",
                     "subcategory": ""
                 }
             ]
@@ -599,82 +589,82 @@
             "words": [
                 {
                     "name": "kaukosäädin",
-                    "image": "",
+                    "image": "kaukosaadin.png",
                     "subcategory": ""
                 },
                 {
                     "name": "hammasharja",
-                    "image": "",
+                    "image": "hammasharja.png",
                     "subcategory": ""
                 },
                 {
                     "name": "juomapullo",
-                    "image": "",
+                    "image": "juomapullo.png",
                     "subcategory": ""
                 },
                 {
                     "name": "aterimet/ruokailuvälineet",
-                    "image": "",
+                    "image": "aterimet-ruokailuvalineet.png",
                     "subcategory": ""
                 },
                 {
                     "name": "kuulokkeet",
-                    "image": "",
+                    "image": "kuulokkeet.png",
                     "subcategory": ""
                 },
                 {
                     "name": "laturi",
-                    "image": "",
+                    "image": "laturi.png",
                     "subcategory": ""
                 },
                 {
                     "name": "puhelin",
-                    "image": "",
+                    "image": "puhelin.png",
                     "subcategory": ""
                 },
                 {
                     "name": "tietokone/läppäri",
-                    "image": "",
+                    "image": "tietokone-lappari.png",
                     "subcategory": ""
                 },
                 {
                     "name": "henkari",
-                    "image": "",
+                    "image": "henkari.png",
                     "subcategory": ""
                 },
                 {
                     "name": "avaimet",
-                    "image": "",
+                    "image": "avaimet.png",
                     "subcategory": ""
                 },
                 {
                     "name": "laukku",
-                    "image": "",
+                    "image": "laukku.png",
                     "subcategory": ""
                 },
                 {
                     "name": "sateenvarjo",
-                    "image": "",
+                    "image": "sateenvarjo.png",
                     "subcategory": ""
                 },
                 {
                     "name": "reppu",
-                    "image": "",
+                    "image": "reppu.png",
                     "subcategory": ""
                 },
                 {
                     "name": "lompakko",
-                    "image": "",
+                    "image": "lompakko.png",
                     "subcategory": ""
                 },
                 {
                     "name": "pankkikortti",
-                    "image": "",
+                    "image": "pankkikortti.png",
                     "subcategory": ""
                 },
                 {
                     "name": "silmälasit",
-                    "image": "",
+                    "image": "silmalasit.png",
                     "subcategory": ""
                 }
             ]
