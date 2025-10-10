@@ -7,82 +7,82 @@
                 {
                     "name": "banaani",
                     "image": "",
-                    "subcategory": "hedelmä"
+                    "hint": "hedelmä"
                 },
                 {
                     "name": "kahvi",
                     "image": "",
-                    "subcategory": "juoma"
+                    "hint": "juoma"
                 },
                 {
                     "name": "tee",
                     "image": "",
-                    "subcategory": "juoma"
+                    "hint": "juoma"
                 },
                 {
                     "name": "leipä",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "puuro",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "salaatti",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "spagetti",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "peruna",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "makkara",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "omena",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "tomaatti",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "kurkku",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "juusto",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "keitto",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "suklaa",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "jäätelö",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 }
             ]
         },
@@ -93,82 +93,82 @@
                 {
                     "name": "housut",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "t-paita",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "takki",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "hame",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "mekko",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "pipo",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "hanskat",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "huivi",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "lippis",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "saappaat",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "lenkkarit",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "sukat",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "farkut",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "neule",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "alusvaatteet",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "uimapuku",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 }
             ]
         },
@@ -179,47 +179,47 @@
                 {
                     "name": "sade",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "aurinko",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "ukkonen",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "lumisade",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "pilvinen",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "tuuli",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "myrsky",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "pakkanen",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "helle",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 }
             ]
         },
@@ -230,67 +230,67 @@
                 {
                     "name": "koira",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "kissa",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "lehmä",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "possu",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "hevonen",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "käärme",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "kala",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "lintu",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "lammas",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "perhonen",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "ampiainen",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "sammakko",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "sudenkorento",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 }
             ]
         },
@@ -301,57 +301,57 @@
                 {
                     "name": "poliisi",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "opettaja",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "kokki",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "leipuri",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "lääkäri",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "palomies",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "maalari",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "putkimies",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "sähköasentaja",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "myyjä/kauppias",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "rekkakuski",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 }
             ]
         },
@@ -362,67 +362,67 @@
                 {
                     "name": "auto",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "juna",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "laiva",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "lentokone",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "raitiovaunu",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "metro",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "bussi",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "polkupyörä",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "moottoripyörä",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "potkulauta",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "pakettiauto",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "rekka/kuorma-auto",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "vene",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 }
             ]
         },
@@ -433,82 +433,82 @@
                 {
                     "name": "nukkua",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "kävellä",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "juosta",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "syödä",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "juoda",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "piirtää",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "laulaa",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "tanssia",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "soittaa",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "pelata",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "katsoa (tv:tä)",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "nauraa",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "puhua",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "kuunnella",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "kirjoittaa",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "lukea",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 }
             ]
         },
@@ -519,77 +519,77 @@
                 {
                     "name": "jalkapallo",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "maalaaminen",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "tanssiminen",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "laulaminen",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "koripallo",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "pesäpallo",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "salibandy",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "jääkiekko",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "teatteri",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "kiipeily",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "kuntosali",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "kalastus",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "metsästys",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "lenkkeily",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "purjehdus",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 }
             ]
         },
@@ -600,82 +600,82 @@
                 {
                     "name": "kaukosäädin",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "hammasharja",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "juomapullo",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "aterimet/ruokailuvälineet",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "kuulokkeet",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "laturi",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "puhelin",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "tietokone/läppäri",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "henkari",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "avaimet",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "laukku",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "sateenvarjo",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "reppu",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "lompakko",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "pankkikortti",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 },
                 {
                     "name": "silmälasit",
                     "image": "",
-                    "subcategory": ""
+                    "hint": ""
                 }
             ]
         }

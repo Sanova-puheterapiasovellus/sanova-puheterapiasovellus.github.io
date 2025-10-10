@@ -5,7 +5,7 @@ const IMAGE_BASE_PATH = "/assets/images/";
 export interface Word {
     name: string;
     image: string;
-    subcategory: string;
+    hint: string;
 }
 
 export interface Category {
