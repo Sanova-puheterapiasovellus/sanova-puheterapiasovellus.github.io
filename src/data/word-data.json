@@ -131,19 +131,9 @@
                     "hint": "Kaulaan kiedottava asuste, joka lämmittää talvella"
                 },
                 {
-                    "name": "lippis",
-                    "image": "",
-                    "hint": ""
-                },
-                {
                     "name": "saappaat",
                     "image": "",
                     "hint": "Pitkävartiset kengät, jotka kestävät vettä"
-                },
-                {
-                    "name": "lenkkarit",
-                    "image": "",
-                    "hint": ""
                 },
                 {
                     "name": "sukat",
