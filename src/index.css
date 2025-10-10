@@ -15,4 +15,13 @@
 
 body {
     min-height: 100vh;
+    background-color: var(--bg-dark);
+    font-family: "Inter", sans-serif;
+}
+
+.mainview-header {
+    background-color: var(--bg);
+    height: 80px;
+    border: 2px solid var(--border);
+    padding: 16px 26px;
 }
