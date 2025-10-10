@@ -7,82 +7,82 @@
                 {
                     "name": "banaani",
                     "image": "",
-                    "hint": "hedelmä"
+                    "hint": "Hedelmä, jota apinatkin usein syövät"
                 },
                 {
                     "name": "kahvi",
                     "image": "",
-                    "hint": "juoma"
+                    "hint": "Kuuma piristävä juoma, jota juodaan usein aamuisin"
                 },
                 {
                     "name": "tee",
                     "image": "",
-                    "hint": "juoma"
+                    "hint": "Kuuma juoma, jota juodaan usein aamuisin tai iltaisin ja siihen voidaan lisätä esimerkiksi hunajaa"
                 },
                 {
                     "name": "leipä",
                     "image": "",
-                    "hint": ""
+                    "hint": "Viljasta leivottu ja sen päälle laitetaan usein voita ja mahdollisesti muita lisukkeita"
                 },
                 {
                     "name": "puuro",
                     "image": "",
-                    "hint": ""
+                    "hint": "Viljaisa ja pehmeä, lusikalla syötävä ruoka. Syödään usein aamupalalla"
                 },
                 {
                     "name": "salaatti",
                     "image": "",
-                    "hint": ""
+                    "hint": "Usein aterian lisukkeena. Sisältää erilaisia vihanneksia ja kasviksia"
                 },
                 {
                     "name": "spagetti",
                     "image": "",
-                    "hint": ""
+                    "hint": "Eräänlainen pastaruoka, jota syödään usein esimerkiksi lihapullien kanssa"
                 },
                 {
                     "name": "peruna",
                     "image": "",
-                    "hint": ""
+                    "hint": "Juures, josta voidaan tehdä esimerkiksi muusia tai ranskalaisia"
                 },
                 {
                     "name": "makkara",
                     "image": "",
-                    "hint": ""
+                    "hint": "ihavalmiste, jota voidaan esimerkiksi grillata tai paistaa nuotiolla"
                 },
                 {
                     "name": "omena",
                     "image": "",
-                    "hint": ""
+                    "hint": "Pyöreä, puussa kasvava, hedelmä"
                 },
                 {
                     "name": "tomaatti",
                     "image": "",
-                    "hint": ""
+                    "hint": "Pyöreä vihannes, jota laitetaan usein salaattiin tai leivän päälle"
                 },
                 {
                     "name": "kurkku",
                     "image": "",
-                    "hint": ""
+                    "hint": "Pitkä ja ohut vihannes, jota laitetaan usein salaattiin tai leivän päälle"
                 },
                 {
                     "name": "juusto",
                     "image": "",
-                    "hint": ""
+                    "hint": "Leivän päälle ja moniin ruokiin laitettava maitotuote"
                 },
                 {
                     "name": "keitto",
                     "image": "",
-                    "hint": ""
+                    "hint": "Lämmin, lusikalla syötävä ruoka. Se voi sisältää liemen lisäksi esimerkiksi nakkeja, juureksia, soseutettuja kasviksia tai jauhelihaa."
                 },
                 {
                     "name": "suklaa",
                     "image": "",
-                    "hint": ""
+                    "hint": "Kaakaopavuista valmistettu makea herkku, joka on usein levyn tai patukan muodossa"
                 },
                 {
                     "name": "jäätelö",
                     "image": "",
-                    "hint": ""
+                    "hint": "Kylmä, pakastimesta löytyvä makea herkku, jota syödään usein kesällä"
                 }
             ]
         },
@@ -93,42 +93,42 @@
                 {
                     "name": "housut",
                     "image": "",
-                    "hint": ""
+                    "hint": "Alavartaloon puettava vaate, jossa on kaksi lahjetta"
                 },
                 {
                     "name": "t-paita",
                     "image": "",
-                    "hint": ""
+                    "hint": "Ylävartaloon puettava vaate, jossa on lyhyet hihat"
                 },
                 {
                     "name": "takki",
                     "image": "",
-                    "hint": ""
+                    "hint": "Ylävartaloon puettava ulkovaate, jota käytetään etenkin viileillä ja kylmillä keleillä"
                 },
                 {
                     "name": "hame",
                     "image": "",
-                    "hint": ""
+                    "hint": "Alavartaloon puettava helmallinen vaate, jota etenkin naiset käyttävät esimerkiksi juhlissa tai kesällä"
                 },
                 {
                     "name": "mekko",
                     "image": "",
-                    "hint": ""
+                    "hint": "Ylä- ja alavartaloon ulottuva helmallinen vaate, jota etenkin naiset käyttävät esimerkiksi juhlissa tai kesällä"
                 },
                 {
                     "name": "pipo",
                     "image": "",
-                    "hint": ""
+                    "hint": "Päähän laitettava asuste, joka lämmittää talvella"
                 },
                 {
                     "name": "käsineet",
                     "image": "",
-                    "hint": ""
+                    "hint": "Nämä lämmittävät käsiä talvella"
                 },
                 {
                     "name": "huivi",
                     "image": "",
-                    "hint": ""
+                    "hint": "Kaulaan kiedottava asuste, joka lämmittää talvella"
                 },
                 {
                     "name": "lippis",
@@ -138,7 +138,7 @@
                 {
                     "name": "saappaat",
                     "image": "",
-                    "hint": ""
+                    "hint": "Pitkävartiset kengät, jotka kestävät vettä"
                 },
                 {
                     "name": "lenkkarit",
@@ -148,27 +148,27 @@
                 {
                     "name": "sukat",
                     "image": "",
-                    "hint": ""
+                    "hint": "Puetaan jalkoihin"
                 },
                 {
                     "name": "farkut",
                     "image": "",
-                    "hint": ""
+                    "hint": "Etenkin arkikäyttöön sopivat housut, joiden kanssa voidaan käyttää vyötä"
                 },
                 {
                     "name": "neule",
                     "image": "",
-                    "hint": ""
+                    "hint": "Ylävartaloon puettava lämmin vaate, joka voi olla tehty esimerkiksi villasta"
                 },
                 {
                     "name": "alusvaatteet",
                     "image": "",
-                    "hint": ""
+                    "hint": "Ihoa vasten olevat, päällysvaatteiden alle puettavat vaatteet"
                 },
                 {
                     "name": "uimapuku",
                     "image": "",
-                    "hint": ""
+                    "hint": "Käytetään esimerkiksi uimahallissa tai rannalla"
                 }
             ]
         },
@@ -179,47 +179,47 @@
                 {
                     "name": "sateinen",
                     "image": "",
-                    "hint": ""
+                    "hint": "Kostea ja märkä säätila"
                 },
                 {
                     "name": "aurinkoinen",
                     "image": "",
-                    "hint": ""
+                    "hint": "Lämmin säätila, paistaa etenkin kesällä"
                 },
                 {
                     "name": "ukkonen",
                     "image": "",
-                    "hint": ""
+                    "hint": "Säätila, jolloin salamoi ja kuuluu jyrinää"
                 },
                 {
                     "name": "lumisade",
                     "image": "",
-                    "hint": ""
+                    "hint": "Talvinen säätila, hiutaleita tippuu taivaalta"
                 },
                 {
                     "name": "pilvinen",
                     "image": "",
-                    "hint": ""
+                    "hint": "Säätila, jossa aurinko on piilossa, eli tällöin ei paista"
                 },
                 {
                     "name": "tuulinen",
                     "image": "",
-                    "hint": ""
+                    "hint": "Säätila, jossa käy viima ja puiden oksat heiluvat"
                 },
                 {
                     "name": "myrsky",
                     "image": "",
-                    "hint": ""
+                    "hint": "Hurja säätila, johon voi liittyä voimakasta tuulta, sadetta tai ukkosta"
                 },
                 {
                     "name": "pakkanen",
                     "image": "",
-                    "hint": ""
+                    "hint": "Talvella oleva kylmä säätila, kun lämpömittari näyttää miinusta"
                 },
                 {
                     "name": "helle",
                     "image": "",
-                    "hint": ""
+                    "hint": "Kesällä oleva lämmin säätila, jolloin lämpömittari näyttää vähintään +25 astetta"
                 }
             ]
         },
@@ -230,67 +230,67 @@
                 {
                     "name": "koira",
                     "image": "",
-                    "hint": ""
+                    "hint": "Lemmikkieläin, joka haukkuu"
                 },
                 {
                     "name": "kissa",
                     "image": "",
-                    "hint": ""
+                    "hint": "Lemmikkieläin, joka maukuu"
                 },
                 {
                     "name": "lehmä",
                     "image": "",
-                    "hint": ""
+                    "hint": "Kotieläin, joka asuu navetassa ja ammuu"
                 },
                 {
                     "name": "sika",
                     "image": "",
-                    "hint": ""
+                    "hint": "Kotieläin, joka röhkii ja jolla on saparohäntä"
                 },
                 {
                     "name": "hevonen",
                     "image": "",
-                    "hint": ""
+                    "hint": "Kotieläin, joka hirnuu ja jolla voi ratsastaa"
                 },
                 {
                     "name": "käärme",
                     "image": "",
-                    "hint": ""
+                    "hint": "Luikerteleva eläin, joka sihisee ja voi olla myrkyllinen"
                 },
                 {
                     "name": "kala",
                     "image": "",
-                    "hint": ""
+                    "hint": "Vedessä uiskenteleva eläin, jolla on evät ja kidukset"
                 },
                 {
                     "name": "lintu",
                     "image": "",
-                    "hint": ""
+                    "hint": "Lentävä, siivekäs eläin, joka ääntelee laulaen"
                 },
                 {
                     "name": "lammas",
                     "image": "",
-                    "hint": ""
+                    "hint": "Kotieläin, joka määkii ja josta voidaan keriä villaa"
                 },
                 {
                     "name": "perhonen",
                     "image": "",
-                    "hint": ""
+                    "hint": "Kaunis hyönteinen, joka lentää ja joilla voi olla eri värisiä siipiä"
                 },
                 {
                     "name": "ampiainen",
                     "image": "",
-                    "hint": ""
+                    "hint": "Lentävä hyönteinen, joka surisee ja voi pistää"
                 },
                 {
                     "name": "sammakko",
                     "image": "",
-                    "hint": ""
+                    "hint": "Hyppivä ja kurnuttava eläin, joka elää esimerkiksi puutarhassa tai metsässä"
                 },
                 {
                     "name": "sudenkorento",
                     "image": "",
-                    "hint": ""
+                    "hint": "Hyönteinen, joka lentää ja jolla on suippo ja pitkä ruumis"
                 }
             ]
         },
@@ -301,57 +301,57 @@
                 {
                     "name": "poliisi",
                     "image": "",
-                    "hint": ""
+                    "hint": "Viranomainen, joka valvoo lakia ja tutkii rikoksia"
                 },
                 {
                     "name": "opettaja",
                     "image": "",
-                    "hint": ""
+                    "hint": "Henkilö, joka jakaa tietoa ja ohjaa oppilaita koulussa"
                 },
                 {
                     "name": "kokki",
                     "image": "",
-                    "hint": ""
+                    "hint": "Henkilö, joka valmistaa ruokaa ravintolassa tai keittiössä"
                 },
                 {
                     "name": "leipuri",
                     "image": "",
-                    "hint": ""
+                    "hint": "Henkilö, joka leipoo leipää, pullaa ja muita leivonnaisia"
                 },
                 {
                     "name": "lääkäri",
                     "image": "",
-                    "hint": ""
+                    "hint": "Henkilö, joka tutkii ja hoitaa ihmisiä sairaalassa"
                 },
                 {
                     "name": "palomies",
                     "image": "",
-                    "hint": ""
+                    "hint": "Henkilö, joka sammuttaa tulipaloja ja pelastaa ihmisiä"
                 },
                 {
                     "name": "maalari",
                     "image": "",
-                    "hint": ""
+                    "hint": "Henkilö, joka maalaa seiniä tai tauluja"
                 },
                 {
                     "name": "putkimies",
                     "image": "",
-                    "hint": ""
+                    "hint": "Henkilö, joka asentaa ja korjaa vesijohtoja sekä viemäreitä"
                 },
                 {
                     "name": "sähköasentaja",
                     "image": "",
-                    "hint": ""
+                    "hint": "Henkilö, joka asentaa ja korjaa sähköjärjestelmiä ja -laitteita"
                 },
                 {
                     "name": "kauppias",
                     "image": "",
-                    "hint": ""
+                    "hint": "Henkilö, joka kaupittelee tuotteita ja palvelee asiakkaita kaupassa"
                 },
                 {
                     "name": "rekkakuski",
                     "image": "",
-                    "hint": ""
+                    "hint": "Henkilö, joka kuljettaa tavaraa pitkiä matkoja rekalla"
                 }
             ]
         },
@@ -362,67 +362,67 @@
                 {
                     "name": "auto",
                     "image": "",
-                    "hint": ""
+                    "hint": "Kulkuneuvo, jossa on neljä pyörää ja jota ohjataan ratista"
                 },
                 {
                     "name": "juna",
                     "image": "",
-                    "hint": ""
+                    "hint": "Pitkä kulkuneuvo, joka kulkee pitkiä matkoja raiteilla"
                 },
                 {
                     "name": "laiva",
                     "image": "",
-                    "hint": ""
+                    "hint": "Suuri kulkuneuvo, joka seilaa merellä ja voi kuljettaa tavaraa, autoja ja ihmisiä"
                 },
                 {
                     "name": "lentokone",
                     "image": "",
-                    "hint": ""
+                    "hint": "Kulkuneuvo, jolla pystyy siirtymään paikasta toiseen ilmateitse"
                 },
                 {
                     "name": "raitiovaunu",
                     "image": "",
-                    "hint": ""
+                    "hint": "Pitkä kulkuneuvo, joka kulkee kaupungissa raiteilla"
                 },
                 {
                     "name": "metro",
                     "image": "",
-                    "hint": ""
+                    "hint": "Pitkä kulkuneuvo, joka kulkee maan alla"
                 },
                 {
                     "name": "bussi",
                     "image": "",
-                    "hint": ""
+                    "hint": "Kulkuneuvo, joka kuljettaa monta matkustajaa kerralla kaupungissa tai pitkällä matkalla"
                 },
                 {
                     "name": "polkupyörä",
                     "image": "",
-                    "hint": ""
+                    "hint": "Kulkuneuvo, jota poljetaan"
                 },
                 {
                     "name": "moottoripyörä",
                     "image": "",
-                    "hint": ""
+                    "hint": "Kaksipyöräinen kulkuneuvo, jossa on moottori"
                 },
                 {
                     "name": "potkulauta",
                     "image": "",
-                    "hint": ""
+                    "hint": "Kulkuneuvo, jota liikutetaan potkimalla jalalla maata"
                 },
                 {
                     "name": "pakettiauto",
                     "image": "",
-                    "hint": ""
+                    "hint": "Kulkuneuvo, jossa kuljetetaan tavaraa"
                 },
                 {
                     "name": "rekka",
                     "image": "",
-                    "hint": ""
+                    "hint": "Suuri kulkuneuvo, joka kuljettaa paljon tavaraa pitkiä matkoja"
                 },
                 {
                     "name": "vene",
                     "image": "",
-                    "hint": ""
+                    "hint": "Kulkuneuvo, joka kulkee vedessä, usein moottorilla tai airoilla"
                 }
             ]
         },
@@ -433,82 +433,82 @@
                 {
                     "name": "nukkua",
                     "image": "",
-                    "hint": ""
+                    "hint": "Levätä silmät suljettuina"
                 },
                 {
                     "name": "kävellä",
                     "image": "",
-                    "hint": ""
+                    "hint": "Liikkua eteenpäin jalkojen avulla"
                 },
                 {
                     "name": "juosta",
                     "image": "",
-                    "hint": ""
+                    "hint": "Liikkua eteenpäin nopeasti jalkojen avulla"
                 },
                 {
                     "name": "syödä",
                     "image": "",
-                    "hint": ""
+                    "hint": "Laittaa ruokaa suuhun ja niellä se"
                 },
                 {
                     "name": "juoda",
                     "image": "",
-                    "hint": ""
+                    "hint": "Laittaa nestettä, kuten vettä, suuhun ja niellä se"
                 },
                 {
                     "name": "piirtää",
                     "image": "",
-                    "hint": ""
+                    "hint": "Tehdä kuvia kynällä tai tussilla"
                 },
                 {
                     "name": "laulaa",
                     "image": "",
-                    "hint": ""
+                    "hint": "Tuottaa sävelmiä äänellä"
                 },
                 {
                     "name": "tanssia",
                     "image": "",
-                    "hint": ""
+                    "hint": "Liikkua musiikin tahdissa"
                 },
                 {
                     "name": "soittaa",
                     "image": "",
-                    "hint": ""
+                    "hint": "Käyttää soitinta musiikin tekemiseen"
                 },
                 {
                     "name": "pelata",
                     "image": "",
-                    "hint": ""
+                    "hint": "Osallistua peliin tai urheiluun"
                 },
                 {
                     "name": "katsoa (tv:tä)",
                     "image": "",
-                    "hint": ""
+                    "hint": "Suunnata katse johonkin, esim. televisioon ja nähdä se"
                 },
                 {
                     "name": "nauraa",
                     "image": "",
-                    "hint": ""
+                    "hint": "Ilmaista iloa äänellä ja ilmeillä"
                 },
                 {
                     "name": "puhua",
                     "image": "",
-                    "hint": ""
+                    "hint": "Kertoa asioita tuottamalla sanoja ja ääntä"
                 },
                 {
                     "name": "kuunnella",
                     "image": "",
-                    "hint": ""
+                    "hint": "Keskittyä ympäristön ääniin"
                 },
                 {
                     "name": "kirjoittaa",
                     "image": "",
-                    "hint": ""
+                    "hint": "Muodostaa sanoja paperille"
                 },
                 {
                     "name": "lukea",
                     "image": "",
-                    "hint": ""
+                    "hint": "Tulkita ja ymmärtää kirjoitettua tekstiä"
                 }
             ]
         },
@@ -519,77 +519,77 @@
                 {
                     "name": "jalkapallo",
                     "image": "",
-                    "hint": ""
+                    "hint": "Joukkuelaji, jossa potkitaan mustavalkoista palloa"
                 },
                 {
                     "name": "maalaaminen",
                     "image": "",
-                    "hint": ""
+                    "hint": "Kuvien tai pintojen värittämistä maalilla"
                 },
                 {
                     "name": "tanssiminen",
                     "image": "",
-                    "hint": ""
+                    "hint": "Liikkumista musiikin tahdissa"
                 },
                 {
                     "name": "laulaminen",
                     "image": "",
-                    "hint": ""
+                    "hint": "Äänen käyttöä musiikin tekemiseen"
                 },
                 {
                     "name": "koripallo",
                     "image": "",
-                    "hint": ""
+                    "hint": "Joukkuelaji, jossa heitetään palloa koriin"
                 },
                 {
                     "name": "pesäpallo",
                     "image": "",
-                    "hint": ""
+                    "hint": "Suomen kansallispeli, jossa lyödään palloa ja juostaan pesien välillä"
                 },
                 {
                     "name": "salibandy",
                     "image": "",
-                    "hint": ""
+                    "hint": "Sisällä pelattava mailapeli, jossa tehdään maaleja pallolla"
                 },
                 {
                     "name": "jääkiekko",
                     "image": "",
-                    "hint": ""
+                    "hint": "Joukkuepeli, jossa pelataan kiekolla jäällä ja tehdään maaleja"
                 },
                 {
                     "name": "teatteri",
                     "image": "",
-                    "hint": ""
+                    "hint": "Taidelaji, jossa näytellään tarinoita lavalla"
                 },
                 {
                     "name": "kiipeily",
                     "image": "",
-                    "hint": ""
+                    "hint": "Liikkumista ylöspäin seinillä tai kallioilla"
                 },
                 {
                     "name": "kuntosali",
                     "image": "",
-                    "hint": ""
+                    "hint": "Harrastus, jossa harjoitellaan lihasvoimaa ja kuntoa, ja nostetaan painoja"
                 },
                 {
                     "name": "kalastus",
                     "image": "",
-                    "hint": ""
+                    "hint": "Kalojen pyytämistä vedestä onkimalla, virvelöimällä tai verkon avulla"
                 },
                 {
                     "name": "metsästys",
                     "image": "",
-                    "hint": ""
+                    "hint": "Villieläinten pyytämistä luonnossa"
                 },
                 {
                     "name": "lenkkeily",
                     "image": "",
-                    "hint": ""
+                    "hint": "Juoksemista tai kävelyä kuntoilun vuoksi"
                 },
                 {
                     "name": "purjehdus",
                     "image": "",
-                    "hint": ""
+                    "hint": "Veneilyä, jossa liikutaan tuulen voimalla purjeilla"
                 }
             ]
         },
@@ -600,82 +600,82 @@
                 {
                     "name": "kaukosäädin",
                     "image": "",
-                    "hint": ""
+                    "hint": "Laite, jolla ohjataan televisiota tai muita laitteita etäältä"
                 },
                 {
                     "name": "hammasharja",
                     "image": "",
-                    "hint": ""
+                    "hint": "Väline hampaiden puhdistamiseen"
                 },
                 {
                     "name": "juomapullo",
                     "image": "",
-                    "hint": ""
+                    "hint": "Pullo, josta juodaan vettä tai muuta juomaa"
                 },
                 {
                     "name": "aterimet/ruokailuvälineet",
                     "image": "",
-                    "hint": ""
+                    "hint": "Haarukka, veitsi ja lusikka"
                 },
                 {
                     "name": "kuulokkeet",
                     "image": "",
-                    "hint": ""
+                    "hint": "Laite, jolla kuunnellaan ääntä tai musiikkia korvilla"
                 },
                 {
                     "name": "laturi",
                     "image": "",
-                    "hint": ""
+                    "hint": "Johdollinen laite, jolla ladataan esim. puhelinta"
                 },
                 {
                     "name": "puhelin",
                     "image": "",
-                    "hint": ""
+                    "hint": "Laite, jolla voidaan soittaa, viestitellä ja ottaa kuvia"
                 },
                 {
                     "name": "tietokone",
                     "image": "",
-                    "hint": ""
+                    "hint": "Laite, jolla voi työskennellä, pelata ja etsiä tietoa"
                 },
                 {
                     "name": "henkari",
                     "image": "",
-                    "hint": ""
+                    "hint": "Esine, jonka avulla ripustetaan vaatteita"
                 },
                 {
                     "name": "avaimet",
                     "image": "",
-                    "hint": ""
+                    "hint": "Välineet, joilla avataan ja lukitaan ovia"
                 },
                 {
                     "name": "laukku",
                     "image": "",
-                    "hint": ""
+                    "hint": "Olalla kannettava säilytystila tavaroille"
                 },
                 {
                     "name": "sateenvarjo",
                     "image": "",
-                    "hint": ""
+                    "hint": "Suojaa sateelta, kun se avataan pään päälle"
                 },
                 {
                     "name": "reppu",
                     "image": "",
-                    "hint": ""
+                    "hint": "Selässä kannettava laukku"
                 },
                 {
                     "name": "lompakko",
                     "image": "",
-                    "hint": ""
+                    "hint": "Pieni kotelo, jossa säilytetään rahaa ja kortteja"
                 },
                 {
                     "name": "pankkikortti",
                     "image": "",
-                    "hint": ""
+                    "hint": "Kortti, jolla voi maksaa"
                 },
                 {
                     "name": "silmälasit",
                     "image": "",
-                    "hint": ""
+                    "hint": "Auttavat näkemään paremmin"
                 }
             ]
         }
