@@ -177,12 +177,12 @@
             "image": "",
             "words": [
                 {
-                    "name": "sade",
+                    "name": "sateinen",
                     "image": "",
                     "hint": ""
                 },
                 {
-                    "name": "aurinko",
+                    "name": "aurinkoinen",
                     "image": "",
                     "hint": ""
                 },
@@ -243,7 +243,7 @@
                     "hint": ""
                 },
                 {
-                    "name": "possu",
+                    "name": "sika",
                     "image": "",
                     "hint": ""
                 },
@@ -344,7 +344,7 @@
                     "hint": ""
                 },
                 {
-                    "name": "myyjä/kauppias",
+                    "name": "kauppias",
                     "image": "",
                     "hint": ""
                 },
@@ -415,7 +415,7 @@
                     "hint": ""
                 },
                 {
-                    "name": "rekka/kuorma-auto",
+                    "name": "rekka",
                     "image": "",
                     "hint": ""
                 },
@@ -633,7 +633,7 @@
                     "hint": ""
                 },
                 {
-                    "name": "tietokone/läppäri",
+                    "name": "tietokone",
                     "image": "",
                     "hint": ""
                 },
