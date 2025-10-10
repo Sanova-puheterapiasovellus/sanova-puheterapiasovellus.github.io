@@ -1,6 +1,6 @@
 import data from "./word-data.json" with { type: "json" };
 
-const IMAGE_BASE_PATH = "/public/assets/images/";
+const IMAGE_BASE_PATH = "/assets/images/";
 
 export interface Word {
     name: string;
