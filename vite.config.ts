@@ -24,5 +24,7 @@ export default {
             usePolling: true,
             interval: 200,
         },
+        host: "0.0.0.0",
+        port: 5173,
     },
 } satisfies UserConfig;
