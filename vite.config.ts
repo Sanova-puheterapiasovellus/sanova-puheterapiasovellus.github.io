@@ -18,4 +18,7 @@ export default {
         // Might as well expose the source for browser devtools clarity even in production.
         sourcemap: true,
     },
+    server: {
+        host: "0.0.0.0",
+    },
 } satisfies UserConfig;
