@@ -1,28 +1,34 @@
-import { buildHtml, expectElement } from "../common/dom";
+import { expectElement } from "../common/dom";
 import { dispatchCategorySelection } from "../common/events";
+import styles from "./styles/categories.module.css";
 
 const categoryList = expectElement("category-selector-list", HTMLUListElement);
 
 /** Create a category entry that triggers a selection change on click. */
 function createCategoryEntry(name: string, imagePath: string): HTMLElement {
-    const img = buildHtml("img", {
-        src: imagePath,
-        alt: name,
-    });
-    Object.assign(img.style, {
-        width: "auto",
-        height: "auto",
-        marginRight: "8px",
-    });
-    const button = buildHtml("button", { type: "button", innerText: name });
-    button.appendChild(img);
-    button.addEventListener("click", (_) => dispatchCategorySelection(button, name));
-    return buildHtml("li", {}, button);
+    const li = document.createElement("li");
+    li.innerHTML = `
+        <button type="button" class="${styles.card}">
+            <img src="${imagePath}" alt="${name || "Category image"}"/>
+            <span>${name}</span>
+        </button>
+    `;
+    const button = li.querySelector("button");
+    button?.addEventListener("click", () => dispatchCategorySelection(button, name));
+    return li;
 }
 
 /** Build up the category selection list. */
 export function initializeCategorySelector() {
-    categoryList.appendChild(createCategoryEntry("", "/public/assets/images/kissa.png"));
-    categoryList.appendChild(createCategoryEntry("", "/public/assets/images/ruokatarvikkeet.png"));
-    categoryList.appendChild(createCategoryEntry("", "/public/assets/images/esineet.png"));
+    const categories = [
+        { name: "Eläimet", image: "/public/assets/images/kissa.png" },
+        { name: "Ruoka", image: "/public/assets/images/ruokatarvikkeet.png" },
+        { name: "Esineet", image: "/public/assets/images/esineet.png" },
+        { name: "ASDF", image: "/public/assets/images/esineet.png" },
+        { name: "PITEMPI KASA TEKSTIÄ", image: "/public/assets/images/esineet.png" },
+    ];
+
+    categories.forEach(({ name, image }) => {
+        categoryList.appendChild(createCategoryEntry(name, image));
+    });
 }
