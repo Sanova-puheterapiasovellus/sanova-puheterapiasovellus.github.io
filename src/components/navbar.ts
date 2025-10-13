@@ -28,7 +28,7 @@ function Navbar(): HTMLElement {
             linkPath === currentPath || (linkPath === "/index.html" && currentPath === "/");
 
         if (isActive) {
-            link.classList.add("active");
+            link.classList.add(styles.active);
         }
     });
 
