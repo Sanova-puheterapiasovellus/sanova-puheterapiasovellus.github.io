@@ -1,12 +1,12 @@
-import "./styles/navbar.css";
+import styles from "./styles/navbar.module.css";
 
 function Navbar(): HTMLElement {
     const nav = document.createElement("nav");
-    nav.className = "navbar";
+    nav.className = styles.navbar;
 
     nav.innerHTML = `
     <h1>Sanova</h1>
-    <div class="navbar-center">
+    <div class="${styles.navbarCenter}">
       <a href="/index.html">
         <img src="/assets/icons/home35.svg" alt="Home icon">
         <span>KATEGORIAT</span>

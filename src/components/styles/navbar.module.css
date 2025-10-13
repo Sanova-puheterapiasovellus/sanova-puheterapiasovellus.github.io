@@ -11,7 +11,7 @@
     font-weight: 400;
 }
 
-.navbar-center {
+.navbarCenter {
     position: absolute;
     left: 50%;
     display: flex;
@@ -20,7 +20,7 @@
     transform: translateX(-50%);
 }
 
-.navbar-center > a {
+.navbarCenter > a {
     display: flex;
     align-items: flex-end;
     border-style: none;
@@ -31,15 +31,15 @@
     transition-timing-function: ease-in;
 }
 
-.navbar-center > a:hover {
+.navbarCenter > a:hover {
     border-bottom: 2px solid var(--text);
 }
 
-.navbar-center > a.active {
+.navbarCenter > a.active {
     border-bottom: 2px solid var(--text);
 }
 
-.navbar-center > a > span {
+.navbarCenter > a > span {
     color: var(--text);
     font-size: 20px;
     padding-bottom: 1px;
