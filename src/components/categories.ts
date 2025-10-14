@@ -1,5 +1,7 @@
 import { expectElement } from "../common/dom";
 import { dispatchCategorySelection } from "../common/events";
+import { wordsData } from "../data/word-data-model.ts";
+import { capitalizeFirstLetter } from "../utils/stringUtils.ts";
 import styles from "./styles/categories.module.css";
 
 const categoryList = expectElement("category-selector-list", HTMLUListElement);
@@ -20,15 +22,11 @@ function createCategoryEntry(name: string, imagePath: string): HTMLElement {
 
 /** Build up the category selection list. */
 export function initializeCategorySelector() {
-    const categories = [
-        { name: "Eläimet", image: "/public/assets/images/kissa.png" },
-        { name: "Ruoka", image: "/public/assets/images/ruokatarvikkeet.png" },
-        { name: "Esineet", image: "/public/assets/images/esineet.png" },
-        { name: "ASDF", image: "/public/assets/images/esineet.png" },
-        { name: "PITEMPI KASA TEKSTIÄ", image: "/public/assets/images/esineet.png" },
-    ];
-
-    categories.forEach(({ name, image }) => {
-        categoryList.appendChild(createCategoryEntry(name, image));
+    wordsData.categories.forEach((category) => {
+        const categoryEntry = createCategoryEntry(
+            capitalizeFirstLetter(category.name),
+            category.image,
+        );
+        categoryList.appendChild(categoryEntry);
     });
 }
