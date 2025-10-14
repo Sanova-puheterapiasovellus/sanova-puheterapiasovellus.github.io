@@ -9,10 +9,11 @@ const categoryList = expectElement("category-selector-list", HTMLUListElement);
 /** Create a category entry that triggers a selection change on click. */
 function createCategoryEntry(name: string, imagePath: string): HTMLElement {
     const li = document.createElement("li");
+    const capitalizedName = capitalizeFirstLetter(name);
     li.innerHTML = `
         <button type="button" class="${styles.card}">
-            <img src="${imagePath}" alt="${name || "Category image"}"/>
-            <span>${name}</span>
+            <img src="${imagePath}" alt="${capitalizedName || "Category image"}"/>
+            <span>${capitalizedName}</span>
         </button>
     `;
     const button = li.querySelector("button");
@@ -23,10 +24,7 @@ function createCategoryEntry(name: string, imagePath: string): HTMLElement {
 /** Build up the category selection list. */
 export function initializeCategorySelector() {
     wordsData.categories.forEach((category) => {
-        const categoryEntry = createCategoryEntry(
-            capitalizeFirstLetter(category.name),
-            category.image,
-        );
+        const categoryEntry = createCategoryEntry(category.name, category.image);
         categoryList.appendChild(categoryEntry);
     });
 }
