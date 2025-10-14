@@ -1,6 +1,6 @@
 import { expectElement } from "../common/dom";
 import { dispatchCategorySelection } from "../common/events";
-import { wordsData } from "../data/word-data-model.ts";
+import { getImagePath, wordsData } from "../data/word-data-model.ts";
 import { capitalizeFirstLetter } from "../utils/stringUtils.ts";
 import styles from "./styles/categories.module.css";
 
@@ -24,7 +24,7 @@ function createCategoryEntry(name: string, imagePath: string): HTMLElement {
 /** Build up the category selection list. */
 export function initializeCategorySelector() {
     wordsData.categories.forEach((category) => {
-        const categoryEntry = createCategoryEntry(category.name, category.image);
+        const categoryEntry = createCategoryEntry(category.name, getImagePath(category.image));
         categoryList.appendChild(categoryEntry);
     });
 }
