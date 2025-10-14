@@ -1,4 +1,5 @@
 import "./index.css";
+import { dispatchInternalNotification } from "./common/events.ts";
 import { initializeCategorySelector } from "./components/categories.ts";
 import { initializeGameContainer } from "./components/game.ts";
 import { initializeHeader } from "./components/navbar.ts";
@@ -10,3 +11,5 @@ initializeCategorySelector();
 initializeGameContainer();
 initializeSyllablePlayer();
 initializeNotificationSystem();
+
+dispatchInternalNotification(document.body, "Testi-ilmoitus", "Lisätietoja");
