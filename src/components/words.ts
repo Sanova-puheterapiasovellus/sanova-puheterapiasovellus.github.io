@@ -39,7 +39,7 @@ export function initializeWordSelector(categoryName: string, gameSession: GameSe
     gameSession.setCategory(categoryName);
     gameSession.setWords(category.words.map((w) => w.name));
 
-    // Add a back button
+    // Add a (temporary?) back button
     const backButton = document.createElement("button");
     backButton.textContent = "Takaisin kategorioihin";
     backButton.classList.add("back-button");
@@ -49,6 +49,21 @@ export function initializeWordSelector(categoryName: string, gameSession: GameSe
         wordList.innerHTML = "";
     });
     wordList.appendChild(backButton);
+
+    const randomOrderButton = document.createElement("button");
+    randomOrderButton.textContent = "? RANDOM ?";
+    randomOrderButton.classList.add("random-order-button");
+    randomOrderButton.addEventListener("click", () => {
+        // Get a random unguessed word from GameSession
+        gameSession.setGameModeRandom();
+        const randomWord = gameSession.getNextWord();
+        if (!randomWord || randomWord === "NoMoreWords") {
+            console.log("All words guessed!");
+            return;
+        }
+        dispatchWordSelection(randomOrderButton, randomWord, -1);
+    });
+    wordList.appendChild(randomOrderButton);
 
     category.words.forEach((word, index) => {
         const wordEntry = createWordEntry(word.name, getImagePath(word.image));

@@ -59,7 +59,7 @@ function handleKeyInput(event: KeyboardEvent) {
     const wordGuess = gameSession.getCurrentWordGuess();
     const container = document.getElementById("word-guess-slots") as HTMLDivElement;
 
-    if (/^[a-zA-ZåäöÅÄÖ]$/.test(event.key)) {
+    if (/^[a-zA-ZåäöÅÄÖ-]$/.test(event.key)) {
         wordGuess.addLetter(event.key);
         wordGuess.render(container);
     } else if (event.key === "Backspace") {

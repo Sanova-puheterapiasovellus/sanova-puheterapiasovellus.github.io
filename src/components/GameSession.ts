@@ -9,6 +9,7 @@ export class GameSession {
     private words: string[] = [];
     private currentWordGuess: WordGuess | null = null;
     private currentWordIndex: number = 0;
+    private gameModeRandom: boolean = false;
 
     /** Set a word to be guessed and create a new word guess object based on that */
     constructor(category: string) {
@@ -27,6 +28,7 @@ export class GameSession {
         this.currentWordIndex = 0;
     }
 
+    /** Set the index of the word if user select the word from the list */
     setCurrentWordIndex(index: number) {
         this.currentWordIndex = index;
         this.currentWord = this.words[index]!;
@@ -57,18 +59,80 @@ export class GameSession {
         this.guessedWords.add(this.currentWord);
     }
 
-    /** Get the next word to be guessed and create a new WordGuess object */
+    setGameModeRandom(): void {
+        this.gameModeRandom = true;
+    }
+
+    /** Get the next word to be guessed. Return random word from the category
+     * or the next one in the list depending on the game mode.
+     */
     getNextWord(): string {
-        this.markGuessed();
-        const nextWord = this.words.find((word) => !this.guessedWords.has(word));
-        if (nextWord) {
-            this.currentWord = nextWord;
-            this.currentWordGuess = new WordGuess(nextWord);
+        if (this.gameModeRandom) {
+            return this.getNextWordRandom();
         } else {
+            return this.getNextWordOrder();
+        }
+    }
+
+    /** Get the next word (in the order the list defines) to be guessed and create a new WordGuess object */
+    getNextWordOrder(): string {
+        this.markGuessed();
+
+        if (this.guessedWords.size >= this.words.length) {
             this.currentWord = "NoMoreWords";
             this.currentWordGuess = null;
+            return this.currentWord;
         }
+
+        const totalWords = this.words.length;
+
+        // Start by trying the next word in the list (current index + 1)
+        let candidateIndex = this.currentWordIndex + 1;
+
+        if (candidateIndex >= totalWords || this.guessedWords.has(this.words[candidateIndex]!)) {
+            // Wrap around: check from the start of the list
+            candidateIndex = 0;
+        }
+
+        // Loop until we find an unguessed word
+        while (this.guessedWords.has(this.words[candidateIndex]!)) {
+            candidateIndex++;
+            if (candidateIndex >= totalWords) {
+                candidateIndex = 0; // wrap around
+            }
+        }
+
+        // Update state
+        this.currentWordIndex = candidateIndex;
+        this.currentWord = this.words[candidateIndex]!;
+        this.currentWordGuess = new WordGuess(this.currentWord);
         this.vocalHintsCounter = 0;
+
+        return this.currentWord;
+    }
+
+    /** Get the next word to be guessed but randomly from the list */
+    getNextWordRandom(): string {
+        // Mark the current one as guessed
+        this.markGuessed();
+
+        // Filter out guessed words
+        const remainingWords = this.words.filter((word) => !this.guessedWords.has(word));
+
+        if (remainingWords.length === 0) {
+            this.currentWord = "NoMoreWords";
+            this.currentWordGuess = null;
+            return this.currentWord;
+        }
+
+        // Pick a random word from the current category
+        const randomIndex = Math.floor(Math.random() * remainingWords.length);
+        const nextWord = remainingWords[randomIndex]!;
+
+        // Update state
+        this.currentWord = nextWord;
+        this.currentWordGuess = new WordGuess(nextWord);
+
         return this.currentWord;
     }
 }
