@@ -1,6 +1,6 @@
 import { expectElement } from "../common/dom";
-import type { CategorySelectedEvent } from "../common/events";
-import type { GameSession } from "./GameSession";
+import type { CategorySelectedEvent, WordSelectedEvent } from "../common/events";
+import { GameSession } from "./GameSession";
 import type { WordGuess } from "./WordGuess";
 import { initializeWordSelector } from "./words.ts";
 
@@ -12,7 +12,7 @@ const wordImage = expectElement("word-guess-image", HTMLImageElement);
 const letterSlots = expectElement("word-guess-slots", HTMLDivElement);
 
 // Keep track of the game progress, initially null
-const gameSession: GameSession | null = null;
+let gameSession: GameSession | null = null;
 
 /** Close the dialog as requested. */
 function handleDialogClose(_: Event): void {
@@ -22,13 +22,26 @@ function handleDialogClose(_: Event): void {
 /** Handle the game starting with the selected category. */
 function handleGameStart(event: CategorySelectedEvent): void {
     const currentCategory: string = event.detail.name;
-    ///gameSession = new GameSession(currentCategory);
+    gameSession = new GameSession(currentCategory);
+    initializeWordSelector(currentCategory, gameSession);
     ///const word = gameSession.getCurrentWord();
     ///wordImage.alt = word;
     ///guessDialog.showModal();
     ///setupWordInput();
-    console.log("Initializing words with category:", currentCategory);
-    initializeWordSelector(currentCategory);
+}
+
+/** Handle the word selection, i.e. show the guessing modal for the user */
+function handleWordSelected(event: WordSelectedEvent) {
+    if (!gameSession) return;
+
+    const { name, index } = event.detail;
+    console.log("Word selected:", name, index);
+
+    const word = gameSession.getCurrentWord();
+
+    wordImage.alt = word;
+    guessDialog.showModal();
+    setupWordInput();
 }
 
 /** Renders the empty slots after answering or when initializing the first word */
@@ -106,6 +119,7 @@ function handleAnswer(wordGuess: WordGuess): void {
 /** Wire up events to react to the game being started. */
 export function initializeGameContainer() {
     window.addEventListener("category-selected", handleGameStart);
+    window.addEventListener("word-selected", handleWordSelected);
     closeButton.addEventListener("click", handleDialogClose);
 
     answerButton.addEventListener("click", () => {

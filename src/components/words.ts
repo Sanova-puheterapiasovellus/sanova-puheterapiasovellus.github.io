@@ -1,6 +1,8 @@
 import { expectElement } from "../common/dom";
+import { dispatchWordSelection } from "../common/events";
 import { getImagePath, wordsData } from "../data/word-data-model.ts";
 import { capitalizeFirstLetter } from "../utils/stringUtils.ts";
+import type { GameSession } from "./GameSession";
 
 // import styles from "./styles/words.module.css";
 
@@ -23,7 +25,7 @@ function createWordEntry(name: string, imagePath: string): HTMLElement {
 }
 
 /** Render the words for a given category name. */
-export function initializeWordSelector(categoryName: string) {
+export function initializeWordSelector(categoryName: string, gameSession: GameSession) {
     const categoryList = expectElement("category-selector-list", HTMLUListElement);
     const wordList = expectElement("word-selector-list", HTMLUListElement);
 
@@ -34,9 +36,12 @@ export function initializeWordSelector(categoryName: string) {
     const category = wordsData.categories.find((c) => c.name === categoryName);
     if (!category) return;
 
+    gameSession.setCategory(categoryName);
+    gameSession.setWords(category.words.map((w) => w.name));
+
     // Add a back button
     const backButton = document.createElement("button");
-    backButton.textContent = "Takaisin kategorioihin"; // “Back to categories”
+    backButton.textContent = "Takaisin kategorioihin";
     backButton.classList.add("back-button");
     backButton.addEventListener("click", () => {
         wordList.classList.add("hidden");
@@ -45,8 +50,13 @@ export function initializeWordSelector(categoryName: string) {
     });
     wordList.appendChild(backButton);
 
-    category.words.forEach((word) => {
+    category.words.forEach((word, index) => {
         const wordEntry = createWordEntry(word.name, getImagePath(word.image));
+
+        wordEntry.addEventListener("click", () => {
+            gameSession.setCurrentWordIndex(index);
+            dispatchWordSelection(wordEntry, word.name, index);
+        });
         wordList.appendChild(wordEntry);
     });
 }
