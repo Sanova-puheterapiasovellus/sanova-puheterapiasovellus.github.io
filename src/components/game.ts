@@ -1,7 +1,8 @@
 import { expectElement } from "../common/dom";
 import type { CategorySelectedEvent } from "../common/events";
-import { GameSession } from "./GameSession";
+import type { GameSession } from "./GameSession";
 import type { WordGuess } from "./WordGuess";
+import { initializeWordSelector } from "./words.ts";
 
 const guessDialog = expectElement("word-guess-dialog", HTMLDialogElement);
 const closeButton = expectElement("word-guess-close", HTMLButtonElement);
@@ -11,7 +12,7 @@ const wordImage = expectElement("word-guess-image", HTMLImageElement);
 const letterSlots = expectElement("word-guess-slots", HTMLDivElement);
 
 // Keep track of the game progress, initially null
-let gameSession: GameSession | null = null;
+const gameSession: GameSession | null = null;
 
 /** Close the dialog as requested. */
 function handleDialogClose(_: Event): void {
@@ -21,12 +22,13 @@ function handleDialogClose(_: Event): void {
 /** Handle the game starting with the selected category. */
 function handleGameStart(event: CategorySelectedEvent): void {
     const currentCategory: string = event.detail.name;
-    gameSession = new GameSession(currentCategory);
-    const word = gameSession.getCurrentWord();
-    wordImage.alt = word;
-
-    guessDialog.showModal();
-    setupWordInput();
+    ///gameSession = new GameSession(currentCategory);
+    ///const word = gameSession.getCurrentWord();
+    ///wordImage.alt = word;
+    ///guessDialog.showModal();
+    ///setupWordInput();
+    console.log("Initializing words with category:", currentCategory);
+    initializeWordSelector(currentCategory);
 }
 
 /** Renders the empty slots after answering or when initializing the first word */

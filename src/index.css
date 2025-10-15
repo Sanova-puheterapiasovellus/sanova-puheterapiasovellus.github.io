@@ -41,3 +41,8 @@ body {
     padding: 0 20px;
     list-style-type: none;
 }
+
+/* Hide sections by adding .hidden at the end of the class name */
+.hidden {
+    display: none !important;
+}
