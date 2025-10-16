@@ -17,7 +17,6 @@ function createWordEntry(name: string, imagePath: string): HTMLElement {
     li.innerHTML = `
         <button type="button" class="word-card">
             <img src="${imagePath}" alt="${capitalizedName || "Word image"}"/>
-            <span>${capitalizedName}</span>
         </button>
     `;
 

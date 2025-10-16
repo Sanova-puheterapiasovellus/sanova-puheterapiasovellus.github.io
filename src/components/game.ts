@@ -10,6 +10,7 @@ const answerButton = expectElement("word-guess-submit", HTMLButtonElement);
 const letterHintButton = expectElement("word-guess-letter-hint", HTMLButtonElement);
 const wordImage = expectElement("word-guess-image", HTMLImageElement);
 const letterSlots = expectElement("word-guess-slots", HTMLDivElement);
+const hiddenInput = document.getElementById("hidden-input") as HTMLInputElement;
 
 // Keep track of the game progress, initially null
 let gameSession: GameSession | null = null;
@@ -17,6 +18,11 @@ let gameSession: GameSession | null = null;
 /** Close the dialog as requested. */
 function handleDialogClose(_: Event): void {
     guessDialog.close();
+}
+
+/** Trigger the mobile keyboard */
+function focusHiddenInput() {
+    hiddenInput.focus();
 }
 
 /** Handle the game starting with the selected category. */
@@ -48,27 +54,39 @@ function handleWordSelected(event: WordSelectedEvent) {
 function setupWordInput() {
     const wordGuess = getGameSession().getCurrentWordGuess();
     wordGuess.render(letterSlots);
-
-    // attach keyboard
-    window.addEventListener("keydown", handleKeyInput);
+    hiddenInput.value = "";
+    hiddenInput.focus();
+    letterSlots.addEventListener("click", () => hiddenInput.focus());
 }
 
 /** Gets and renders the letter typed from the keyboard */
-function handleKeyInput(event: KeyboardEvent) {
+function handleInputEvent(event: Event) {
     if (!gameSession) return;
     const wordGuess = gameSession.getCurrentWordGuess();
-    const container = document.getElementById("word-guess-slots") as HTMLDivElement;
-
-    if (/^[a-zA-ZåäöÅÄÖ-]$/.test(event.key)) {
-        wordGuess.addLetter(event.key);
-        wordGuess.render(container);
-    } else if (event.key === "Backspace") {
+    const inputEvent = event as InputEvent;
+    if (inputEvent.inputType === "deleteContentBackward") {
         wordGuess.removeLetter();
-        wordGuess.render(container);
+    } else if (inputEvent.inputType === "insertText" && hiddenInput.value.length > 0) {
+        const letter = hiddenInput.value[hiddenInput.value.length - 1]!;
+        wordGuess.addLetter(letter);
+    }
+    wordGuess.render(letterSlots);
+    hiddenInput.value = "";
+}
+
+/** Handles other keyboard events than letters */
+function handleKeyDown(event: KeyboardEvent) {
+    if (!gameSession) return;
+    const wordGuess = gameSession.getCurrentWordGuess();
+
+    if (event.key === "Backspace") {
+        event.preventDefault();
+        wordGuess.removeLetter();
+        wordGuess.render(letterSlots);
     }
 }
 
-/** Function that quarantees to return a valid game session object or throw an error */
+/** Function that guarantees to return a valid game session object or throw an error */
 function getGameSession(): GameSession {
     if (gameSession === null) {
         throw new Error("Game session is not initialized yet!");
@@ -129,4 +147,7 @@ export function initializeGameContainer() {
     });
 
     letterHintButton.addEventListener("click", handleUseLetterHint);
+
+    hiddenInput.addEventListener("input", handleInputEvent);
+    hiddenInput.addEventListener("keydown", handleKeyDown);
 }

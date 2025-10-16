@@ -111,6 +111,13 @@ export class WordGuess {
                 span.style.color = "red"; // TODO: css file for styling
             }
 
+            span.addEventListener("click", () => {
+                const input = document.getElementById("hidden-input") as HTMLInputElement;
+                if (input) {
+                    input.focus();
+                }
+            });
+
             container.appendChild(span);
         }
     }
