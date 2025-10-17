@@ -59,31 +59,53 @@ function setupWordInput() {
     letterSlots.addEventListener("click", () => hiddenInput.focus());
 }
 
-/** Gets and renders the letter typed from the keyboard */
-function handleInputEvent(event: Event) {
+/** Handle the typing events when using both physical keyboard and phone's keyboard */
+function handleInputEvent() {
     if (!gameSession) return;
+
     const wordGuess = gameSession.getCurrentWordGuess();
-    const inputEvent = event as InputEvent;
-    if (inputEvent.inputType === "deleteContentBackward") {
-        wordGuess.removeLetter();
-    } else if (inputEvent.inputType === "insertText" && hiddenInput.value.length > 0) {
-        const letter = hiddenInput.value[hiddenInput.value.length - 1]!;
-        wordGuess.addLetter(letter);
+    const currentWord = gameSession.getCurrentWord();
+    const locked = wordGuess.getLockedLettersArray();
+
+    let typed = hiddenInput.value.toUpperCase();
+
+    // Restrict the length of the input word to the length of the word being guessed
+    if (typed.length > currentWord.length) {
+        typed = typed.slice(0, currentWord.length);
+        hiddenInput.value = typed;
     }
+
+    const oldGuess = wordGuess.getGuess();
+
+    if (typed.length < oldGuess.length) {
+        // Protect locked (hint) letters
+        const oldLetters = oldGuess.split("");
+        const newLetters: string[] = [];
+
+        for (let i = 0; i < oldLetters.length; i++) {
+            if (locked[i]) {
+                newLetters.push(oldLetters[i]!);
+            } else {
+                if (newLetters.length < typed.length) {
+                    newLetters.push(typed[newLetters.length]!);
+                }
+            }
+        }
+
+        wordGuess.setGuessFromString(newLetters.join(""));
+        hiddenInput.value = newLetters.join("");
+
+        console.log("AAA");
+
+        // Set the mobile cursor to the end of the text after backspace
+        setTimeout(() => {
+            hiddenInput.setSelectionRange(hiddenInput.value.length, hiddenInput.value.length);
+        }, 0);
+    } else {
+        wordGuess.setGuessFromString(typed);
+    }
+
     wordGuess.render(letterSlots);
-    hiddenInput.value = "";
-}
-
-/** Handles other keyboard events than letters */
-function handleKeyDown(event: KeyboardEvent) {
-    if (!gameSession) return;
-    const wordGuess = gameSession.getCurrentWordGuess();
-
-    if (event.key === "Backspace") {
-        event.preventDefault();
-        wordGuess.removeLetter();
-        wordGuess.render(letterSlots);
-    }
 }
 
 /** Function that guarantees to return a valid game session object or throw an error */
@@ -104,6 +126,7 @@ function handleUseLetterHint(): void {
     const wordGuess = gameSession.getCurrentWordGuess();
     const done = wordGuess.useLetterHint();
 
+    hiddenInput.value = wordGuess.getGuess();
     wordGuess.render(letterSlots);
 
     if (done) {
@@ -149,5 +172,4 @@ export function initializeGameContainer() {
     letterHintButton.addEventListener("click", handleUseLetterHint);
 
     hiddenInput.addEventListener("input", handleInputEvent);
-    hiddenInput.addEventListener("keydown", handleKeyDown);
 }

@@ -15,9 +15,24 @@ export class WordGuess {
         this.locked = new Array(this.word.length).fill(false);
     }
 
+    /** Get the array containing the hint letters of the current guess */
+    getLockedLettersArray(): boolean[] {
+        return this.locked;
+    }
+
+    /** Get the array containing the letters of the current guess */
+    getCurrentGuessArray(): string[] {
+        return this.currentGuess;
+    }
+
     /** Get the current word as a string */
     getWord(): string {
         return this.word;
+    }
+
+    /** Update the current guess based on the string parameter */
+    setGuessFromString(value: string) {
+        this.currentGuess = value.split("").slice(0, this.word.length);
     }
 
     /** Get the current guess as a string */
