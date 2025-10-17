@@ -95,8 +95,6 @@ function handleInputEvent() {
         wordGuess.setGuessFromString(newLetters.join(""));
         hiddenInput.value = newLetters.join("");
 
-        console.log("AAA");
-
         // Set the mobile cursor to the end of the text after backspace
         setTimeout(() => {
             hiddenInput.setSelectionRange(hiddenInput.value.length, hiddenInput.value.length);

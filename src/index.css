@@ -11,6 +11,7 @@
     --text: hsl(222, 77%, 5%);
     --text-muted: hsl(0, 0, 30%);
     --border: hsl(0, 0, 70%);
+    --notification-padding: 5ch;
 }
 
 body {
@@ -51,4 +52,15 @@ body {
     border: 2px solid red;
     background: yellow;
     font-size: 1.5rem;
+}
+
+ul#notification-list {
+    position: fixed;
+    bottom: var(--notification-padding);
+    right: var(--notification-padding);
+    z-index: 100;
+    list-style: none;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: var(--notification-padding);
 }

@@ -2,7 +2,7 @@
     "compilerOptions": {
         // Specify that we're doing the latest and greatest.
         "target": "esnext",
-        "lib": ["ESNext", "DOM"],
+        "lib": ["ESNext", "DOM", "DOM.Iterable"],
         "module": "esnext",
 
         // Appropriate options for using an bundler.
