@@ -5,12 +5,14 @@ const IMAGE_BASE_PATH = "/assets/images/";
 export interface Word {
     name: string;
     image: string;
+    image_credit: string;
     hint: string;
 }
 
 export interface Category {
     name: string;
     image: string;
+    image_credit: string;
     words: Word[];
 }
 
