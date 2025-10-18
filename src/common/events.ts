@@ -2,7 +2,7 @@
 export type CategorySelectedEvent = CustomEvent<{ name: string }>;
 
 /** The event when a word has been selected. */
-export type WordSelectedEvent = CustomEvent<{ word: string }>
+export type WordSelectedEvent = CustomEvent<{ word: string }>;
 
 /** Notify other components about a category being selected. */
 export function dispatchCategorySelection(source: EventTarget, name: string) {
@@ -20,7 +20,7 @@ export function dispatchWordSelection(source: EventTarget, word: string) {
         new CustomEvent("word-selected", {
             bubbles: true,
             detail: { word },
-        }) satisfies WordSelectedEvent
+        }) satisfies WordSelectedEvent,
     );
 }
 
