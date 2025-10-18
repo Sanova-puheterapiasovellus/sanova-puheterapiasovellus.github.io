@@ -18,4 +18,15 @@ export default {
         // Might as well expose the source for browser devtools clarity even in production.
         sourcemap: true,
     },
+    server: {
+        watch: {
+            // Allow HMR
+            usePolling: true,
+            interval: 200,
+        },
+        /*allowedHosts: ["treasonous-improbably-bobby.ngrok-free.dev"],
+        host: true,*/
+        /*host: "0.0.0.0",
+        port: 5173,*/
+    },
 } satisfies UserConfig;

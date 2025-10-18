@@ -4,17 +4,19 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Sanova</title>
-        <script type="module" src="src"></script>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        >
+        <script type="module" src="./src/index.ts"></script>
     </head>
     <body>
-        <header>
-            <h1>Sanova</h1>
-        </header>
+        <header class="mainview-header"></header>
 
-        <main>
-            <h2>Kategoriat</h2>
-
+        <main class="mainview-main">
             <ul id="category-selector-list"></ul>
+            <ul id="word-selector-list"></ul>
+            <ul id="notification-list"></ul>
         </main>
 
         <footer>
@@ -26,9 +28,18 @@
         <dialog id="word-guess-dialog" closedby="any">
             <h3>Sanaharjoittelu</h3>
 
-            <p id="word-guess-debug"></p>
-
+            <img id="word-guess-image" src="placeholder.png" alt="placeholder">
+            <br>
+            <!--<div id="word-guess-slots"></div>-->
+            <div id="word-guess-slots"></div>
+            <input id="hidden-input" type="text" style="opacity:0;">
+            <!--style="position:absolute; opacity:0; width:1px; height:1px;"-->
+            <br>
+            <button id="word-guess-letter-hint" type="button">Kirjainvihje</button>
+            <br>
             <button id="word-guess-close" type="button">Sulje</button>
+            <br>
+            <button id="word-guess-submit" type="button">Vastaa</button>
         </dialog>
 
         <dialog id="syllable-player-dialog" closedby="any">
@@ -52,5 +63,17 @@
 
             <button id="syllable-player-close" type="button">Sulje</button>
         </dialog>
+
+        <template id="notification-item">
+            <li>
+                <details>
+                    <summary>
+                        <slot name="header"></slot>
+                    </summary>
+
+                    <slot name="content"></slot>
+                </details>
+            </li>
+        </template>
     </body>
 </html>

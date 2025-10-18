@@ -1,6 +1,12 @@
 /** The event when a category has been selected. */
 export type CategorySelectedEvent = CustomEvent<{ name: string }>;
 
+/** Event for notifications shown to user. */
+export type InternalNotificationEvent = CustomEvent<{
+    title: string;
+    description: string | undefined;
+}>;
+
 /** Notify other components about a category being selected. */
 export function dispatchCategorySelection(source: EventTarget, name: string) {
     source.dispatchEvent(
@@ -11,8 +17,42 @@ export function dispatchCategorySelection(source: EventTarget, name: string) {
     );
 }
 
+/** Notify the user about something. */
+export function dispatchInternalNotification(
+    source: EventTarget,
+    title: string,
+    description?: string,
+) {
+    source.dispatchEvent(
+        new CustomEvent("internal-notification", {
+            bubbles: true,
+            detail: { title, description },
+        }) satisfies InternalNotificationEvent,
+    );
+}
+
 declare global {
     interface GlobalEventHandlersEventMap {
         "category-selected": CategorySelectedEvent;
+        "internal-notification": InternalNotificationEvent;
+    }
+}
+
+/** Event when a word has been selected. */
+export type WordSelectedEvent = CustomEvent<{ name: string; index: number }>;
+
+/** Notify other components about a word being selected. */
+export function dispatchWordSelection(source: EventTarget, name: string, index: number) {
+    source.dispatchEvent(
+        new CustomEvent("word-selected", {
+            bubbles: true,
+            detail: { name, index },
+        }) satisfies WordSelectedEvent,
+    );
+}
+
+declare global {
+    interface GlobalEventHandlersEventMap {
+        "word-selected": WordSelectedEvent;
     }
 }
