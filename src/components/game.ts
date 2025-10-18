@@ -1,5 +1,6 @@
 import { expectElement } from "../common/dom";
 import type { CategorySelectedEvent, WordSelectedEvent } from "../common/events";
+import { getImagePath, wordsData } from "../data/word-data-model.ts";
 import { GameSession } from "./GameSession";
 import type { WordGuess } from "./WordGuess";
 import { initializeWordSelector } from "./words.ts";
@@ -29,11 +30,25 @@ function focusHiddenInput() {
 function handleGameStart(event: CategorySelectedEvent): void {
     const currentCategory: string = event.detail.name;
     gameSession = new GameSession(currentCategory);
-    initializeWordSelector(currentCategory, gameSession);
-    ///const word = gameSession.getCurrentWord();
-    ///wordImage.alt = word;
-    ///guessDialog.showModal();
-    ///setupWordInput();
+    //initializeWordSelector(currentCategory, gameSession); // Uncomment to make the word view visible
+
+    // ### SKIP THE WORD VIEW WHEN CATEGORY IS SELECTED ###
+    const category = wordsData.categories.find((c) => c.name === currentCategory);
+    if (!category) return;
+
+    gameSession.setCategory(currentCategory);
+    gameSession.setWords(category.words.map((w) => w.name));
+
+    gameSession.setGameModeRandom(); // Show words in random order
+    const word = gameSession.getNextWord();
+    // Fake the word selection event
+    dispatchEvent(
+        new CustomEvent("word-selected", {
+            bubbles: true,
+            detail: { name: word, index: 0 },
+        }),
+    );
+    // ### ############################################ ###
 }
 
 /** Handle the word selection, i.e. show the guessing modal for the user */
