@@ -349,8 +349,7 @@
                 {
                     "name": "opettaja",
                     "image": "opettaja.png",
-                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)","",
-                    "hint": "
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
                     "hint": "Henkilö, joka jakaa tietoa ja ohjaa oppilaita koulussa"
                 },
                 {
@@ -637,7 +636,7 @@
                 },
                 {
                     "name": "salibandy",
-                    "image": "salibandy.png",s
+                    "image": "salibandy.png",
                     "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
                     "hint": "Sisällä pelattava mailapeli, jossa tehdään maaleja pallolla"
                 },
