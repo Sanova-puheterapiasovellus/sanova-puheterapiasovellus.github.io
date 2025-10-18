@@ -146,7 +146,7 @@
                 },
                 {
                     "name": "käsineet",
-                    "image": "kasineet",
+                    "image": "kasineet.png",
                     "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
                     "hint": "Nämä lämmittävät käsiä talvella"
                 },
@@ -680,7 +680,7 @@
                 },
                 {
                     "name": "metsästys",
-                    "image": "metsästys.png",
+                    "image": "metsastys.png",
                     "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
                     "hint": "Villieläinten pyytämistä luonnossa"
                 },
