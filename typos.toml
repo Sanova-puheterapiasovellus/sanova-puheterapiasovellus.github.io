@@ -1,3 +1,4 @@
 # Spell checking localization related assets doesn't make any sense.
 [files]
-extend-exclude = ["*data.json", "*.png"]
+extend-exclude = ["*data.json", "syllable-split-phonology.ts"]
+

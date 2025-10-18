@@ -7,82 +7,98 @@
                 {
                     "name": "banaani",
                     "image": "banaani.png",
-                    "subcategory": "hedelmä"
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Hedelmä, jota apinatkin usein syövät"
                 },
                 {
                     "name": "kahvi",
                     "image": "kahvi.png",
-                    "subcategory": "juoma"
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Kuuma piristävä juoma, jota juodaan usein aamuisin"
                 },
                 {
                     "name": "tee",
                     "image": "tee.png",
-                    "subcategory": "juoma"
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Kuuma juoma, jota juodaan usein aamuisin tai iltaisin ja siihen voidaan lisätä esimerkiksi hunajaa"
                 },
                 {
                     "name": "leipä",
                     "image": "leipa.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Viljasta leivottu ja sen päälle laitetaan usein voita ja mahdollisesti muita lisukkeita"
                 },
                 {
                     "name": "puuro",
                     "image": "puuro.png",
-                    "subcategory": ""
+                    "image_credit": "Copyright 2018/19 Steve Lee - This work is licensed under the Creative Commons Attribution-ShareAlike 2.0 UK: England & Wales License. Mulberry Symbols. https://mulberrysymbols.org/",
+                    "hint": "Viljaisa ja pehmeä, lusikalla syötävä ruoka. Syödään usein aamupalalla"
                 },
                 {
                     "name": "salaatti",
                     "image": "salaatti.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Usein aterian lisukkeena. Sisältää erilaisia vihanneksia ja kasviksia"
                 },
                 {
                     "name": "spagetti",
                     "image": "spagetti.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Eräänlainen pastaruoka, jota syödään usein esimerkiksi lihapullien kanssa"
                 },
                 {
                     "name": "peruna",
                     "image": "peruna.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Juures, josta voidaan tehdä esimerkiksi muusia tai ranskalaisia"
                 },
                 {
                     "name": "makkara",
                     "image": "makkara.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "ihavalmiste, jota voidaan esimerkiksi grillata tai paistaa nuotiolla"
                 },
                 {
                     "name": "omena",
                     "image": "omena.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Pyöreä, puussa kasvava, hedelmä"
                 },
                 {
                     "name": "tomaatti",
                     "image": "tomaatti.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Pyöreä vihannes, jota laitetaan usein salaattiin tai leivän päälle"
                 },
                 {
                     "name": "kurkku",
                     "image": "kurkku.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Pitkä ja ohut vihannes, jota laitetaan usein salaattiin tai leivän päälle"
                 },
                 {
                     "name": "juusto",
                     "image": "juusto.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Leivän päälle ja moniin ruokiin laitettava maitotuote"
                 },
                 {
                     "name": "keitto",
                     "image": "keitto.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Lämmin, lusikalla syötävä ruoka. Se voi sisältää liemen lisäksi esimerkiksi nakkeja, juureksia, soseutettuja kasviksia tai jauhelihaa."
                 },
                 {
                     "name": "suklaa",
                     "image": "suklaa.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Kaakaopavuista valmistettu makea herkku, joka on usein levyn tai patukan muodossa"
                 },
                 {
                     "name": "jäätelö",
                     "image": "jaatelo.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Kylmä, pakastimesta löytyvä makea herkku, jota syödään usein kesällä"
                 }
             ]
         },
@@ -93,72 +109,86 @@
                 {
                     "name": "housut",
                     "image": "housut.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Alavartaloon puettava vaate, jossa on kaksi lahjetta"
                 },
                 {
                     "name": "t-paita",
                     "image": "t-paita.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Ylävartaloon puettava vaate, jossa on lyhyet hihat"
                 },
                 {
                     "name": "takki",
                     "image": "takki.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Ylävartaloon puettava ulkovaate, jota käytetään etenkin viileillä ja kylmillä keleillä"
                 },
                 {
                     "name": "hame",
                     "image": "hame.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Alavartaloon puettava helmallinen vaate, jota etenkin naiset käyttävät esimerkiksi juhlissa tai kesällä"
                 },
                 {
                     "name": "mekko",
                     "image": "mekko.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Ylä- ja alavartaloon ulottuva helmallinen vaate, jota etenkin naiset käyttävät esimerkiksi juhlissa tai kesällä"
                 },
                 {
                     "name": "pipo",
                     "image": "pipo.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Päähän laitettava asuste, joka lämmittää talvella"
                 },
                 {
-                    "name": "hanskat",
-                    "image": "hanskat.png",
-                    "subcategory": ""
+                    "name": "käsineet",
+                    "image": "kasineet",
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Nämä lämmittävät käsiä talvella"
                 },
                 {
                     "name": "huivi",
                     "image": "huivi.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Kaulaan kiedottava asuste, joka lämmittää talvella"
                 },
                 {
                     "name": "saappaat",
                     "image": "saappaat.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Pitkävartiset kengät, jotka kestävät vettä"
                 },
                 {
                     "name": "sukat",
                     "image": "sukat.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Puetaan jalkoihin"
                 },
                 {
                     "name": "farkut",
                     "image": "farkut.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Etenkin arkikäyttöön sopivat housut, joiden kanssa voidaan käyttää vyötä"
                 },
                 {
                     "name": "neule",
                     "image": "neule.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Ylävartaloon puettava lämmin vaate, joka voi olla tehty esimerkiksi villasta"
                 },
                 {
                     "name": "alusvaatteet",
                     "image": "alusvaatteet.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Ihoa vasten olevat, päällysvaatteiden alle puettavat vaatteet"
                 },
                 {
                     "name": "uimapuku",
                     "image": "uimapuku.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Käytetään esimerkiksi uimahallissa tai rannalla"
                 }
             ]
         },
@@ -167,49 +197,58 @@
             "image": "",
             "words": [
                 {
-                    "name": "sade",
-                    "image": "sade.png",
-                    "subcategory": ""
+                    "name": "sateinen",
+                    "image": "sateinen.png",
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Kostea ja märkä säätila"
                 },
                 {
-                    "name": "aurinko",
-                    "image": "aurinko.png",
-                    "subcategory": ""
+                    "name": "aurinkoinen",
+                    "image": "aurinkoinen.png",
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Lämmin säätila, paistaa etenkin kesällä"
                 },
                 {
                     "name": "ukkonen",
                     "image": "ukkonen.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Säätila, jolloin salamoi ja kuuluu jyrinää"
                 },
                 {
                     "name": "lumisade",
                     "image": "lumisade.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Talvinen säätila, hiutaleita tippuu taivaalta"
                 },
                 {
                     "name": "pilvinen",
                     "image": "pilvinen.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Säätila, jossa aurinko on piilossa, eli tällöin ei paista"
                 },
                 {
-                    "name": "tuuli",
-                    "image": "tuuli.png",
-                    "subcategory": ""
+                    "name": "tuulinen",
+                    "image": "tuulinen.png",
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Säätila, jossa käy viima ja puiden oksat heiluvat"
                 },
                 {
                     "name": "myrsky",
                     "image": "myrsky.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Hurja säätila, johon voi liittyä voimakasta tuulta, sadetta tai ukkosta"
                 },
                 {
                     "name": "pakkanen",
                     "image": "pakkanen.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Talvella oleva kylmä säätila, kun lämpömittari näyttää miinusta"
                 },
                 {
                     "name": "helle",
                     "image": "helle.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Kesällä oleva lämmin säätila, jolloin lämpömittari näyttää vähintään +25 astetta"
                 }
             ]
         },
@@ -220,67 +259,80 @@
                 {
                     "name": "koira",
                     "image": "koira.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Lemmikkieläin, joka haukkuu"
                 },
                 {
                     "name": "kissa",
                     "image": "kissa.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Lemmikkieläin, joka maukuu"
                 },
                 {
                     "name": "lehmä",
                     "image": "lehma.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Kotieläin, joka asuu navetassa ja ammuu"
                 },
                 {
-                    "name": "possu",
-                    "image": "possu.png",
-                    "subcategory": ""
+                    "name": "sika",
+                    "image": "sika.png",
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Kotieläin, joka röhkii ja jolla on saparohäntä"
                 },
                 {
                     "name": "hevonen",
                     "image": "hevonen.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Kotieläin, joka hirnuu ja jolla voi ratsastaa"
                 },
                 {
                     "name": "käärme",
                     "image": "kaarme.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Luikerteleva eläin, joka sihisee ja voi olla myrkyllinen"
                 },
                 {
                     "name": "kala",
                     "image": "kala.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Vedessä uiskenteleva eläin, jolla on evät ja kidukset"
                 },
                 {
                     "name": "lintu",
                     "image": "lintu.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Lentävä, siivekäs eläin, joka ääntelee laulaen"
                 },
                 {
                     "name": "lammas",
                     "image": "lammas.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Kotieläin, joka määkii ja josta voidaan keriä villaa"
                 },
                 {
                     "name": "perhonen",
                     "image": "perhonen.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Kaunis hyönteinen, joka lentää ja joilla voi olla eri värisiä siipiä"
                 },
                 {
                     "name": "ampiainen",
                     "image": "ampiainen.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Lentävä hyönteinen, joka surisee ja voi pistää"
                 },
                 {
                     "name": "sammakko",
                     "image": "sammakko.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Hyppivä ja kurnuttava eläin, joka elää esimerkiksi puutarhassa tai metsässä"
                 },
                 {
                     "name": "sudenkorento",
                     "image": "sudenkorento.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Hyönteinen, joka lentää ja jolla on suippo ja pitkä ruumis"
                 }
             ]
         },
@@ -291,57 +343,69 @@
                 {
                     "name": "poliisi",
                     "image": "poliisi.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Viranomainen, joka valvoo lakia ja tutkii rikoksia"
                 },
                 {
                     "name": "opettaja",
                     "image": "opettaja.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)","",
+                    "hint": "
+                    "hint": "Henkilö, joka jakaa tietoa ja ohjaa oppilaita koulussa"
                 },
                 {
                     "name": "kokki",
                     "image": "kokki.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Henkilö, joka valmistaa ruokaa ravintolassa tai keittiössä"
                 },
                 {
                     "name": "leipuri",
                     "image": "leipuri.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Henkilö, joka leipoo leipää, pullaa ja muita leivonnaisia"
                 },
                 {
                     "name": "lääkäri",
                     "image": "laakari.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Henkilö, joka tutkii ja hoitaa ihmisiä sairaalassa"
                 },
                 {
                     "name": "palomies",
                     "image": "palomies.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Henkilö, joka sammuttaa tulipaloja ja pelastaa ihmisiä"
                 },
                 {
                     "name": "maalari",
                     "image": "maalari.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Henkilö, joka maalaa seiniä tai tauluja"
                 },
                 {
                     "name": "putkimies",
                     "image": "putkimies.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Henkilö, joka asentaa ja korjaa vesijohtoja sekä viemäreitä"
                 },
                 {
                     "name": "sähköasentaja",
                     "image": "sahkoasentaja.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Henkilö, joka asentaa ja korjaa sähköjärjestelmiä ja -laitteita"
                 },
                 {
-                    "name": "myyjä/kauppias",
-                    "image": "myyja-kauppias.png",
-                    "subcategory": ""
+                    "name": "kauppias",
+                    "image": "kauppias.png",
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Henkilö, joka kaupittelee tuotteita ja palvelee asiakkaita kaupassa"
                 },
                 {
                     "name": "rekkakuski",
                     "image": "rekkakuski.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain). Pictures edited",
+                    "hint": "Henkilö, joka kuljettaa tavaraa pitkiä matkoja rekalla"
                 }
             ]
         },
@@ -352,67 +416,80 @@
                 {
                     "name": "auto",
                     "image": "auto.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Kulkuneuvo, jossa on neljä pyörää ja jota ohjataan ratista"
                 },
                 {
                     "name": "juna",
                     "image": "juna.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Pitkä kulkuneuvo, joka kulkee pitkiä matkoja raiteilla"
                 },
                 {
                     "name": "laiva",
                     "image": "laiva.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Suuri kulkuneuvo, joka seilaa merellä ja voi kuljettaa tavaraa, autoja ja ihmisiä"
                 },
                 {
                     "name": "lentokone",
                     "image": "lentokone.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Kulkuneuvo, jolla pystyy siirtymään paikasta toiseen ilmateitse"
                 },
                 {
                     "name": "raitiovaunu",
                     "image": "raitiovaunu.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Pitkä kulkuneuvo, joka kulkee kaupungissa raiteilla"
                 },
                 {
                     "name": "metro",
                     "image": "metro.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Pitkä kulkuneuvo, joka kulkee maan alla"
                 },
                 {
                     "name": "bussi",
                     "image": "bussi.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Kulkuneuvo, joka kuljettaa monta matkustajaa kerralla kaupungissa tai pitkällä matkalla"
                 },
                 {
                     "name": "polkupyörä",
                     "image": "polkupyora.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Kulkuneuvo, jota poljetaan"
                 },
                 {
                     "name": "moottoripyörä",
                     "image": "moottoripyora.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Kaksipyöräinen kulkuneuvo, jossa on moottori"
                 },
                 {
                     "name": "potkulauta",
                     "image": "potkulauta.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Kulkuneuvo, jota liikutetaan potkimalla jalalla maata"
                 },
                 {
                     "name": "pakettiauto",
                     "image": "pakettiauto.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Kulkuneuvo, jossa kuljetetaan tavaraa"
                 },
                 {
-                    "name": "rekka/kuorma-auto",
-                    "image": "rekka-kuorma-auto.png",
-                    "subcategory": ""
+                    "name": "rekka",
+                    "image": "rekka.png",
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Suuri kulkuneuvo, joka kuljettaa paljon tavaraa pitkiä matkoja"
                 },
                 {
                     "name": "vene",
                     "image": "vene.png",
-                    "subcategory": ""
+                    "image_credit": "Annakaisa Ojanen CC-BY-NC-SA 3.0",
+                    "hint": "Kulkuneuvo, joka kulkee vedessä, usein moottorilla tai airoilla"
                 }
             ]
         },
@@ -423,82 +500,98 @@
                 {
                     "name": "nukkua",
                     "image": "nukkua.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Levätä silmät suljettuina"
                 },
                 {
                     "name": "kävellä",
                     "image": "kavella.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Liikkua eteenpäin jalkojen avulla"
                 },
                 {
                     "name": "juosta",
                     "image": "juosta.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Liikkua eteenpäin nopeasti jalkojen avulla"
                 },
                 {
                     "name": "syödä",
                     "image": "syoda.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Laittaa ruokaa suuhun ja niellä se"
                 },
                 {
                     "name": "juoda",
                     "image": "juoda.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Laittaa nestettä, kuten vettä, suuhun ja niellä se"
                 },
                 {
                     "name": "piirtää",
                     "image": "piirtaa.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Tehdä kuvia kynällä tai tussilla"
                 },
                 {
                     "name": "laulaa",
                     "image": "laulaa.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Tuottaa sävelmiä äänellä"
                 },
                 {
                     "name": "tanssia",
                     "image": "tanssia.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Liikkua musiikin tahdissa"
                 },
                 {
                     "name": "soittaa",
                     "image": "soittaa.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Käyttää soitinta musiikin tekemiseen"
                 },
                 {
                     "name": "pelata",
                     "image": "pelata.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Osallistua peliin tai urheiluun"
                 },
                 {
                     "name": "katsoa (tv:tä)",
                     "image": "katsoa.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Suunnata katse johonkin, esim. televisioon ja nähdä se"
                 },
                 {
                     "name": "nauraa",
                     "image": "nauraa.png",
-                    "subcategory": ""
+                    "image_credit": "Nana Sipola CC-BY-NC-SA 3.0",
+                    "hint": "Ilmaista iloa äänellä ja ilmeillä"
                 },
                 {
                     "name": "puhua",
                     "image": "puhua.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Kertoa asioita tuottamalla sanoja ja ääntä"
                 },
                 {
                     "name": "kuunnella",
                     "image": "kuunnella.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Keskittyä ympäristön ääniin"
                 },
                 {
                     "name": "kirjoittaa",
                     "image": "kirjoittaa.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Muodostaa sanoja paperille"
                 },
                 {
                     "name": "lukea",
                     "image": "lukea.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Tulkita ja ymmärtää kirjoitettua tekstiä"
                 }
             ]
         },
@@ -509,77 +602,92 @@
                 {
                     "name": "jalkapallo",
                     "image": "jalkapallo.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Joukkuelaji, jossa potkitaan mustavalkoista palloa"
                 },
                 {
                     "name": "maalaaminen",
                     "image": "maalaaminen.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Kuvien tai pintojen värittämistä maalilla"
                 },
                 {
                     "name": "tanssiminen",
                     "image": "tanssiminen.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Liikkumista musiikin tahdissa"
                 },
                 {
                     "name": "laulaminen",
                     "image": "laulaminen.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Äänen käyttöä musiikin tekemiseen"
                 },
                 {
                     "name": "koripallo",
                     "image": "koripallo.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Joukkuelaji, jossa heitetään palloa koriin"
                 },
                 {
                     "name": "pesäpallo",
                     "image": "pesapallo.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Suomen kansallispeli, jossa lyödään palloa ja juostaan pesien välillä"
                 },
                 {
                     "name": "salibandy",
-                    "image": "salibandy.png",
-                    "subcategory": ""
+                    "image": "salibandy.png",s
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Sisällä pelattava mailapeli, jossa tehdään maaleja pallolla"
                 },
                 {
                     "name": "jääkiekko",
                     "image": "jaakiekko.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Joukkuepeli, jossa pelataan kiekolla jäällä ja tehdään maaleja"
                 },
                 {
                     "name": "teatteri",
                     "image": "teatteri.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Taidelaji, jossa näytellään tarinoita lavalla"
                 },
                 {
                     "name": "kiipeily",
                     "image": "kiipeily.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Liikkumista ylöspäin seinillä tai kallioilla"
                 },
                 {
                     "name": "kuntosali",
                     "image": "kuntosali.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Harrastus, jossa harjoitellaan lihasvoimaa ja kuntoa, ja nostetaan painoja"
                 },
                 {
                     "name": "kalastus",
                     "image": "kalastus.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Kalojen pyytämistä vedestä onkimalla, virvelöimällä tai verkon avulla"
                 },
                 {
                     "name": "metsästys",
-                    "image": "metsastys.png",
-                    "subcategory": ""
+                    "image": "metsästys.png",
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Villieläinten pyytämistä luonnossa"
                 },
                 {
                     "name": "lenkkeily",
                     "image": "lenkkeily.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Juoksemista tai kävelyä kuntoilun vuoksi"
                 },
                 {
                     "name": "purjehdus",
                     "image": "purjehdus.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Veneilyä, jossa liikutaan tuulen voimalla purjeilla"
                 }
             ]
         },
@@ -590,82 +698,98 @@
                 {
                     "name": "kaukosäädin",
                     "image": "kaukosaadin.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Laite, jolla ohjataan televisiota tai muita laitteita etäältä"
                 },
                 {
                     "name": "hammasharja",
                     "image": "hammasharja.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Väline hampaiden puhdistamiseen"
                 },
                 {
                     "name": "juomapullo",
                     "image": "juomapullo.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Pullo, josta juodaan vettä tai muuta juomaa"
                 },
                 {
                     "name": "aterimet/ruokailuvälineet",
                     "image": "aterimet-ruokailuvalineet.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Haarukka, veitsi ja lusikka"
                 },
                 {
                     "name": "kuulokkeet",
                     "image": "kuulokkeet.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Laite, jolla kuunnellaan ääntä tai musiikkia korvilla"
                 },
                 {
                     "name": "laturi",
                     "image": "laturi.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Johdollinen laite, jolla ladataan esim. puhelinta"
                 },
                 {
                     "name": "puhelin",
                     "image": "puhelin.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Laite, jolla voidaan soittaa, viestitellä ja ottaa kuvia"
                 },
                 {
-                    "name": "tietokone/läppäri",
-                    "image": "tietokone-lappari.png",
-                    "subcategory": ""
+                    "name": "tietokone",
+                    "image": "tietokone.png",
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Laite, jolla voi työskennellä, pelata ja etsiä tietoa"
                 },
                 {
                     "name": "henkari",
                     "image": "henkari.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Esine, jonka avulla ripustetaan vaatteita"
                 },
                 {
                     "name": "avaimet",
                     "image": "avaimet.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Välineet, joilla avataan ja lukitaan ovia"
                 },
                 {
                     "name": "laukku",
                     "image": "laukku.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Olalla kannettava säilytystila tavaroille"
                 },
                 {
                     "name": "sateenvarjo",
                     "image": "sateenvarjo.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Suojaa sateelta, kun se avataan pään päälle"
                 },
                 {
                     "name": "reppu",
                     "image": "reppu.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Selässä kannettava laukku"
                 },
                 {
                     "name": "lompakko",
                     "image": "lompakko.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Pieni kotelo, jossa säilytetään rahaa ja kortteja"
                 },
                 {
                     "name": "pankkikortti",
                     "image": "pankkikortti.png",
-                    "subcategory": ""
+                    "image_credit": "Copyright 2018/19 Steve Lee - This work is licensed under the Creative Commons Attribution-ShareAlike 2.0 UK: England & Wales License. Mulberry Symbols. https://mulberrysymbols.org/",
+                    "hint": "Kortti, jolla voi maksaa"
                 },
                 {
                     "name": "silmälasit",
                     "image": "silmalasit.png",
-                    "subcategory": ""
+                    "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
+                    "hint": "Auttavat näkemään paremmin"
                 }
             ]
         }
