@@ -1,7 +1,9 @@
 import { expectElement } from "../common/dom";
-import type { CategorySelectedEvent } from "../common/events";
+import type { CategorySelectedEvent, WordSelectedEvent } from "../common/events";
+import { getImagePath, wordsData } from "../data/word-data-model.ts";
 import { GameSession } from "./GameSession";
 import type { WordGuess } from "./WordGuess";
+import { initializeWordSelector } from "./words.ts";
 
 const guessDialog = expectElement("word-guess-dialog", HTMLDialogElement);
 const closeButton = expectElement("word-guess-close", HTMLButtonElement);
@@ -9,6 +11,7 @@ const answerButton = expectElement("word-guess-submit", HTMLButtonElement);
 const letterHintButton = expectElement("word-guess-letter-hint", HTMLButtonElement);
 const wordImage = expectElement("word-guess-image", HTMLImageElement);
 const letterSlots = expectElement("word-guess-slots", HTMLDivElement);
+const hiddenInput = document.getElementById("hidden-input") as HTMLInputElement;
 
 // Keep track of the game progress, initially null
 let gameSession: GameSession | null = null;
@@ -18,13 +21,43 @@ function handleDialogClose(_: Event): void {
     guessDialog.close();
 }
 
+/** Trigger the mobile keyboard */
+function focusHiddenInput() {
+    hiddenInput.focus();
+}
+
 /** Handle the game starting with the selected category. */
 function handleGameStart(event: CategorySelectedEvent): void {
     const currentCategory: string = event.detail.name;
     gameSession = new GameSession(currentCategory);
-    const word = gameSession.getCurrentWord();
-    wordImage.alt = word;
+    //initializeWordSelector(currentCategory, gameSession); // Uncomment to make the word view visible
 
+    // ### SKIP THE WORD VIEW WHEN CATEGORY IS SELECTED ###
+    const category = wordsData.categories.find((c) => c.name === currentCategory);
+    if (!category) return;
+
+    gameSession.setCategory(currentCategory);
+    gameSession.setWords(category.words.map((w) => w.name));
+
+    gameSession.setGameModeRandom(); // Show words in random order
+    const word = gameSession.getNextWord();
+    // Fake the word selection event
+    dispatchEvent(
+        new CustomEvent("word-selected", {
+            bubbles: true,
+            detail: { name: word, index: 0 },
+        }),
+    );
+    // ### ############################################ ###
+}
+
+/** Handle the word selection, i.e. show the guessing modal for the user */
+function handleWordSelected(event: WordSelectedEvent) {
+    if (!gameSession) return;
+
+    const word = gameSession.getCurrentWord();
+
+    wordImage.alt = word;
     guessDialog.showModal();
     setupWordInput();
 }
@@ -33,27 +66,59 @@ function handleGameStart(event: CategorySelectedEvent): void {
 function setupWordInput() {
     const wordGuess = getGameSession().getCurrentWordGuess();
     wordGuess.render(letterSlots);
-
-    // attach keyboard
-    window.addEventListener("keydown", handleKeyInput);
+    hiddenInput.value = "";
+    hiddenInput.focus();
+    letterSlots.addEventListener("click", () => hiddenInput.focus());
 }
 
-/** Gets and renders the letter typed from the keyboard */
-function handleKeyInput(event: KeyboardEvent) {
+/** Handle the typing events when using both physical keyboard and phone's keyboard */
+function handleInputEvent() {
     if (!gameSession) return;
-    const wordGuess = gameSession.getCurrentWordGuess();
-    const container = document.getElementById("word-guess-slots") as HTMLDivElement;
 
-    if (/^[a-zA-ZåäöÅÄÖ]$/.test(event.key)) {
-        wordGuess.addLetter(event.key);
-        wordGuess.render(container);
-    } else if (event.key === "Backspace") {
-        wordGuess.removeLetter();
-        wordGuess.render(container);
+    const wordGuess = gameSession.getCurrentWordGuess();
+    const currentWord = gameSession.getCurrentWord();
+    const locked = wordGuess.getLockedLettersArray();
+
+    let typed = hiddenInput.value.toUpperCase();
+
+    // Restrict the length of the input word to the length of the word being guessed
+    if (typed.length > currentWord.length) {
+        typed = typed.slice(0, currentWord.length);
+        hiddenInput.value = typed;
     }
+
+    const oldGuess = wordGuess.getGuess();
+
+    if (typed.length < oldGuess.length) {
+        // Protect locked (hint) letters
+        const oldLetters = oldGuess.split("");
+        const newLetters: string[] = [];
+
+        for (let i = 0; i < oldLetters.length; i++) {
+            if (locked[i]) {
+                newLetters.push(oldLetters[i]!);
+            } else {
+                if (newLetters.length < typed.length) {
+                    newLetters.push(typed[newLetters.length]!);
+                }
+            }
+        }
+
+        wordGuess.setGuessFromString(newLetters.join(""));
+        hiddenInput.value = newLetters.join("");
+
+        // Set the mobile cursor to the end of the text after backspace
+        setTimeout(() => {
+            hiddenInput.setSelectionRange(hiddenInput.value.length, hiddenInput.value.length);
+        }, 0);
+    } else {
+        wordGuess.setGuessFromString(typed);
+    }
+
+    wordGuess.render(letterSlots);
 }
 
-/** Function that quarantees to return a valid game session object or throw an error */
+/** Function that guarantees to return a valid game session object or throw an error */
 function getGameSession(): GameSession {
     if (gameSession === null) {
         throw new Error("Game session is not initialized yet!");
@@ -71,6 +136,7 @@ function handleUseLetterHint(): void {
     const wordGuess = gameSession.getCurrentWordGuess();
     const done = wordGuess.useLetterHint();
 
+    hiddenInput.value = wordGuess.getGuess();
     wordGuess.render(letterSlots);
 
     if (done) {
@@ -104,6 +170,7 @@ function handleAnswer(wordGuess: WordGuess): void {
 /** Wire up events to react to the game being started. */
 export function initializeGameContainer() {
     window.addEventListener("category-selected", handleGameStart);
+    window.addEventListener("word-selected", handleWordSelected);
     closeButton.addEventListener("click", handleDialogClose);
 
     answerButton.addEventListener("click", () => {
@@ -113,4 +180,6 @@ export function initializeGameContainer() {
     });
 
     letterHintButton.addEventListener("click", handleUseLetterHint);
+
+    hiddenInput.addEventListener("input", handleInputEvent);
 }

@@ -43,6 +43,17 @@ body {
     list-style-type: none;
 }
 
+/* Hide sections by adding .hidden at the end of the class name */
+.hidden {
+    display: none !important;
+}
+
+#hidden-input {
+    border: 2px solid red;
+    background: yellow;
+    font-size: 1.5rem;
+}
+
 ul#notification-list {
     position: fixed;
     bottom: var(--notification-padding);

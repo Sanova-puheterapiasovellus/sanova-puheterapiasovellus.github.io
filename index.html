@@ -15,7 +15,7 @@
 
         <main class="mainview-main">
             <ul id="category-selector-list"></ul>
-
+            <ul id="word-selector-list"></ul>
             <ul id="notification-list"></ul>
         </main>
 
@@ -28,11 +28,12 @@
         <dialog id="word-guess-dialog" closedby="any">
             <h3>Sanaharjoittelu</h3>
 
-            <!--<p id="word-guess-debug"></p>-->
             <img id="word-guess-image" src="placeholder.png" alt="placeholder">
             <br>
-            <!--<input id="word-guess-input" type="text">-->
+            <!--<div id="word-guess-slots"></div>-->
             <div id="word-guess-slots"></div>
+            <input id="hidden-input" type="text" style="opacity:0;">
+            <!--style="position:absolute; opacity:0; width:1px; height:1px;"-->
             <br>
             <button id="word-guess-letter-hint" type="button">Kirjainvihje</button>
             <br>
