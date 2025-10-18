@@ -2,7 +2,8 @@
     "categories": [
         {
             "name": "ruoat ja juomat",
-            "image": "",
+            "image": "banaani.png",
+            "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
             "words": [
                 {
                     "name": "banaani",
@@ -104,7 +105,8 @@
         },
         {
             "name": "vaatteet",
-            "image": "",
+            "image": "t-paita.png",
+            "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
             "words": [
                 {
                     "name": "housut",
@@ -194,7 +196,8 @@
         },
         {
             "name": "säätilat",
-            "image": "",
+            "image": "aurinkoinen.png",
+            "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
             "words": [
                 {
                     "name": "sateinen",
@@ -254,7 +257,8 @@
         },
         {
             "name": "eläimet",
-            "image": "",
+            "image": "koira.png",
+            "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
             "words": [
                 {
                     "name": "koira",
@@ -338,7 +342,8 @@
         },
         {
             "name": "ammatit",
-            "image": "",
+            "image": "opettaja.png",
+            "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
             "words": [
                 {
                     "name": "poliisi",
@@ -410,7 +415,8 @@
         },
         {
             "name": "kulkuneuvot",
-            "image": "",
+            "image": "juna.png",
+            "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
             "words": [
                 {
                     "name": "auto",
@@ -494,7 +500,8 @@
         },
         {
             "name": "tekeminen",
-            "image": "",
+            "image": "juosta.png",
+            "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
             "words": [
                 {
                     "name": "nukkua",
@@ -596,7 +603,8 @@
         },
         {
             "name": "harrastukset",
-            "image": "",
+            "image": "jalkapallo.png",
+            "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
             "words": [
                 {
                     "name": "jalkapallo",
@@ -692,7 +700,8 @@
         },
         {
             "name": "arkipäiväiset esineet",
-            "image": "",
+            "image": "hammasharja.png",
+            "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
             "words": [
                 {
                     "name": "kaukosäädin",
