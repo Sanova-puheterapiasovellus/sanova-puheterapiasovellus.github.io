@@ -1,13 +1,11 @@
 import { buildHtml, expectElement } from "../common/dom";
 import { dispatchWordSelection } from "../common/events";
-import data from "../data/word-data.json";
+import { getImagePath, wordsData } from "../data/word-data-model.ts";
 
 const openBtn = expectElement("open-words-btn", HTMLButtonElement);
 const dialog = expectElement("all-words-dialog", HTMLDialogElement);
 const closeBtn = expectElement("close-all-words", HTMLElement);
 const allWordsList = expectElement("all-words-list", HTMLUListElement);
-
-const baseImgPath = "/assets/images/";
 
 openBtn.addEventListener("click", () => {
     dialog.showModal();
@@ -20,7 +18,7 @@ dialog.addEventListener("click", (e) => {
 });
 
 function createImageEntry(word: string, imagePath: string, index: number): HTMLElement {
-    const img = buildHtml("img", { src: `${baseImgPath}${imagePath}`, alt: word });
+    const img = buildHtml("img", { src: imagePath, alt: word });
     Object.assign(img.style, {
         cursor: "pointer",
         display: "block",
@@ -33,7 +31,7 @@ function createImageEntry(word: string, imagePath: string, index: number): HTMLE
 
 function createRandomEntry(): HTMLElement {
     const img = buildHtml("img", {
-        src: `${baseImgPath}question.png`,
+        src: getImagePath("question.png"),
         alt: "random",
     });
     Object.assign(img.style, {
@@ -49,9 +47,9 @@ function createRandomEntry(): HTMLElement {
 export function initializeAllWords() {
     allWordsList.innerHTML = "";
     allWordsList.appendChild(createRandomEntry());
-    data.categories.forEach((category) => {
+    wordsData.categories.forEach((category) => {
         category.words.forEach((word, index) => {
-            const li = createImageEntry(word.name, word.image, index);
+            const li = createImageEntry(word.name, getImagePath(word.image), index);
             allWordsList.appendChild(li);
         });
     });
