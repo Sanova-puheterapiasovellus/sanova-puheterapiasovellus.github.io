@@ -1,3 +1,5 @@
+import { offsetsData } from "../data/offset-data-model";
+
 /** All previously loaded audio snippets as there's a reasonable finite amount of them. */
 const snippetCache = new Map<string, Promise<AudioBuffer>>();
 
@@ -59,7 +61,8 @@ function combineAudioBuffers(
 ): AudioBuffer {
     const { length, samples, channels } = analyzeAudioBuffers(values);
 
-    const capacity = length + (values.length - 1) * (separation * samples);
+    const middle = Math.floor(separation * samples);
+    const capacity = length + (values.length - 1) * middle;
     const output = context.createBuffer(channels, capacity, samples);
 
     let offset = 0;
@@ -68,7 +71,37 @@ function combineAudioBuffers(
             output.copyToChannel(buffer.getChannelData(index), index, offset);
         }
 
-        offset += buffer.length + separation * samples;
+        offset += buffer.length + middle;
+    }
+
+    return output;
+}
+
+/**
+ * Essentially an {@link Array#splice} but for audio buffers.
+ *
+ * Bit of an silly approach since it's an unnecessary temporary copy,
+ * but that saves me from changing too much of the surrounding logic.
+ */
+function audioBufferSubset(
+    context: AudioContext,
+    original: AudioBuffer,
+    start: number,
+    end: number,
+): AudioBuffer {
+    const startSample = Math.floor(original.sampleRate * start);
+    const endSample = Math.floor(original.sampleRate * end);
+
+    const output = context.createBuffer(
+        original.numberOfChannels,
+        endSample - startSample,
+        original.sampleRate,
+    );
+
+    for (let index = 0; index < original.numberOfChannels; index++) {
+        output
+            .getChannelData(index)
+            .set(original.getChannelData(index).subarray(startSample, endSample));
     }
 
     return output;
@@ -81,14 +114,18 @@ function loadSoundClip(
     name: string,
 ): Promise<AudioBuffer> {
     return loadCachedValue(snippetCache, name, async () => {
-        const response = await fetch(`assets/${name}.opus`, { signal });
+        const response = await fetch(`sounds/${name}.mp3`, { signal });
         if (!response.ok) {
             throw new Error(`failed to fetch sound clip for ${name}`, {
                 cause: response,
             });
         }
 
-        return context.decodeAudioData(await response.arrayBuffer());
+        const buffer = await context.decodeAudioData(await response.arrayBuffer());
+        const meta = offsetsData[name];
+        if (meta === undefined) return buffer;
+
+        return audioBufferSubset(context, buffer, meta.start, meta.end);
     });
 }
 
@@ -108,6 +145,24 @@ async function formSyllableSound(
     );
 }
 
+/** Play back audio buffer and wait for it to finish. */
+async function waitFullPlayback(
+    cancellation: AbortSignal,
+    context: AudioContext,
+    buffer: AudioBuffer,
+): Promise<void> {
+    const source = context.createBufferSource();
+    source.buffer = buffer;
+    source.connect(context.destination);
+
+    return new Promise((resolve) => {
+        source.addEventListener("ended", (_) => resolve());
+        source.start();
+
+        cancellation.addEventListener("abort", (_) => source.stop());
+    });
+}
+
 /** Spell out the given syllables with a separation in seconds. */
 export async function playSyllableSounds(
     cancellation: AbortSignal,
@@ -119,14 +174,9 @@ export async function playSyllableSounds(
         syllables.map((name) => formSyllableSound(cancellation, context, name)),
     );
 
-    const source = context.createBufferSource();
-    source.buffer = combineAudioBuffers(context, segments, separation);
-    source.connect(context.destination);
-
-    return new Promise((resolve) => {
-        source.addEventListener("ended", (_) => resolve());
-        source.start();
-
-        cancellation.addEventListener("abort", (_) => source.stop());
-    });
+    await waitFullPlayback(
+        cancellation,
+        context,
+        combineAudioBuffers(context, segments, separation),
+    );
 }

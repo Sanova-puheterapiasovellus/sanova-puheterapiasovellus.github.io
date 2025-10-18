@@ -19,6 +19,14 @@ export default {
         sourcemap: true,
     },
     server: {
-        host: "0.0.0.0",
+        watch: {
+            // Allow HMR
+            usePolling: true,
+            interval: 200,
+        },
+        /*allowedHosts: ["treasonous-improbably-bobby.ngrok-free.dev"],
+        host: true,*/
+        /*host: "0.0.0.0",
+        port: 5173,*/
     },
 } satisfies UserConfig;

@@ -19,14 +19,14 @@ dialog.addEventListener("click", (e) => {
     if (e.target === dialog) dialog.close();
 });
 
-function createImageEntry(word: string, imagePath: string): HTMLElement {
+function createImageEntry(word: string, imagePath: string, index: number): HTMLElement {
     const img = buildHtml("img", { src: `${baseImgPath}${imagePath}`, alt: word });
     Object.assign(img.style, {
         cursor: "pointer",
         display: "block",
     });
     img.addEventListener("click", () => {
-        dispatchWordSelection(img, word);
+        dispatchWordSelection(img, word, index);
     });
     return buildHtml("li", {}, img);
 }
@@ -50,8 +50,8 @@ export function initializeAllWords() {
     allWordsList.innerHTML = "";
     allWordsList.appendChild(createRandomEntry());
     data.categories.forEach((category) => {
-        category.words.forEach((word) => {
-            const li = createImageEntry(word.name, word.image);
+        category.words.forEach((word, index) => {
+            const li = createImageEntry(word.name, word.image, index);
             allWordsList.appendChild(li);
         });
     });

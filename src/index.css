@@ -14,3 +14,69 @@
     aspect-ratio: 1 / 1;
     object-fit: cover;
 }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-dark: hsl(220, 85%, 55%);
+    --bg: hsl(0, 0, 95%);
+    --bg-light: hsl(0, 0, 100%);
+    --text: hsl(222, 77%, 5%);
+    --text-muted: hsl(0, 0, 30%);
+    --border: hsl(0, 0, 70%);
+    --notification-padding: 5ch;
+}
+
+body {
+    min-height: 100vh;
+    background-color: var(--bg-dark);
+    font-family: "Inter", sans-serif;
+}
+
+.mainview-header {
+    background-color: var(--bg);
+    height: 80px;
+    border: 2px solid var(--border);
+    padding: 16px 26px;
+}
+
+.mainview-main {
+    padding-top: 110px;
+}
+
+.mainview-main > ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 170px);
+    justify-content: center;
+    column-gap: 55px;
+    row-gap: 75px;
+    max-width: 955px /*845px*/;
+    margin: 0 auto;
+    padding: 0 20px;
+    list-style-type: none;
+}
+
+/* Hide sections by adding .hidden at the end of the class name */
+.hidden {
+    display: none !important;
+}
+
+#hidden-input {
+    border: 2px solid red;
+    background: yellow;
+    font-size: 1.5rem;
+}
+
+ul#notification-list {
+    position: fixed;
+    bottom: var(--notification-padding);
+    right: var(--notification-padding);
+    z-index: 100;
+    list-style: none;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: var(--notification-padding);
+}
