@@ -57,7 +57,6 @@ export function initializeWordSelector(categoryName: string, gameSession: GameSe
         gameSession.setGameModeRandom();
         const randomWord = gameSession.getNextWord();
         if (!randomWord || randomWord === "NoMoreWords") {
-            console.log("All words guessed!");
             return;
         }
         dispatchWordSelection(randomOrderButton, randomWord, -1);

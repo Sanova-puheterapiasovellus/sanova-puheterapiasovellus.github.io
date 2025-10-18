@@ -55,9 +55,6 @@ function handleGameStart(event: CategorySelectedEvent): void {
 function handleWordSelected(event: WordSelectedEvent) {
     if (!gameSession) return;
 
-    const { name, index } = event.detail;
-    console.log("Word selected:", name, index);
-
     const word = gameSession.getCurrentWord();
 
     wordImage.alt = word;
