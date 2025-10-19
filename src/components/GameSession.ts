@@ -23,6 +23,10 @@ export class GameSession {
         this.category = category;
     }
 
+    getCategory() {
+        return this.category;
+    }
+
     setWords(words: string[]) {
         this.words = words;
         this.currentWordIndex = 0;
