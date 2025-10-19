@@ -52,12 +52,9 @@ function handleGameStart(event: CategorySelectedEvent): void {
 }
 
 function setImage(word: string, category: string) {
-    console.log("Current word and category:", word, category);
-
     const categoryData = wordsData.categories.find((c) => c.name === category);
     const wordData = categoryData!.words.find((w) => w.name === word);
 
-    console.log("WordData.name, imagePath", wordData!.name, getImagePath(wordData!.image));
     wordImage.alt = wordData!.name;
     wordImage.src = getImagePath(wordData!.image);
 }
