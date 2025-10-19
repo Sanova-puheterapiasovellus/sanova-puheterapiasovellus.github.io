@@ -24,3 +24,6 @@ jobs:
 
             - name: Run linter and formatter checks
               run: npx biome ci
+
+            - name: Run any unit tests
+              run: node --test
