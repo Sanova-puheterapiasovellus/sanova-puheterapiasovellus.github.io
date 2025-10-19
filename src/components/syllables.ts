@@ -48,7 +48,7 @@ function handleSubmission(event: Event): void {
     }
 
     // Update state accordingly to the given input.
-    determinedSyllables = splitToSyllables(wordInput.value).split("-");
+    determinedSyllables = splitToSyllables(wordInput.value).toArray();
     if (determinedSyllables.length > 1) {
         playButton.disabled = false;
     } else {

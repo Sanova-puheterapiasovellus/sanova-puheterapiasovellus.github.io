@@ -8,17 +8,26 @@ import {
  * Splits a Finnish word into syllables.
  *
  * @param word The Finnish word to be split
- * @returns Split word string with hyphens at syllable boundaries
+ * @returns Iterator over individual syllables
  */
-export function splitToSyllables(word: string): string {
-    let currentSyllable = "";
-    for (let i = 0; i < word.length; i++) {
-        const lastChar = word.charAt(i - 1);
+export function* splitToSyllables(word: string): Generator<string> {
+    let i = 0;
+    let currentStart = 0;
+
+    // Helper function to clean up the yield cases from toying with the indices
+    const advance = () => {
+        i++;
+        const previous = word.substring(currentStart, i);
+        currentStart = i;
+        return previous;
+    };
+
+    outer: for (; i < word.length; i++) {
+        // Don't look back to the last syllable
+        const lastChar = i === currentStart ? "" : word.charAt(i - 1);
         const currentChar = word.charAt(i);
         const nextChar = word.charAt(i + 1);
         const secondNextChar = word.charAt(i + 2);
-
-        currentSyllable += currentChar;
 
         // Consonant rule
         // Split if one or more consonants follow vowels of current syllable.
@@ -26,7 +35,8 @@ export function splitToSyllables(word: string): string {
         if (isConsonant(nextChar) && isVowel(secondNextChar)) {
             for (let j = i; j >= 0; j--) {
                 if (isVowel(word.charAt(j))) {
-                    return `${currentSyllable}-${splitToSyllables(word.substring(i + 1))}`;
+                    yield advance();
+                    continue outer;
                 }
             }
         }
@@ -40,7 +50,8 @@ export function splitToSyllables(word: string): string {
             isVowel(nextChar) &&
             !isDiphthongOrLongVowel(currentChar + nextChar)
         ) {
-            return `${currentSyllable}-${splitToSyllables(word.substring(i + 1))}`;
+            yield advance();
+            continue;
         }
 
         // Diphthong rule
@@ -48,11 +59,11 @@ export function splitToSyllables(word: string): string {
         // it is followed by another vowel.
         // Examples: maa-il-ma, kai-ui-ssa
         if (isVowel(nextChar) && isDiphthongOrLongVowel(lastChar + currentChar)) {
-            return `${currentSyllable}-${splitToSyllables(word.substring(i + 1))}`;
+            yield advance();
         }
     }
 
-    return currentSyllable;
+    yield word.substring(currentStart);
 }
 
 /**

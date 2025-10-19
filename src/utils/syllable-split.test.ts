@@ -5,6 +5,6 @@ import { splitToSyllables } from "./syllable-split.ts";
 
 suite("check syllable splitting with known test examples", () => {
     for (const [word, expected] of Object.entries(TEST_EXAMPLES)) {
-        test(word, () => strictEqual(splitToSyllables(word), expected));
+        test(word, () => strictEqual(splitToSyllables(word).toArray().join("-"), expected));
     }
 });
