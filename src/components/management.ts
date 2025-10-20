@@ -1,5 +1,5 @@
 import { buildHtml, expectElement } from "../common/dom";
-import { addOrUpdateFile } from "../common/github";
+import { addOrUpdateFile, createBranch, createPullRequest } from "../common/github";
 import { loadSoundClip } from "../common/playback";
 import { type AudioSegment, offsetsData } from "../data/offset-data-model";
 
@@ -8,6 +8,7 @@ const authToken = expectElement("management-auth-token", HTMLInputElement);
 const soundSelection = expectElement("management-sound-selection", HTMLSelectElement);
 const soundStart = expectElement("management-sound-start", HTMLInputElement);
 const soundEnd = expectElement("management-sound-end", HTMLInputElement);
+const customBranch = expectElement("management-branch", HTMLInputElement);
 
 let soundsChanged = false;
 const soundOffsets = structuredClone(offsetsData);
@@ -69,13 +70,23 @@ function handleSoundOffsetChange(_: Event): void {
 async function handleFormSubmit(event: SubmitEvent): Promise<void> {
     event.preventDefault();
 
+    const branchName = customBranch.value.length !== 0 ? customBranch.value : undefined;
+    if (branchName !== undefined) {
+        await createBranch(branchName, authToken.value);
+    }
+
     if (soundsChanged) {
         await addOrUpdateFile(
             "sound offset refinement",
             "src/data/offset-data.json",
             JSON.stringify(soundOffsets, undefined, 4),
             authToken.value,
+            branchName,
         );
+    }
+
+    if (branchName !== undefined) {
+        await createPullRequest("requested changes", branchName, authToken.value);
     }
 }
 
