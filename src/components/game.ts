@@ -51,15 +51,25 @@ function handleGameStart(event: CategorySelectedEvent): void {
     // ### ############################################ ###
 }
 
+function setImage(word: string, category: string) {
+    const categoryData = wordsData.categories.find((c) => c.name === category);
+    const wordData = categoryData!.words.find((w) => w.name === word);
+
+    wordImage.alt = wordData!.name;
+    wordImage.src = getImagePath(wordData!.image);
+}
+
 /** Handle the word selection, i.e. show the guessing modal for the user */
 function handleWordSelected(event: WordSelectedEvent) {
     if (!gameSession) return;
 
     const word = gameSession.getCurrentWord();
+    const category = gameSession.getCategory();
 
-    wordImage.alt = word;
     guessDialog.showModal();
     setupWordInput();
+
+    setImage(word, category);
 }
 
 /** Renders the empty slots after answering or when initializing the first word */
@@ -159,7 +169,10 @@ function handleAnswer(wordGuess: WordGuess): void {
     const correctAnswer: string = wordImage.alt;
     const isCorrect: boolean = isCorrectAnswer(correctAnswer, answer);
     if (isCorrect) {
-        wordImage.alt = getGameSession().getNextWord();
+        const gameSession: GameSession = getGameSession();
+        const nextWord: string = gameSession.getNextWord();
+        const category = gameSession.getCategory();
+        setImage(nextWord, category);
     } else {
         // show incorrect feedback if you like
         wordGuess.removeAllLetters();
