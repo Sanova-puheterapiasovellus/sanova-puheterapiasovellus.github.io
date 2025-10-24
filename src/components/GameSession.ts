@@ -12,7 +12,7 @@ export class GameSession {
     private gameModeRandom: boolean = false;
 
     /** Set a word to be guessed and create a new word guess object based on that */
-    constructor(category: string) {
+    constructor(category: string | null) {
         this.category = category;
         // Fetch all the words from this category, for now, use the placeholder words
         this.currentWord = "placeholder";

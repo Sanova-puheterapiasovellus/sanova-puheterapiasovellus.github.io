@@ -97,10 +97,13 @@ function setImage() {
 
 /** Handle the word selection, i.e. show the guessing modal for the user */
 function handleWordSelected(event: WordSelectedEvent) {
-    if (!gameSession) return;
-
-    const word = gameSession.getCurrentWord();
-    const category = gameSession.getCategory();
+    if (!gameSession) {
+        // If gameSession does not exist, then only one word was selected
+        gameSession = new GameSession(null);
+        const { name } = event.detail;
+        gameSession.setWords([name]);
+        gameSession.setCurrentWordIndex(0);
+    }
 
     guessDialog.showModal();
     setupWordInput();
