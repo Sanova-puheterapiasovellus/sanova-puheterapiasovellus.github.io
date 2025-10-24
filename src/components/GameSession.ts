@@ -2,7 +2,7 @@ import { WordGuess } from "./WordGuess";
 
 /** Keep track of the game progress for one category */
 export class GameSession {
-    private category: string; // Will be used to fetch a word from the correct category
+    private category: string | null = null; // Will be used to fetch a word from the correct category
     private currentWord: string = "";
     private vocalHintsCounter: number = 0; // Will be used to determine how many syllables to play
     private guessedWords = new Set<string>();
@@ -19,7 +19,7 @@ export class GameSession {
         this.currentWordGuess = new WordGuess(this.currentWord);
     }
 
-    setCategory(category: string) {
+    setCategory(category: string | null) {
         this.category = category;
     }
 

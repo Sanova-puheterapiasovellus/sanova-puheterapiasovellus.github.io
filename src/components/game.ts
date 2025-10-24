@@ -1,5 +1,9 @@
 import { expectElement } from "../common/dom";
-import type { CategorySelectedEvent, WordSelectedEvent } from "../common/events";
+import type {
+    CategorySelectedEvent,
+    WordSelectedEvent,
+    WordsSelectedEvent,
+} from "../common/events";
 import { getImagePath, wordsData } from "../data/word-data-model.ts";
 import { GameSession } from "./GameSession";
 import type { WordGuess } from "./WordGuess";
@@ -36,27 +40,59 @@ function handleGameStart(event: CategorySelectedEvent): void {
     const category = wordsData.categories.find((c) => c.name === currentCategory);
     if (!category) return;
 
-    gameSession.setCategory(currentCategory);
-    gameSession.setWords(category.words.map((w) => w.name));
+    // gameSession.setCategory(currentCategory);
+    // gameSession.setWords(category.words.map((w) => w.name));
+
+    // gameSession.setGameModeRandom(); // Show words in random order
+    // const word = gameSession.getNextWord();
+
+    // Set the words to the game session object through the WordsSelected event
+    dispatchEvent(
+        new CustomEvent("words-selected", {
+            bubbles: true,
+            detail: {
+                selections: category.words.map((w, idx) => ({ name: w.name, index: idx })),
+                category: currentCategory,
+            },
+        }),
+    );
 
     gameSession.setGameModeRandom(); // Show words in random order
     const word = gameSession.getNextWord();
-    // Fake the word selection event
+
+    // Start the game by firing WordSelected event
     dispatchEvent(
         new CustomEvent("word-selected", {
             bubbles: true,
             detail: { name: word, index: 0 },
         }),
     );
-    // ### ############################################ ###
 }
 
-function setImage(word: string, category: string) {
-    const categoryData = wordsData.categories.find((c) => c.name === category);
-    const wordData = categoryData!.words.find((w) => w.name === word);
+function setImage() {
+    if (!gameSession) return;
+    const word = gameSession.getCurrentWord();
+    const category = gameSession.getCategory();
 
-    wordImage.alt = wordData!.name;
-    wordImage.src = getImagePath(wordData!.image);
+    let wordData: { name: string; image: string } | undefined;
+
+    if (category) {
+        const categoryData = wordsData.categories.find((c) => c.name === category);
+        wordData = categoryData?.words.find((w) => w.name === word);
+    } else {
+        for (const c of wordsData.categories) {
+            const found = c.words.find((w) => w.name === word);
+            if (found) {
+                wordData = found;
+                break;
+            }
+        }
+    }
+
+    if (!wordData) return;
+
+    wordImage.alt = wordData.name;
+    wordImage.src = getImagePath(wordData.image);
 }
 
 /** Handle the word selection, i.e. show the guessing modal for the user */
@@ -69,7 +105,16 @@ function handleWordSelected(event: WordSelectedEvent) {
     guessDialog.showModal();
     setupWordInput();
 
-    setImage(word, category);
+    setImage();
+}
+
+function handleWordsSelected(event: WordsSelectedEvent) {
+    const { category, selections } = event.detail;
+
+    if (!gameSession) return;
+
+    gameSession.setCategory(category);
+    gameSession.setWords(selections.map((s) => s.name));
 }
 
 /** Renders the empty slots after answering or when initializing the first word */
@@ -172,7 +217,7 @@ function handleAnswer(wordGuess: WordGuess): void {
         const gameSession: GameSession = getGameSession();
         const nextWord: string = gameSession.getNextWord();
         const category = gameSession.getCategory();
-        setImage(nextWord, category);
+        setImage();
     } else {
         // show incorrect feedback if you like
         wordGuess.removeAllLetters();
@@ -184,6 +229,7 @@ function handleAnswer(wordGuess: WordGuess): void {
 export function initializeGameContainer() {
     window.addEventListener("category-selected", handleGameStart);
     window.addEventListener("word-selected", handleWordSelected);
+    window.addEventListener("words-selected", handleWordsSelected);
     closeButton.addEventListener("click", handleDialogClose);
 
     answerButton.addEventListener("click", () => {
