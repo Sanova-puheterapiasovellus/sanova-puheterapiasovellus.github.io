@@ -1,8 +1,7 @@
 import { expectElement } from "../common/dom.ts";
 import { playSyllableSounds } from "../common/playback.ts";
+import { syllableSeparationSeconds } from "../data/syllable-player-config.ts";
 import { splitToSyllables } from "../utils/syllable-split.ts";
-
-const syllableSeparationSeconds = 0.5;
 
 const playButton = expectElement("word-guess-syllable-hint", HTMLButtonElement);
 
