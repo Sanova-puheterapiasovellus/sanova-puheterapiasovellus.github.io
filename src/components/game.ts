@@ -14,6 +14,7 @@ const syllableHintButton = expectElement("word-guess-syllable-hint", HTMLButtonE
 const wordImage = expectElement("word-guess-image", HTMLImageElement);
 const letterSlots = expectElement("word-guess-slots", HTMLDivElement);
 const hiddenInput = document.getElementById("hidden-input") as HTMLInputElement;
+const textHint = expectElement("text-hint", HTMLDivElement);
 
 // Keep track of the game progress, initially null
 let gameSession: GameSession | null = null;
@@ -157,6 +158,19 @@ function handleUseLetterHint(): void {
     }
 }
 
+function handleUseTextHint(): void {
+    if (!gameSession) return;
+
+    const currentWord = gameSession.getCurrentWord();
+    const currentWordData = wordsData.categories
+        .flatMap((category) => category.words)
+        .find((word) => word.name === currentWord);
+
+    if (!currentWordData) return;
+
+    textHint.textContent = currentWordData.hint;
+}
+
 /** Check if the user's answer is correct */
 function isCorrectAnswer(correctAnswer: string, answer: string): boolean {
     if (correctAnswer === answer) {
@@ -173,6 +187,7 @@ function handleAnswer(wordGuess: WordGuess): void {
     if (isCorrect) {
         const gameSession: GameSession = getGameSession();
         const nextWord: string = gameSession.getNextWord();
+        textHint.textContent = "";
         const category = gameSession.getCategory();
         setImage(nextWord, category);
     } else {
@@ -195,6 +210,7 @@ export function initializeGameContainer() {
     });
 
     letterHintButton.addEventListener("click", handleUseLetterHint);
+    textHintButton.addEventListener("click", handleUseTextHint);
 
     hiddenInput.addEventListener("input", handleInputEvent);
 }
