@@ -1,7 +1,10 @@
 import { expectElement } from "../common/dom";
 import type { CategorySelectedEvent, WordSelectedEvent } from "../common/events";
+import { playSyllableSounds } from "../common/playback.ts";
 import { getImagePath, wordsData } from "../data/word-data-model.ts";
+import { splitToSyllables } from "../utils/syllable-split.ts";
 import { GameSession } from "./GameSession";
+import { setSyllableHintWord } from "./syllablesHint.ts";
 import type { WordGuess } from "./WordGuess";
 import { initializeWordSelector } from "./words.ts";
 
@@ -44,6 +47,8 @@ function handleGameStart(event: CategorySelectedEvent): void {
 
     gameSession.setGameModeRandom(); // Show words in random order
     const word = gameSession.getNextWord();
+    textHint.textContent = "";
+    setSyllableHintWord(word);
     // Fake the word selection event
     dispatchEvent(
         new CustomEvent("word-selected", {
@@ -139,10 +144,6 @@ function getGameSession(): GameSession {
     return gameSession;
 }
 
-function handleUseVocalHint(): void {
-    getGameSession().useVocalHint();
-}
-
 /** Handle the letter hint logic when the letter hint is requested */
 function handleUseLetterHint(): void {
     if (!gameSession) return;
@@ -158,6 +159,7 @@ function handleUseLetterHint(): void {
     }
 }
 
+/** Set current word's text hint */
 function handleUseTextHint(): void {
     if (!gameSession) return;
 
@@ -169,6 +171,12 @@ function handleUseTextHint(): void {
     if (!currentWordData) return;
 
     textHint.textContent = currentWordData.hint;
+}
+
+function handleUseVocalHint(): void {
+    if (!gameSession) return;
+
+    getGameSession().useVocalHint();
 }
 
 /** Check if the user's answer is correct */
@@ -188,6 +196,7 @@ function handleAnswer(wordGuess: WordGuess): void {
         const gameSession: GameSession = getGameSession();
         const nextWord: string = gameSession.getNextWord();
         textHint.textContent = "";
+        setSyllableHintWord(nextWord);
         const category = gameSession.getCategory();
         setImage(nextWord, category);
     } else {
@@ -211,6 +220,7 @@ export function initializeGameContainer() {
 
     letterHintButton.addEventListener("click", handleUseLetterHint);
     textHintButton.addEventListener("click", handleUseTextHint);
+    syllableHintButton.addEventListener("click", handleUseVocalHint);
 
     hiddenInput.addEventListener("input", handleInputEvent);
 }
