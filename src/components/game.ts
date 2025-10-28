@@ -42,15 +42,8 @@ function handleGameStart(event: CategorySelectedEvent): void {
     gameSession = new GameSession(currentCategory);
     //initializeWordSelector(currentCategory, gameSession); // Uncomment to make the word view visible
 
-    // ### SKIP THE WORD VIEW WHEN CATEGORY IS SELECTED ###
     const category = wordsData.categories.find((c) => c.name === currentCategory);
     if (!category) return;
-
-    // gameSession.setCategory(currentCategory);
-    // gameSession.setWords(category.words.map((w) => w.name));
-
-    // gameSession.setGameModeRandom(); // Show words in random order
-    // const word = gameSession.getNextWord();
 
     // Set the words to the game session object through the WordsSelected event
     dispatchEvent(
@@ -77,11 +70,7 @@ function handleGameStart(event: CategorySelectedEvent): void {
 
 function handleGameOver(event: GameOverEvent) {
     const showResults: boolean = event.detail.showResults;
-    console.log("Game over! Do something.");
-    console.log("Should show results:", showResults);
-    console.log("Destroying the gameSession.");
     gameSession = null;
-    console.log("Quitting the dialog.");
     guessDialog.close();
 }
 
@@ -229,19 +218,14 @@ function isCorrectAnswer(correctAnswer: string, answer: string): boolean {
 
 /** Handle the user's guess when the answer btn is pressed */
 function handleAnswer(wordGuess: WordGuess): void {
-    console.log("HANDLE ANSWER!");
     const gameSession: GameSession = getGameSession();
 
     const answer = wordGuess.getGuess().toLowerCase();
     const correctAnswer: string = wordImage.alt;
     const isCorrect: boolean = isCorrectAnswer(correctAnswer, answer);
     const isGameOver: boolean = gameSession.isGameOver();
-    console.log("isCorrect?", isCorrect);
-
-    console.log("GAME OVER?", isGameOver);
 
     if (isCorrect && isGameOver) {
-        console.log("GAME IS OVER!");
         const showResults: boolean = gameSession.getWordCount() > 1;
         dispatchEvent(
             new CustomEvent("show-results", {

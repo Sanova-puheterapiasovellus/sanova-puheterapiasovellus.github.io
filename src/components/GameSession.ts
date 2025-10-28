@@ -68,6 +68,7 @@ export class GameSession {
         this.gameModeRandom = true;
     }
 
+    /** Check if game is over, i.e. are there any more words to be guessed */
     isGameOver(): boolean {
         if (this.words.length === 1) {
             // Game will always be considered over if the user
@@ -82,6 +83,7 @@ export class GameSession {
         }
     }
 
+    /** Get the amount of guessed words */
     getWordCount(): number {
         return this.guessedWords.size;
     }
@@ -140,8 +142,6 @@ export class GameSession {
         // Filter out guessed words
         const remainingWords = this.words.filter((word) => !this.guessedWords.has(word));
 
-        console.log("Guessed words size:", this.guessedWords.size);
-        console.log("All words size:", this.words.length);
         if (this.guessedWords.size === this.words.length) {
             this.outOfWords = true;
         }
