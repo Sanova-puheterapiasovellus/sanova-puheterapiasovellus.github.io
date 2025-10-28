@@ -5,8 +5,11 @@ import type {
     WordSelectedEvent,
     WordsSelectedEvent,
 } from "../common/events";
+import { playSyllableSounds } from "../common/playback.ts";
 import { getImagePath, wordsData } from "../data/word-data-model.ts";
+import { splitToSyllables } from "../utils/syllable-split.ts";
 import { GameSession } from "./GameSession";
+import { setSyllableHintWord } from "./syllablesHint.ts";
 import type { WordGuess } from "./WordGuess";
 import { initializeWordSelector } from "./words.ts";
 
@@ -14,9 +17,12 @@ const guessDialog = expectElement("word-guess-dialog", HTMLDialogElement);
 const closeButton = expectElement("word-guess-close", HTMLButtonElement);
 const answerButton = expectElement("word-guess-submit", HTMLButtonElement);
 const letterHintButton = expectElement("word-guess-letter-hint", HTMLButtonElement);
+const textHintButton = expectElement("word-guess-text-hint", HTMLButtonElement);
+const syllableHintButton = expectElement("word-guess-syllable-hint", HTMLButtonElement);
 const wordImage = expectElement("word-guess-image", HTMLImageElement);
 const letterSlots = expectElement("word-guess-slots", HTMLDivElement);
 const hiddenInput = document.getElementById("hidden-input") as HTMLInputElement;
+const textHint = expectElement("text-hint", HTMLDivElement);
 
 // Keep track of the game progress, initially null
 let gameSession: GameSession | null = null;
@@ -58,8 +64,9 @@ function handleGameStart(event: CategorySelectedEvent): void {
 
     gameSession.setGameModeRandom(); // Show words in random order
     const word = gameSession.getNextWord();
-
-    // Start the game by firing WordSelected event
+    textHint.textContent = "";
+    setSyllableHintWord(word);
+    // Fake the word selection event
     dispatchEvent(
         new CustomEvent("word-selected", {
             bubbles: true,
@@ -189,10 +196,6 @@ function getGameSession(): GameSession {
     return gameSession;
 }
 
-function handleUseVocalHint(): void {
-    getGameSession().useVocalHint();
-}
-
 /** Handle the letter hint logic when the letter hint is requested */
 function handleUseLetterHint(): void {
     if (!gameSession) return;
@@ -206,6 +209,26 @@ function handleUseLetterHint(): void {
         // word completed with hints, move to next word
         handleAnswer(wordGuess);
     }
+}
+
+/** Set current word's text hint */
+function handleUseTextHint(): void {
+    if (!gameSession) return;
+
+    const currentWord = gameSession.getCurrentWord();
+    const currentWordData = wordsData.categories
+        .flatMap((category) => category.words)
+        .find((word) => word.name === currentWord);
+
+    if (!currentWordData) return;
+
+    textHint.textContent = currentWordData.hint;
+}
+
+function handleUseVocalHint(): void {
+    if (!gameSession) return;
+
+    getGameSession().useVocalHint();
 }
 
 /** Check if the user's answer is correct */
@@ -237,6 +260,8 @@ function handleAnswer(wordGuess: WordGuess): void {
     }
     if (isCorrect) {
         const nextWord: string = gameSession.getNextWord();
+        textHint.textContent = "";
+        setSyllableHintWord(nextWord);
         const category = gameSession.getCategory();
         setImage();
     } else {
@@ -261,6 +286,8 @@ export function initializeGameContainer() {
     });
 
     letterHintButton.addEventListener("click", handleUseLetterHint);
+    textHintButton.addEventListener("click", handleUseTextHint);
+    syllableHintButton.addEventListener("click", handleUseVocalHint);
 
     hiddenInput.addEventListener("input", handleInputEvent);
 }

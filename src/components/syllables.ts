@@ -1,9 +1,10 @@
 import { expectElement } from "../common/dom.ts";
 import { playSyllableSounds } from "../common/playback.ts";
+import {
+    inputDebounceMilliseconds,
+    syllableSeparationSeconds,
+} from "../data/syllable-player-config.ts";
 import { splitToSyllables } from "../utils/syllable-split.ts";
-
-const inputDebounceMilliseconds = 100;
-const syllableSeparationSeconds = 0.5;
 
 const toolDialog = expectElement("syllable-player-dialog", HTMLDialogElement);
 const openButton = expectElement("syllable-player-open", HTMLButtonElement);
