@@ -115,6 +115,7 @@ function handleWordSelected(event: WordSelectedEvent) {
         const { name } = event.detail;
         gameSession.setWords([name]);
         gameSession.setCurrentWordIndex(0);
+        setSyllableHintWord(name);
     }
 
     guessDialog.showModal();
