@@ -1,6 +1,7 @@
 import { expectElement } from "../common/dom";
 import type {
     CategorySelectedEvent,
+    GameOverEvent,
     WordSelectedEvent,
     WordsSelectedEvent,
 } from "../common/events";
@@ -22,6 +23,11 @@ let gameSession: GameSession | null = null;
 
 /** Close the dialog as requested. */
 function handleDialogClose(_: Event): void {
+    // Set the gameSession null to avoid a situation where the user
+    // would select a different category, but the words from previously
+    // closed category would appear.
+    gameSession = null;
+    // Close the guessing dialog
     guessDialog.close();
 }
 
@@ -67,6 +73,16 @@ function handleGameStart(event: CategorySelectedEvent): void {
             detail: { name: word, index: 0 },
         }),
     );
+}
+
+function handleGameOver(event: GameOverEvent) {
+    const showResults: boolean = event.detail.showResults;
+    console.log("Game over! Do something.");
+    console.log("Should show results:", showResults);
+    console.log("Destroying the gameSession.");
+    gameSession = null;
+    console.log("Quitting the dialog.");
+    guessDialog.close();
 }
 
 function setImage() {
@@ -213,11 +229,29 @@ function isCorrectAnswer(correctAnswer: string, answer: string): boolean {
 
 /** Handle the user's guess when the answer btn is pressed */
 function handleAnswer(wordGuess: WordGuess): void {
+    console.log("HANDLE ANSWER!");
+    const gameSession: GameSession = getGameSession();
+
     const answer = wordGuess.getGuess().toLowerCase();
     const correctAnswer: string = wordImage.alt;
     const isCorrect: boolean = isCorrectAnswer(correctAnswer, answer);
+    const isGameOver: boolean = gameSession.isGameOver();
+    console.log("isCorrect?", isCorrect);
+
+    console.log("GAME OVER?", isGameOver);
+
+    if (isCorrect && isGameOver) {
+        console.log("GAME IS OVER!");
+        const showResults: boolean = gameSession.getWordCount() > 1;
+        dispatchEvent(
+            new CustomEvent("show-results", {
+                bubbles: true,
+                detail: { showResults: showResults },
+            }),
+        );
+        return;
+    }
     if (isCorrect) {
-        const gameSession: GameSession = getGameSession();
         const nextWord: string = gameSession.getNextWord();
         const category = gameSession.getCategory();
         setImage();
@@ -233,6 +267,7 @@ export function initializeGameContainer() {
     window.addEventListener("category-selected", handleGameStart);
     window.addEventListener("word-selected", handleWordSelected);
     window.addEventListener("words-selected", handleWordsSelected);
+    window.addEventListener("show-results", handleGameOver);
     closeButton.addEventListener("click", handleDialogClose);
 
     answerButton.addEventListener("click", () => {

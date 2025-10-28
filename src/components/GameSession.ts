@@ -10,6 +10,7 @@ export class GameSession {
     private currentWordGuess: WordGuess | null = null;
     private currentWordIndex: number = 0;
     private gameModeRandom: boolean = false;
+    private outOfWords: boolean = false;
 
     /** Set a word to be guessed and create a new word guess object based on that */
     constructor(category: string | null) {
@@ -67,6 +68,24 @@ export class GameSession {
         this.gameModeRandom = true;
     }
 
+    isGameOver(): boolean {
+        if (this.words.length === 1) {
+            // Game will always be considered over if the user
+            // has only selected one word. This way the game ends
+            // as soon as the user answers correctly
+            return true;
+        }
+        if (this.outOfWords) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    getWordCount(): number {
+        return this.guessedWords.size;
+    }
+
     /** Get the next word to be guessed. Return random word from the category
      * or the next one in the list depending on the game mode.
      */
@@ -82,10 +101,8 @@ export class GameSession {
     getNextWordOrder(): string {
         this.markGuessed();
 
-        if (this.guessedWords.size >= this.words.length) {
-            this.currentWord = "NoMoreWords";
-            this.currentWordGuess = null;
-            return this.currentWord;
+        if (this.guessedWords.size === this.words.length) {
+            this.outOfWords = true;
         }
 
         const totalWords = this.words.length;
@@ -123,10 +140,10 @@ export class GameSession {
         // Filter out guessed words
         const remainingWords = this.words.filter((word) => !this.guessedWords.has(word));
 
-        if (remainingWords.length === 0) {
-            this.currentWord = "NoMoreWords";
-            this.currentWordGuess = null;
-            return this.currentWord;
+        console.log("Guessed words size:", this.guessedWords.size);
+        console.log("All words size:", this.words.length);
+        if (this.guessedWords.size === this.words.length) {
+            this.outOfWords = true;
         }
 
         // Pick a random word from the current category
