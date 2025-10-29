@@ -24,6 +24,7 @@ const wordImage = expectElement("word-guess-image", HTMLImageElement);
 const letterSlots = expectElement("word-guess-slots", HTMLDivElement);
 const hiddenInput = document.getElementById("hidden-input") as HTMLInputElement;
 const textHint = expectElement("text-hint", HTMLDivElement);
+const resultsCloseButton = expectElement("word-guess-results-close", HTMLButtonElement);
 
 // Keep track of the game progress, initially null
 let gameSession: GameSession | null = null;
@@ -206,6 +207,7 @@ function getGameSession(): GameSession {
 /** Handle the letter hint logic when the letter hint is requested */
 function handleUseLetterHint(): void {
     if (!gameSession) return;
+    gameSession.useLetterHint();
     const wordGuess = gameSession.getCurrentWordGuess();
     const done = wordGuess.useLetterHint();
 
@@ -221,6 +223,7 @@ function handleUseLetterHint(): void {
 /** Set current word's text hint */
 function handleUseTextHint(): void {
     if (!gameSession) return;
+    gameSession.useTextHint();
 
     const currentWord = gameSession.getCurrentWord();
     const currentWordData = wordsData.categories
@@ -234,8 +237,7 @@ function handleUseTextHint(): void {
 
 function handleUseVocalHint(): void {
     if (!gameSession) return;
-
-    getGameSession().useVocalHint();
+    gameSession.useVocalHint();
 }
 
 /** Check if the user's answer is correct */
@@ -285,6 +287,7 @@ export function initializeGameContainer() {
     window.addEventListener("words-selected", handleWordsSelected);
     window.addEventListener("show-results", handleGameOver);
     closeButton.addEventListener("click", handleDialogClose);
+    resultsCloseButton.addEventListener("click", handleDialogClose);
 
     answerButton.addEventListener("click", () => {
         if (!gameSession) return;
