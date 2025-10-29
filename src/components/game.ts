@@ -124,6 +124,14 @@ function handleWordSelected(event: WordSelectedEvent) {
         setSyllableHintWord(name);
     }
 
+    if (event.detail.name === null) {
+        // No word was set, set it here
+        console.log("No word was selected!");
+        console.log("All words:", gameSession.getAllWords());
+        console.log("Current word:", gameSession.getCurrentWord());
+        gameSession.setCurrentWordIndex(0);
+    }
+
     guessDialog.showModal();
     setupWordInput();
 
@@ -133,7 +141,8 @@ function handleWordSelected(event: WordSelectedEvent) {
 function handleWordsSelected(event: WordsSelectedEvent) {
     const { category, selections } = event.detail;
 
-    if (!gameSession) return;
+    gameSession = new GameSession(category);
+    //if (!gameSession) return;
 
     gameSession.setCategory(category);
     gameSession.setWords(selections.map((s) => s.name));
@@ -249,6 +258,7 @@ function isCorrectAnswer(correctAnswer: string, answer: string): boolean {
 
 /** Handle the user's guess when the answer btn is pressed */
 function handleAnswer(wordGuess: WordGuess): void {
+    console.log("Handling answer");
     const gameSession: GameSession = getGameSession();
 
     const answer = wordGuess.getGuess().toLowerCase();
@@ -257,11 +267,18 @@ function handleAnswer(wordGuess: WordGuess): void {
     const isGameOver: boolean = gameSession.isGameOver();
 
     if (isCorrect) {
+        console.log("Answer is correct!");
         gameSession.increaseCorrectCount();
+    } else {
+        gameSession.saveIncorrectlyGuessed();
     }
 
+    console.log("WORDS IN GAME SESSION:", gameSession.getAllWords());
+
     if (isGameOver) {
+        console.log("Come over show results event will be submitted");
         const showResults: boolean = gameSession.getGuessedWordCount() > 1;
+        console.log("Should show results?", showResults);
         dispatchEvent(
             new CustomEvent("show-results", {
                 bubbles: true,
@@ -270,6 +287,7 @@ function handleAnswer(wordGuess: WordGuess): void {
         );
         return;
     }
+    console.log("Game not over!");
 
     const nextWord: string = gameSession.getNextWord();
     textHint.textContent = "";
