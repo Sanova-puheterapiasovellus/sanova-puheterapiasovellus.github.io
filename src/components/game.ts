@@ -11,6 +11,7 @@ import { splitToSyllables } from "../utils/syllable-split.ts";
 import { GameSession } from "./GameSession";
 import { setSyllableHintWord } from "./syllablesHint.ts";
 import type { WordGuess } from "./WordGuess";
+import { showWordGuessResults } from "./wordGuessResults.ts";
 import { initializeWordSelector } from "./words.ts";
 
 const guessDialog = expectElement("word-guess-dialog", HTMLDialogElement);
@@ -77,8 +78,13 @@ function handleGameStart(event: CategorySelectedEvent): void {
 
 function handleGameOver(event: GameOverEvent) {
     const showResults: boolean = event.detail.showResults;
-    gameSession = null;
     guessDialog.close();
+    if (showResults) {
+        if (gameSession) {
+            showWordGuessResults(gameSession);
+        }
+    }
+    gameSession = null;
 }
 
 function setImage() {
