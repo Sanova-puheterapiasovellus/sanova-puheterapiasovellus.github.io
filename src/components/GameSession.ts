@@ -5,12 +5,15 @@ export class GameSession {
     private category: string | null = null; // Will be used to fetch a word from the correct category
     private currentWord: string = "";
     private vocalHintsCounter: number = 0; // Will be used to determine how many syllables to play
+    private textHintsCounter: number = 0;
+    private letterHintsCounter: number = 0;
     private guessedWords = new Set<string>();
     private words: string[] = [];
     private currentWordGuess: WordGuess | null = null;
     private currentWordIndex: number = 0;
     private gameModeRandom: boolean = false;
     private outOfWords: boolean = false;
+    private correctAnswers: number = 0;
 
     /** Set a word to be guessed and create a new word guess object based on that */
     constructor(category: string | null) {
@@ -59,6 +62,30 @@ export class GameSession {
         this.vocalHintsCounter++;
     }
 
+    getTextHintsUsed(): number {
+        return this.textHintsCounter;
+    }
+
+    useTextHint(): void {
+        this.textHintsCounter++;
+    }
+
+    getLetterHintsUsed(): number {
+        return this.letterHintsCounter;
+    }
+
+    useLetterHint(): void {
+        this.letterHintsCounter++;
+    }
+
+    getCorrectAnswerCount(): number {
+        return this.correctAnswers;
+    }
+
+    getTotalWordCount(): number {
+        return this.words.length;
+    }
+
     /** Mark the current word as guessed so it won't be shown again */
     private markGuessed(): void {
         this.guessedWords.add(this.currentWord);
@@ -83,8 +110,12 @@ export class GameSession {
         }
     }
 
+    increaseCorrectCount(): void {
+        this.correctAnswers++;
+    }
+
     /** Get the amount of guessed words */
-    getWordCount(): number {
+    getGuessedWordCount(): number {
         return this.guessedWords.size;
     }
 

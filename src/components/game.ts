@@ -255,8 +255,12 @@ function handleAnswer(wordGuess: WordGuess): void {
     const isCorrect: boolean = isCorrectAnswer(correctAnswer, answer);
     const isGameOver: boolean = gameSession.isGameOver();
 
-    if (isCorrect && isGameOver) {
-        const showResults: boolean = gameSession.getWordCount() > 1;
+    if (isCorrect) {
+        gameSession.increaseCorrectCount();
+    }
+
+    if (isGameOver) {
+        const showResults: boolean = gameSession.getGuessedWordCount() > 1;
         dispatchEvent(
             new CustomEvent("show-results", {
                 bubbles: true,
@@ -265,16 +269,12 @@ function handleAnswer(wordGuess: WordGuess): void {
         );
         return;
     }
-    if (isCorrect) {
-        const nextWord: string = gameSession.getNextWord();
-        textHint.textContent = "";
-        setSyllableHintWord(nextWord);
-        const category = gameSession.getCategory();
-        setImage();
-    } else {
-        // show incorrect feedback if you like
-        wordGuess.removeAllLetters();
-    }
+
+    const nextWord: string = gameSession.getNextWord();
+    textHint.textContent = "";
+    setSyllableHintWord(nextWord);
+    setImage();
+
     setupWordInput();
 }
 
