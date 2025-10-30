@@ -2,7 +2,7 @@ import { WordGuess } from "./WordGuess";
 
 /** Keep track of the game progress for one category */
 export class GameSession {
-    private category: string; // Will be used to fetch a word from the correct category
+    private category: string | null = null; // Will be used to fetch a word from the correct category
     private currentWord: string = "";
     private vocalHintsCounter: number = 0; // Will be used to determine how many syllables to play
     private guessedWords = new Set<string>();
@@ -10,16 +10,17 @@ export class GameSession {
     private currentWordGuess: WordGuess | null = null;
     private currentWordIndex: number = 0;
     private gameModeRandom: boolean = false;
+    private outOfWords: boolean = false;
 
     /** Set a word to be guessed and create a new word guess object based on that */
-    constructor(category: string) {
+    constructor(category: string | null) {
         this.category = category;
         // Fetch all the words from this category, for now, use the placeholder words
         this.currentWord = "placeholder";
         this.currentWordGuess = new WordGuess(this.currentWord);
     }
 
-    setCategory(category: string) {
+    setCategory(category: string | null) {
         this.category = category;
     }
 
@@ -67,6 +68,26 @@ export class GameSession {
         this.gameModeRandom = true;
     }
 
+    /** Check if game is over, i.e. are there any more words to be guessed */
+    isGameOver(): boolean {
+        if (this.words.length === 1) {
+            // Game will always be considered over if the user
+            // has only selected one word. This way the game ends
+            // as soon as the user answers correctly
+            return true;
+        }
+        if (this.outOfWords) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /** Get the amount of guessed words */
+    getWordCount(): number {
+        return this.guessedWords.size;
+    }
+
     /** Get the next word to be guessed. Return random word from the category
      * or the next one in the list depending on the game mode.
      */
@@ -82,10 +103,8 @@ export class GameSession {
     getNextWordOrder(): string {
         this.markGuessed();
 
-        if (this.guessedWords.size >= this.words.length) {
-            this.currentWord = "NoMoreWords";
-            this.currentWordGuess = null;
-            return this.currentWord;
+        if (this.guessedWords.size === this.words.length) {
+            this.outOfWords = true;
         }
 
         const totalWords = this.words.length;
@@ -123,10 +142,8 @@ export class GameSession {
         // Filter out guessed words
         const remainingWords = this.words.filter((word) => !this.guessedWords.has(word));
 
-        if (remainingWords.length === 0) {
-            this.currentWord = "NoMoreWords";
-            this.currentWordGuess = null;
-            return this.currentWord;
+        if (this.guessedWords.size === this.words.length) {
+            this.outOfWords = true;
         }
 
         // Pick a random word from the current category
