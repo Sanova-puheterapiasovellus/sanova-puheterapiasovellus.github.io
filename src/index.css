@@ -30,6 +30,11 @@
     --notification-padding: 5ch;
 }
 
+@font-face {
+    font-family: "Inter"
+    src: url('/public/assets/fonts/Inter_18pt-Regular.ttf')
+}
+
 body {
     min-height: 100vh;
     background-color: var(--bg-dark);
