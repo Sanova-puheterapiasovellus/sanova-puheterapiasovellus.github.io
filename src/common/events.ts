@@ -47,6 +47,7 @@ export type WordSelectedEvent = CustomEvent<{
 export type WordsSelectedEvent = CustomEvent<{
     selections: Array<{ name: string; index: number }>;
     category: string | null;
+    isReplay: boolean;
 }>;
 /** Event that is triggered when the game runs out of words */
 export type GameOverEvent = CustomEvent<{
@@ -68,11 +69,12 @@ export function dispatchWordsSelection(
     source: EventTarget,
     selections: Array<{ name: string; index: number }>,
     category: string | null,
+    isReplay: boolean,
 ) {
     source.dispatchEvent(
         new CustomEvent("words-selected", {
             bubbles: true,
-            detail: { selections, category },
+            detail: { selections, category, isReplay },
         }) satisfies WordsSelectedEvent,
     );
 }

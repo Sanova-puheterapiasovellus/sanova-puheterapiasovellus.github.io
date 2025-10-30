@@ -15,6 +15,7 @@ export class GameSession {
     private gameModeRandom: boolean = false;
     private outOfWords: boolean = false;
     private correctAnswers: number = 0;
+    private isReplay: boolean = false;
 
     /** Set a word to be guessed and create a new word guess object based on that */
     constructor(category: string | null) {
@@ -24,7 +25,7 @@ export class GameSession {
         this.currentWordGuess = new WordGuess(this.currentWord);
     }
 
-    setCategory(category: string | null) {
+    setCategory(category: string | null): void {
         this.category = category;
     }
 
@@ -32,9 +33,17 @@ export class GameSession {
         return this.category;
     }
 
-    setWords(words: string[]) {
+    setWords(words: string[]): void {
         this.words = words;
         this.currentWordIndex = 0;
+    }
+
+    setIsReplay(isReplay: boolean): void {
+        this.isReplay = isReplay;
+    }
+
+    getIsReplay(): boolean {
+        return this.isReplay;
     }
 
     getAllWords(): string[] {

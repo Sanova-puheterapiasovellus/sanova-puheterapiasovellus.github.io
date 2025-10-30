@@ -59,6 +59,7 @@ function handleGameStart(event: CategorySelectedEvent): void {
             detail: {
                 selections: category.words.map((w, idx) => ({ name: w.name, index: idx })),
                 category: currentCategory,
+                isReplay: false,
             },
         }),
     );
@@ -136,10 +137,11 @@ function handleWordSelected(event: WordSelectedEvent) {
 }
 
 function handleWordsSelected(event: WordsSelectedEvent) {
-    const { category, selections } = event.detail;
+    const { category, selections, isReplay } = event.detail;
     gameSession = new GameSession(category);
     //if (!gameSession) return;
 
+    gameSession.setIsReplay(isReplay);
     gameSession.setCategory(category);
     gameSession.setWords(selections.map((s) => s.name));
 }
@@ -268,7 +270,13 @@ function handleAnswer(wordGuess: WordGuess): void {
     }
 
     if (isGameOver) {
-        const showResults: boolean = gameSession.getGuessedWordCount() > 1;
+        let showResults: boolean = gameSession.getAllWords().length > 1;
+        const isReplay: boolean = gameSession.getIsReplay();
+        if (isReplay) {
+            // Always show results if the user is replaying correct words,
+            // even if there was only one word replayed
+            showResults = true;
+        }
         dispatchEvent(
             new CustomEvent("show-results", {
                 bubbles: true,
