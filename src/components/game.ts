@@ -254,8 +254,19 @@ function isCorrectAnswer(correctAnswer: string, answer: string): boolean {
     return false;
 }
 
+function setButtonsEnabled(enabled: boolean): void {
+    answerButton.disabled = !enabled;
+    letterHintButton.disabled = !enabled;
+    textHintButton.disabled = !enabled;
+    syllableHintButton.disabled = !enabled;
+}
+
+function delay(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 /** Handle the user's guess when the answer btn is pressed */
-function handleAnswer(wordGuess: WordGuess): void {
+async function handleAnswer(wordGuess: WordGuess) {
     const gameSession: GameSession = getGameSession();
 
     const answer = wordGuess.getGuess().toLowerCase();
@@ -265,9 +276,19 @@ function handleAnswer(wordGuess: WordGuess): void {
 
     if (isCorrect) {
         gameSession.increaseCorrectCount();
+        guessDialog.classList.add("correct");
     } else {
         gameSession.saveIncorrectlyGuessed();
+        guessDialog.classList.add("wrong");
     }
+
+    // Set buttons disabled during the delay
+    setButtonsEnabled(false);
+    await delay(1000);
+    setButtonsEnabled(true);
+
+    // Remove the indication of correct/wrong answer before moving to the next card
+    guessDialog.classList.remove("correct", "wrong");
 
     if (isGameOver) {
         let showResults: boolean = gameSession.getAllWords().length > 1;
