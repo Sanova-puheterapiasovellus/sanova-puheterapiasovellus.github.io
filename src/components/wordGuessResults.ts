@@ -15,7 +15,6 @@ export function showWordGuessResults(gameSession: GameSession): void {
     // Handler here to get access to the gameSession
     function handleReplayIncorrect(_: Event): void {
         const words: string[] = gameSession.getIncorrectlyGuessedWords();
-        console.log("Incorrect words:", gameSession.getIncorrectlyGuessedWords());
         if (words.length > 0) {
             // Update the gameSession
             dispatchEvent(
@@ -59,6 +58,5 @@ export function showWordGuessResults(gameSession: GameSession): void {
     vocalHintsP.textContent = `Käytettyja äänivihjeitä: ${gameSession.getVocalHintsUsed()}`;
     textHintsP.textContent = `Käytettyja tekstivihjeitä: ${gameSession.getTextHintsUsed()}`;
 
-    console.log("Showing modal!");
     resultsDialog.showModal();
 }
