@@ -9,6 +9,7 @@ import { playSyllableSounds } from "../common/playback.ts";
 import { getImagePath, wordsData } from "../data/word-data-model.ts";
 import { splitToSyllables } from "../utils/syllable-split.ts";
 import { GameSession } from "./GameSession";
+import "./styles/game.css";
 import { setSyllableHintWord } from "./syllablesHint.ts";
 import type { WordGuess } from "./WordGuess";
 import { showWordGuessResults } from "./wordGuessResults.ts";
