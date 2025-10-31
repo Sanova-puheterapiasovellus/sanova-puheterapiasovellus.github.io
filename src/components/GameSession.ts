@@ -5,12 +5,17 @@ export class GameSession {
     private category: string | null = null; // Will be used to fetch a word from the correct category
     private currentWord: string = "";
     private vocalHintsCounter: number = 0; // Will be used to determine how many syllables to play
+    private textHintsCounter: number = 0;
+    private letterHintsCounter: number = 0;
     private guessedWords = new Set<string>();
     private words: string[] = [];
+    private incorrectWords: string[] = [];
     private currentWordGuess: WordGuess | null = null;
     private currentWordIndex: number = 0;
     private gameModeRandom: boolean = false;
     private outOfWords: boolean = false;
+    private correctAnswers: number = 0;
+    private isReplay: boolean = false;
 
     /** Set a word to be guessed and create a new word guess object based on that */
     constructor(category: string | null) {
@@ -20,7 +25,7 @@ export class GameSession {
         this.currentWordGuess = new WordGuess(this.currentWord);
     }
 
-    setCategory(category: string | null) {
+    setCategory(category: string | null): void {
         this.category = category;
     }
 
@@ -28,9 +33,21 @@ export class GameSession {
         return this.category;
     }
 
-    setWords(words: string[]) {
+    setWords(words: string[]): void {
         this.words = words;
         this.currentWordIndex = 0;
+    }
+
+    setIsReplay(isReplay: boolean): void {
+        this.isReplay = isReplay;
+    }
+
+    getIsReplay(): boolean {
+        return this.isReplay;
+    }
+
+    getAllWords(): string[] {
+        return this.words;
     }
 
     /** Set the index of the word if user select the word from the list */
@@ -59,6 +76,38 @@ export class GameSession {
         this.vocalHintsCounter++;
     }
 
+    getTextHintsUsed(): number {
+        return this.textHintsCounter;
+    }
+
+    useTextHint(): void {
+        this.textHintsCounter++;
+    }
+
+    getLetterHintsUsed(): number {
+        return this.letterHintsCounter;
+    }
+
+    useLetterHint(): void {
+        this.letterHintsCounter++;
+    }
+
+    getCorrectAnswerCount(): number {
+        return this.correctAnswers;
+    }
+
+    getTotalWordCount(): number {
+        return this.words.length;
+    }
+
+    saveIncorrectlyGuessed(): void {
+        this.incorrectWords.push(this.currentWord);
+    }
+
+    getIncorrectlyGuessedWords(): string[] {
+        return this.incorrectWords;
+    }
+
     /** Mark the current word as guessed so it won't be shown again */
     private markGuessed(): void {
         this.guessedWords.add(this.currentWord);
@@ -83,8 +132,12 @@ export class GameSession {
         }
     }
 
+    increaseCorrectCount(): void {
+        this.correctAnswers++;
+    }
+
     /** Get the amount of guessed words */
-    getWordCount(): number {
+    getGuessedWordCount(): number {
         return this.guessedWords.size;
     }
 
@@ -101,9 +154,11 @@ export class GameSession {
 
     /** Get the next word (in the order the list defines) to be guessed and create a new WordGuess object */
     getNextWordOrder(): string {
-        this.markGuessed();
+        if (this.currentWord !== "placeholder") {
+            this.markGuessed();
+        }
 
-        if (this.guessedWords.size === this.words.length) {
+        if (this.guessedWords.size === this.words.length - 1) {
             this.outOfWords = true;
         }
 
@@ -137,12 +192,14 @@ export class GameSession {
     /** Get the next word to be guessed but randomly from the list */
     getNextWordRandom(): string {
         // Mark the current one as guessed
-        this.markGuessed();
+        if (this.currentWord !== "placeholder") {
+            this.markGuessed();
+        }
 
         // Filter out guessed words
         const remainingWords = this.words.filter((word) => !this.guessedWords.has(word));
 
-        if (this.guessedWords.size === this.words.length) {
+        if (this.guessedWords.size === this.words.length - 1) {
             this.outOfWords = true;
         }
 

@@ -11,6 +11,7 @@ import { splitToSyllables } from "../utils/syllable-split.ts";
 import { GameSession } from "./GameSession";
 import { setSyllableHintWord } from "./syllablesHint.ts";
 import type { WordGuess } from "./WordGuess";
+import { showWordGuessResults } from "./wordGuessResults.ts";
 import { initializeWordSelector } from "./words.ts";
 
 const guessDialog = expectElement("word-guess-dialog", HTMLDialogElement);
@@ -58,6 +59,7 @@ function handleGameStart(event: CategorySelectedEvent): void {
             detail: {
                 selections: category.words.map((w, idx) => ({ name: w.name, index: idx })),
                 category: currentCategory,
+                isReplay: false,
             },
         }),
     );
@@ -77,8 +79,13 @@ function handleGameStart(event: CategorySelectedEvent): void {
 
 function handleGameOver(event: GameOverEvent) {
     const showResults: boolean = event.detail.showResults;
-    gameSession = null;
     guessDialog.close();
+    if (showResults) {
+        if (gameSession) {
+            showWordGuessResults(gameSession);
+        }
+    }
+    gameSession = null;
 }
 
 function setImage() {
@@ -118,6 +125,11 @@ function handleWordSelected(event: WordSelectedEvent) {
         setSyllableHintWord(name);
     }
 
+    if (event.detail.name === null) {
+        // No word was set, set it here
+        gameSession.setCurrentWordIndex(0);
+    }
+
     guessDialog.showModal();
     setupWordInput();
 
@@ -125,10 +137,11 @@ function handleWordSelected(event: WordSelectedEvent) {
 }
 
 function handleWordsSelected(event: WordsSelectedEvent) {
-    const { category, selections } = event.detail;
+    const { category, selections, isReplay } = event.detail;
+    gameSession = new GameSession(category);
+    //if (!gameSession) return;
 
-    if (!gameSession) return;
-
+    gameSession.setIsReplay(isReplay);
     gameSession.setCategory(category);
     gameSession.setWords(selections.map((s) => s.name));
 }
@@ -200,6 +213,7 @@ function getGameSession(): GameSession {
 /** Handle the letter hint logic when the letter hint is requested */
 function handleUseLetterHint(): void {
     if (!gameSession) return;
+    gameSession.useLetterHint();
     const wordGuess = gameSession.getCurrentWordGuess();
     const done = wordGuess.useLetterHint();
 
@@ -215,6 +229,7 @@ function handleUseLetterHint(): void {
 /** Set current word's text hint */
 function handleUseTextHint(): void {
     if (!gameSession) return;
+    gameSession.useTextHint();
 
     const currentWord = gameSession.getCurrentWord();
     const currentWordData = wordsData.categories
@@ -228,8 +243,7 @@ function handleUseTextHint(): void {
 
 function handleUseVocalHint(): void {
     if (!gameSession) return;
-
-    getGameSession().useVocalHint();
+    gameSession.useVocalHint();
 }
 
 /** Check if the user's answer is correct */
@@ -249,8 +263,20 @@ function handleAnswer(wordGuess: WordGuess): void {
     const isCorrect: boolean = isCorrectAnswer(correctAnswer, answer);
     const isGameOver: boolean = gameSession.isGameOver();
 
-    if (isCorrect && isGameOver) {
-        const showResults: boolean = gameSession.getWordCount() > 1;
+    if (isCorrect) {
+        gameSession.increaseCorrectCount();
+    } else {
+        gameSession.saveIncorrectlyGuessed();
+    }
+
+    if (isGameOver) {
+        let showResults: boolean = gameSession.getAllWords().length > 1;
+        const isReplay: boolean = gameSession.getIsReplay();
+        if (isReplay) {
+            // Always show results if the user is replaying correct words,
+            // even if there was only one word replayed
+            showResults = true;
+        }
         dispatchEvent(
             new CustomEvent("show-results", {
                 bubbles: true,
@@ -259,16 +285,12 @@ function handleAnswer(wordGuess: WordGuess): void {
         );
         return;
     }
-    if (isCorrect) {
-        const nextWord: string = gameSession.getNextWord();
-        textHint.textContent = "";
-        setSyllableHintWord(nextWord);
-        const category = gameSession.getCategory();
-        setImage();
-    } else {
-        // show incorrect feedback if you like
-        wordGuess.removeAllLetters();
-    }
+
+    const nextWord: string = gameSession.getNextWord();
+    textHint.textContent = "";
+    setSyllableHintWord(nextWord);
+    setImage();
+
     setupWordInput();
 }
 
