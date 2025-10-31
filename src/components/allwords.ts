@@ -1,6 +1,7 @@
 import { buildHtml, expectElement } from "../common/dom";
 import { dispatchWordSelection } from "../common/events";
 import { getImagePath, wordsData } from "../data/word-data-model.ts";
+import "./styles/allwords.css";
 
 const openBtn = expectElement("open-words-btn", HTMLButtonElement);
 const dialog = expectElement("all-words-dialog", HTMLDialogElement);
