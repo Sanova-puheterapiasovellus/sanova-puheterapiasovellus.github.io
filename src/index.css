@@ -115,6 +115,27 @@ ul#notification-list {
     transition: background-color 0.3s ease;
 }
 
+/* Shake animation to indicate invalid answer */
+@keyframes shake {
+    0%,
+    100% {
+        transform: translate(-50%, -50%) translateX(0);
+    }
+    20%,
+    60% {
+        transform: translate(-50%, -50%) translateX(-8px);
+    }
+    40%,
+    80% {
+        transform: translate(-50%, -50%) translateX(8px);
+    }
+}
+
+/* Apply shake effect to the dialog */
+#word-guess-dialog.shake {
+    animation: shake 0.4s ease;
+}
+
 /* Quick styles to center the results modal */
 #word-guess-results-dialog {
     max-width: 90vw;

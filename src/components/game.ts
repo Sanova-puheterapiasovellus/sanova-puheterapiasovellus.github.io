@@ -271,6 +271,19 @@ async function handleAnswer(wordGuess: WordGuess) {
 
     const answer = wordGuess.getGuess().toLowerCase();
     const correctAnswer: string = wordImage.alt;
+
+    // Check if the answer is the correct length (cannot submit empty word for example)
+    if (answer.length < correctAnswer.length) {
+        // Indicate the user about invalid answer. The user can answer
+        // again with a correct length word.
+        guessDialog.classList.add("shake");
+        // Non-blocking timeout to remove the shake class
+        setTimeout(() => {
+            guessDialog.classList.remove("shake");
+        }, 400);
+        return;
+    }
+
     const isCorrect: boolean = isCorrectAnswer(correctAnswer, answer);
     const isGameOver: boolean = gameSession.isGameOver();
 
