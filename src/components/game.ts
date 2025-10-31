@@ -328,6 +328,11 @@ async function handleAnswer(wordGuess: WordGuess) {
     setupWordInput();
 }
 
+function moveCursorToEnd(input: HTMLInputElement) {
+    const length = input.value.length;
+    input.setSelectionRange(length, length);
+}
+
 /** Wire up events to react to the game being started. */
 export function initializeGameContainer() {
     window.addEventListener("category-selected", handleGameStart);
@@ -347,4 +352,9 @@ export function initializeGameContainer() {
     syllableHintButton.addEventListener("click", handleUseVocalHint);
 
     hiddenInput.addEventListener("input", handleInputEvent);
+
+    /* Make sure that cursor is always at the very end of the hidden input */
+    hiddenInput.addEventListener("focus", () => moveCursorToEnd(hiddenInput));
+    hiddenInput.addEventListener("click", () => moveCursorToEnd(hiddenInput));
+    hiddenInput.addEventListener("keyup", () => moveCursorToEnd(hiddenInput));
 }
