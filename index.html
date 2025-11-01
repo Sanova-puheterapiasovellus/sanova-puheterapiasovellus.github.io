@@ -28,26 +28,43 @@
         </dialog>
 
         <dialog id="word-guess-dialog" closedby="any">
-            <h3>Sanaharjoittelu</h3>
-
-            <img id="word-guess-image" src="placeholder.png" alt="placeholder">
-            <br>
-            <!--<div id="word-guess-slots"></div>-->
-            <div id="word-guess-slots"></div>
-            <input id="hidden-input" type="text" style="opacity:0;">
-            <!--style="position:absolute; opacity:0; width:1px; height:1px;"-->
-            <br>
-            <div id="text-hint"></div>
-            <br>
-            <button id="word-guess-letter-hint" type="button">Kirjainvihje</button>
-            <br>
-            <button id="word-guess-text-hint" type="button">Kuvaileva vihje</button>
-            <br>
-            <button id="word-guess-syllable-hint" type="button">Tavuvihje</button>
-            <br>
-            <button id="word-guess-close" type="button">Sulje</button>
-            <br>
-            <button id="word-guess-submit" type="button">Vastaa</button>
+            <div id="word-guess-card">
+                <button id="word-guess-close" type="button">
+                    <img src="/assets/icons/close_36dp.svg"></img>
+                </button>
+                <div id="prev-btn-container">
+                    <button id="prev-btn">
+                        <img src="/assets/icons/arrow_back_20dp.svg" alt="arrow back">
+                    </button>
+                </div>
+                <div id="word-guess-card-content">
+                    <h3>Sanaharjoittelu</h3>
+                    <img id="word-guess-image" src="placeholder.png" alt="placeholder">
+                    <!--<div id="word-guess-slots"></div>-->
+                    <div id="word-guess-slots"></div>
+                    <input id="hidden-input" type="text" style="opacity:0;">
+                    <!--style="position:absolute; opacity:0; width:1px; height:1px;"-->
+                    <div id="text-hint"></div>
+                    <button id="word-guess-letter-hint" type="button">
+                        <img src="/assets/icons/text_rotation_none_22dp.svg" alt="" class="icon">
+                        <span>Kirjainvihje</span>
+                    </button>
+                    <button id="word-guess-text-hint" type="button">
+                        <img src="/assets/icons/book_5_22dp.svg" alt="" class="icon">
+                        <span>Kuvaileva vihje</span>
+                    </button>
+                    <button id="word-guess-syllable-hint" type="button">
+                        <img src="/assets/icons/ear_sound_22dp.svg" alt="" class="icon">
+                        <span>Tavuvihje</span>
+                    </button>
+                    <button id="word-guess-submit" type="button">Vastaa</button>
+                </div>
+                <div id="prev-btn-container">
+                    <button id="next-btn">
+                        <img src="/assets/icons/arrow_forward_20dp.svg">
+                    </button>
+                </div>
+            </div>
         </dialog>
 
         <dialog id="word-guess-results-dialog" closedby="any">
