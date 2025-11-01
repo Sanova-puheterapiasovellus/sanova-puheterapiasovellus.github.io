@@ -1,30 +1,109 @@
-/* Quick styles to center the guessing modal */
-#word-guess-dialog {
+#word-guess-dialog[open] {
+    max-width: 100%;
+    width: 100%;
+    max-height: 100%;
+    height: 100%;
+    border: none;
+    background-color: var(--bg-dark);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#next-btn-container,
+#prev-btn-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#next-btn,
+#prev-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--bg-light);
+    cursor: pointer;
+}
+
+#word-guess-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    cursor: pointer;
+    border: none;
+}
+
+#word-guess-close > img {
+    border: 1px solid hsl(0, 0%, 80%);
+    border-radius: 100%;
+    background-color: hsl(0, 0%, 90%);
+}
+
+#word-guess-close > img:hover {
+    background-color: hsl(0, 0%, 87%);
+}
+
+#word-guess-card > * {
+    min-width: 40px;
+}
+
+#word-guess-card-content button {
+    width: 224px;
+    min-height: 40px;
+    border: 1.5px solid #2c2c2c;
+    border-radius: 8px;
+    background-color: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    font-weight: 500;
+    color: #000;
+    cursor: pointer;
+    margin-bottom: 11px;
+}
+
+#word-guess-card-content button .icon {
+    position: absolute;
+    left: 34px;
+}
+
+#word-guess-card {
     max-width: 90vw;
+    width: 678px;
     max-height: 90vh;
     padding: 2rem;
     border: none;
     border-radius: 12px;
-    background: white;
+    background: var(--bg);
+    overflow: auto;
+    display: flex;
+    position: relative;
 }
 
-#word-guess-dialog[open] {
+#word-guess-card-content {
+    flex-grow: 1;
     display: flex;
-    position: fixed;
-    inset: 50% auto auto 50%;
-    transform: translate(-50%, -50%);
     flex-direction: column;
     align-items: center;
-    /*gap: 1rem;*/
-    overflow: hidden;
 }
 
 #word-guess-image {
+    padding-top: 12px;
     width: 100%;
     height: auto;
     max-height: 40vh;
     object-fit: contain;
     border-radius: 8px;
+}
+
+#word-guess-slots {
+    padding-top: 18px;
 }
 
 #hidden-input {
