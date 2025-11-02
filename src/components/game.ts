@@ -254,20 +254,54 @@ function isCorrectAnswer(correctAnswer: string, answer: string): boolean {
     return false;
 }
 
+function setButtonsEnabled(enabled: boolean): void {
+    answerButton.disabled = !enabled;
+    letterHintButton.disabled = !enabled;
+    textHintButton.disabled = !enabled;
+    syllableHintButton.disabled = !enabled;
+}
+
+function delay(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 /** Handle the user's guess when the answer btn is pressed */
-function handleAnswer(wordGuess: WordGuess): void {
+async function handleAnswer(wordGuess: WordGuess) {
     const gameSession: GameSession = getGameSession();
 
     const answer = wordGuess.getGuess().toLowerCase();
     const correctAnswer: string = wordImage.alt;
+
+    // Check if the answer is the correct length (cannot submit empty word for example)
+    if (answer.length < correctAnswer.length) {
+        // Indicate the user about invalid answer. The user can answer
+        // again with a correct length word.
+        guessDialog.classList.add("shake");
+        // Non-blocking timeout to remove the shake class
+        setTimeout(() => {
+            guessDialog.classList.remove("shake");
+        }, 400);
+        return;
+    }
+
     const isCorrect: boolean = isCorrectAnswer(correctAnswer, answer);
     const isGameOver: boolean = gameSession.isGameOver();
 
     if (isCorrect) {
         gameSession.increaseCorrectCount();
+        guessDialog.classList.add("correct");
     } else {
         gameSession.saveIncorrectlyGuessed();
+        guessDialog.classList.add("wrong");
     }
+
+    // Set buttons disabled during the delay
+    setButtonsEnabled(false);
+    await delay(1000);
+    setButtonsEnabled(true);
+
+    // Remove the indication of correct/wrong answer before moving to the next card
+    guessDialog.classList.remove("correct", "wrong");
 
     if (isGameOver) {
         let showResults: boolean = gameSession.getAllWords().length > 1;
@@ -294,6 +328,11 @@ function handleAnswer(wordGuess: WordGuess): void {
     setupWordInput();
 }
 
+function moveCursorToEnd(input: HTMLInputElement) {
+    const length = input.value.length;
+    input.setSelectionRange(length, length);
+}
+
 /** Wire up events to react to the game being started. */
 export function initializeGameContainer() {
     window.addEventListener("category-selected", handleGameStart);
@@ -313,4 +352,9 @@ export function initializeGameContainer() {
     syllableHintButton.addEventListener("click", handleUseVocalHint);
 
     hiddenInput.addEventListener("input", handleInputEvent);
+
+    /* Make sure that cursor is always at the very end of the hidden input */
+    hiddenInput.addEventListener("focus", () => moveCursorToEnd(hiddenInput));
+    hiddenInput.addEventListener("click", () => moveCursorToEnd(hiddenInput));
+    hiddenInput.addEventListener("keyup", () => moveCursorToEnd(hiddenInput));
 }

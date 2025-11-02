@@ -39,7 +39,8 @@
 
 body {
     min-height: 100vh;
-    background-color: var(--bg-dark);
+    /*background-color: var(--bg-dark);*/
+    background: radial-gradient(circle at center, var(--bg-dark) 0%, #000820 100%);
     font-family: "Inter", sans-serif;
 }
 
@@ -107,6 +108,39 @@ ul#notification-list {
     align-items: center;
     /*gap: 1rem;*/
     overflow: hidden;
+}
+
+/* Correct answer, green flash */
+#word-guess-dialog.correct {
+    background-color: #c0f0cd;
+    transition: background-color 0.3s ease;
+}
+
+/* Wrong answer, red flash */
+#word-guess-dialog.wrong {
+    background-color: #f0c0c0;
+    transition: background-color 0.3s ease;
+}
+
+/* Shake animation to indicate invalid answer */
+@keyframes shake {
+    0%,
+    100% {
+        transform: translate(-50%, -50%) translateX(0);
+    }
+    20%,
+    60% {
+        transform: translate(-50%, -50%) translateX(-8px);
+    }
+    40%,
+    80% {
+        transform: translate(-50%, -50%) translateX(8px);
+    }
+}
+
+/* Apply shake effect to the dialog */
+#word-guess-dialog.shake {
+    animation: shake 0.4s ease;
 }
 
 /* Quick styles to center the results modal */
