@@ -2,16 +2,18 @@ import { buildHtml, expectElement } from "../common/dom";
 import { dispatchWordSelection } from "../common/events";
 import { getImagePath, wordsData } from "../data/word-data-model.ts";
 
-const openBtn = expectElement("open-words-btn", HTMLButtonElement);
 const dialog = expectElement("all-words-dialog", HTMLDialogElement);
 const closeBtn = expectElement("close-all-words", HTMLElement);
 const allWordsList = expectElement("all-words-list", HTMLUListElement);
 
-openBtn.addEventListener("click", () => {
-    dialog.showModal();
+window.addEventListener("hashchange", () => {
+    if (window.location.hash.slice(1) === "search") {
+        dialog.showModal();
+    }
 });
 closeBtn.addEventListener("click", () => {
     dialog.close();
+    window.location.hash = "#";
 });
 dialog.addEventListener("click", (e) => {
     if (e.target === dialog) dialog.close();
