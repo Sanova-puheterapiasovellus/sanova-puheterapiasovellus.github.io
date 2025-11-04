@@ -106,6 +106,7 @@ export class WordGuess {
      * @param container: Element that holds all the spans containing the letters
      */
     render(container: HTMLElement): void {
+        container.style.setProperty("--letters", this.word.length.toString());
         container.innerHTML = "";
         for (let i = 0; i < this.word.length; i++) {
             const span = document.createElement("span");

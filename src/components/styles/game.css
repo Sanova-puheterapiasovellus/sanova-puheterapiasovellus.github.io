@@ -101,7 +101,7 @@
     object-fit: contain;
     border-radius: 8px;
 }
-
+/*
 #word-guess-slots {
     padding-top: 18px;
 }
@@ -110,6 +110,25 @@
     margin: 0 5px;
     font-size: 2rem;
     display: inline-block;
+}
+*/
+
+#word-guess-slots {
+    padding-top: 18px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: clamp(6px, 1vw, 16px);
+    width: 100%;
+    text-transform: uppercase;
+    font-size: clamp(1rem, calc(6vw - var(--letters) * 0.04vw), 3rem);
+}
+
+#word-guess-slots span.letter-slot {
+    display: inline-block;
+    flex-shrink: 1;
+    text-align: center;
+    min-width: 0;
 }
 
 #hidden-input {
