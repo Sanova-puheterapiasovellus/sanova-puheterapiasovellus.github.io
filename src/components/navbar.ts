@@ -1,6 +1,7 @@
+import type { Store } from "../common/reactive";
 import styles from "./styles/navbar.module.css";
 
-function Navbar(): HTMLElement {
+function Navbar(hash: Store<string>): HTMLElement {
     const nav = document.createElement("nav");
     nav.className = styles.navbar;
 
@@ -21,10 +22,9 @@ function Navbar(): HTMLElement {
     const links = nav.querySelectorAll<HTMLAnchorElement>("a");
 
     // Active page - <a> tag style
-    window.addEventListener("hashchange", (_) => {
-        const page = window.location.hash.slice(1);
+    hash.subscribe((value) => {
         for (const element of links) {
-            if (element.href.slice(1) === page) {
+            if (element.href === value) {
                 element.classList.add(styles.active);
             } else {
                 element.classList.remove(styles.active);
@@ -35,6 +35,6 @@ function Navbar(): HTMLElement {
     return nav;
 }
 
-export function initializeHeader() {
-    document.querySelector("header.mainview-header")?.appendChild(Navbar());
+export function initializeHeader(hash: Store<string>) {
+    document.querySelector("header.mainview-header")?.appendChild(Navbar(hash));
 }

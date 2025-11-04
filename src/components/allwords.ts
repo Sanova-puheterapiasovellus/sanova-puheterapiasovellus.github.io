@@ -1,16 +1,12 @@
 import { buildHtml, expectElement } from "../common/dom";
 import { dispatchWordSelection } from "../common/events";
+import type { Store } from "../common/reactive.ts";
 import { getImagePath, wordsData } from "../data/word-data-model.ts";
 
 const dialog = expectElement("all-words-dialog", HTMLDialogElement);
 const closeBtn = expectElement("close-all-words", HTMLElement);
 const allWordsList = expectElement("all-words-list", HTMLUListElement);
 
-window.addEventListener("hashchange", () => {
-    if (window.location.hash.slice(1) === "search") {
-        dialog.showModal();
-    }
-});
 closeBtn.addEventListener("click", () => {
     dialog.close();
     window.location.hash = "#";
@@ -46,7 +42,9 @@ function createRandomEntry(): HTMLElement {
     return buildHtml("li", {}, img);
 }
 
-export function initializeAllWords() {
+export function initializeAllWords(hash: Store<string>) {
+    hash.filter((value) => value === "#search").subscribe((_) => dialog.showModal());
+
     allWordsList.innerHTML = "";
     allWordsList.appendChild(createRandomEntry());
     wordsData.categories.forEach((category) => {
