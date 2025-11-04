@@ -5,9 +5,10 @@
 }
 
 :root {
-    --bg-dark: hsl(220, 85%, 55%);
+    --bg-dark: hsl(220, 85%, 53%);
     --bg: hsl(0, 0, 95%);
     --bg-light: hsl(0, 0, 100%);
+    --bg-card-btns: hsl(0, 0%, 17%);
     --text: hsl(222, 77%, 5%);
     --text-muted: hsl(0, 0, 30%);
     --border: hsl(0, 0, 70%);
