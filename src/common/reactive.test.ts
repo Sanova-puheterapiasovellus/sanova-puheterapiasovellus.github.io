@@ -68,4 +68,14 @@ suite("check reactive store usage", () => {
 
         assertProvidedWith(callback, [4, 6, 12]);
     });
+
+    test("monadic bind operation works", ({ signal }) => {
+        const store = Store.of(2);
+        const callback = mock.fn<Subscriber<number>>();
+
+        store.flatMap((value) => Store.of(value * 10)).subscribe(callback, signal);
+        store.set(3);
+
+        assertProvidedWith(callback, [20, 30]);
+    });
 });

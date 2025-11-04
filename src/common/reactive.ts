@@ -124,6 +124,15 @@ export class Store<T> implements Writable<T> {
         });
     }
 
+    /** Create a child store for chaining dependent computations. */
+    flatMap<S>(transform: (value: T) => Store<S>): Store<S> {
+        return new Store((store, signal) => {
+            this.subscribe((value) => {
+                transform(value).subscribe((value) => store.set(value), signal);
+            }, signal);
+        });
+    }
+
     /** Create a child store with type narrowed filtering. */
     filter<S extends T>(condition: (value: T) => value is S): Store<S>;
 
