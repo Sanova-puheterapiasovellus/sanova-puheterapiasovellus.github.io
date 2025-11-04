@@ -7,7 +7,7 @@ function Navbar(): HTMLElement {
     nav.innerHTML = `
     <h1>Sanova</h1>
     <div class="${styles.navbarCenter}">
-      <a href="/index.html">
+      <a href="/index.html" id="categories-link">
         <img src="/assets/icons/home35.svg" alt="Home icon">
         <span>KATEGORIAT</span>
       </a>
@@ -32,11 +32,20 @@ function Navbar(): HTMLElement {
         }
     });
 
-    // prevent normal link behaviour and open all words in dialog element instead
+    // prevent normal link behaviour, open all words in dialog element instead and highlight
+    // active navbar link
     const allWordsLink = nav.querySelector<HTMLAnchorElement>("#all-words-link");
+    const categoriesLink = nav.querySelector<HTMLAnchorElement>("#categories-link");
+    const dialog = document.getElementById("all-words-dialog") as HTMLDialogElement | null;
     allWordsLink?.addEventListener("click", (e) => {
         e.preventDefault();
-        (document.getElementById("all-words-dialog") as HTMLDialogElement | null)?.showModal();
+        dialog?.showModal();
+        allWordsLink.classList.add(styles.active);
+        categoriesLink?.classList.remove(styles.active);
+    });
+    dialog?.addEventListener("close", () => {
+        allWordsLink?.classList.remove(styles.active);
+        categoriesLink?.classList.add(styles.active);
     });
     return nav;
 }

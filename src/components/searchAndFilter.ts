@@ -1,4 +1,5 @@
 import { buildHtml } from "../common/dom";
+import styles from "./styles/allWords.module.css";
 
 export interface FilterOptions {
     term: string;
@@ -17,33 +18,24 @@ export function setupSearchAndFilter(
     categoriesContainer.innerHTML = "";
     const searchInput = buildHtml("input", {
         type: "text",
-        placeholder: "Hae sana...",
+        placeholder: "Etsi sana...",
+        className: styles.searchInput,
     });
-    Object.assign(searchInput.style, {
-        width: "90%",
-        height: "30px",
-    });
-    const clearBtn = buildHtml("button", { type: "button", innerText: "✕" });
-    clearBtn.addEventListener("click", () => {
-        searchInput.value = "";
-        notifyChange();
-    });
-    searchContainer.append(searchInput, clearBtn);
+
+    searchContainer.className = styles.searchContainer;
+    searchContainer.append(searchInput);
 
     categories.forEach((category) => {
-        const label = buildHtml("label");
-        Object.assign(label.style, {
-            display: "inline-flex",
-            alignItems: "center",
-            marginRight: "12px",
-            marginBottom: "8px",
+        const label = buildHtml("label", { className: styles.categoryLabel });
+        const checkbox = buildHtml("input", {
+            type: "checkbox",
+            value: category.name,
+            className: styles.categoryCheckbox,
         });
-        const checkbox = buildHtml("input", { type: "checkbox", value: category.name });
-        const img = buildHtml("img", { src: category.imagePath, alt: category.name });
-        Object.assign(img.style, {
-            width: "30px",
-            height: "30px",
-            objectFit: "cover",
+        const img = buildHtml("img", {
+            src: category.imagePath,
+            alt: category.name,
+            className: styles.categoryImage,
         });
         label.append(img, checkbox, document.createTextNode(category.name));
         categoriesContainer.appendChild(label);
