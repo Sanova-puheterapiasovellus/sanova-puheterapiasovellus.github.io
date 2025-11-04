@@ -1,19 +1,3 @@
-#all-words-dialog {
-    width: 100vw;
-    height: 100vh;
-}
-#all-words-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 12px;
-    padding: 0;
-    list-style: none;
-}
-#all-words-list img {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-}
 * {
     margin: 0;
     padding: 0;
@@ -21,26 +5,21 @@
 }
 
 :root {
-    --bg-dark: hsl(220, 85%, 55%);
+    --bg-dark: hsl(220, 85%, 53%);
     --bg: hsl(0, 0, 95%);
     --bg-light: hsl(0, 0, 100%);
+    --bg-card-btns: hsl(0, 0%, 17%);
     --text: hsl(222, 77%, 5%);
     --text-muted: hsl(0, 0, 30%);
     --border: hsl(0, 0, 70%);
     --notification-padding: 5ch;
 }
 
-@font-face {
-    font-family: "Inter";
-    src: url("/assets/fonts/Inter_18pt-Regular.ttf") format("truetype");
-    font-weight: 400;
-    font-style: normal;
-}
-
 body {
     min-height: 100vh;
-    /*background-color: var(--bg-dark);*/
-    background: radial-gradient(circle at center, var(--bg-dark) 0%, #000820 100%);
+    background-color: var(--bg-dark);
+    /*background: radial-gradient(circle at center, var(--bg-dark) 0%, #000820 100%);*/
+    /*background: radial-gradient(circle at center, var(--bg-dark) 0%, hsl(225, 100%, 25%) 100%);*/
     font-family: "Inter", sans-serif;
 }
 
@@ -72,12 +51,6 @@ body {
     display: none !important;
 }
 
-#hidden-input {
-    border: 2px solid red;
-    background: yellow;
-    font-size: 1.5rem;
-}
-
 ul#notification-list {
     position: fixed;
     bottom: var(--notification-padding);
@@ -87,87 +60,4 @@ ul#notification-list {
     display: flex;
     flex-direction: column-reverse;
     gap: var(--notification-padding);
-}
-
-/* Quick styles to center the guessing modal */
-#word-guess-dialog {
-    max-width: 90vw;
-    max-height: 90vh;
-    padding: 2rem;
-    border: none;
-    border-radius: 12px;
-    background: white;
-}
-
-#word-guess-dialog[open] {
-    display: flex;
-    position: fixed;
-    inset: 50% auto auto 50%;
-    transform: translate(-50%, -50%);
-    flex-direction: column;
-    align-items: center;
-    /*gap: 1rem;*/
-    overflow: hidden;
-}
-
-/* Correct answer, green flash */
-#word-guess-dialog.correct {
-    background-color: #c0f0cd;
-    transition: background-color 0.3s ease;
-}
-
-/* Wrong answer, red flash */
-#word-guess-dialog.wrong {
-    background-color: #f0c0c0;
-    transition: background-color 0.3s ease;
-}
-
-/* Shake animation to indicate invalid answer */
-@keyframes shake {
-    0%,
-    100% {
-        transform: translate(-50%, -50%) translateX(0);
-    }
-    20%,
-    60% {
-        transform: translate(-50%, -50%) translateX(-8px);
-    }
-    40%,
-    80% {
-        transform: translate(-50%, -50%) translateX(8px);
-    }
-}
-
-/* Apply shake effect to the dialog */
-#word-guess-dialog.shake {
-    animation: shake 0.4s ease;
-}
-
-/* Quick styles to center the results modal */
-#word-guess-results-dialog {
-    max-width: 90vw;
-    max-height: 90vh;
-    padding: 2rem;
-    border: none;
-    border-radius: 12px;
-    background: white;
-}
-
-#word-guess-results-dialog[open] {
-    display: flex;
-    position: fixed;
-    inset: 50% auto auto 50%;
-    transform: translate(-50%, -50%);
-    flex-direction: column;
-    align-items: center;
-    /*gap: 1rem;*/
-    overflow: hidden;
-}
-
-#word-guess-image {
-    width: 100%;
-    height: auto;
-    max-height: 40vh;
-    object-fit: contain;
-    border-radius: 8px;
 }

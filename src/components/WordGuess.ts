@@ -141,17 +141,13 @@ export class WordGuess {
      * @param container: Element that holds all the spans containing the letters
      */
     render(container: HTMLElement): void {
+        container.style.setProperty("--letters", this.word.length.toString());
         container.innerHTML = "";
         for (let i = 0; i < this.word.length; i++) {
             const span = document.createElement("span");
             span.classList.add("letter-slot"); // Set style class for the element to later use css styling
             // Set the text to the guessed letter or to _ if not typed yet
             span.textContent = this.currentGuess[i] ?? "_";
-            // Set the actual style later in css, not in here.
-            // Set some test styling now for easier testing
-            span.style.margin = "0 5px"; // TODO: css file for styling
-            span.style.fontSize = "2rem"; // TODO: css file for styling
-            span.style.display = "inline-block"; // TODO: css file for styling
 
             // If the current letter is obtained from a letter hint, it is locked.
             if (this.locked[i]) {
