@@ -1,16 +1,17 @@
 import { expectElement } from "../common/dom.ts";
 import { playSyllableSounds } from "../common/playback.ts";
-
-const inputDebounceMilliseconds = 100;
-const syllableSeparationSeconds = 0.5;
+import {
+    inputDebounceMilliseconds,
+    syllableSeparationSeconds,
+} from "../data/syllable-player-config.ts";
+import { splitToSyllables } from "../utils/syllable-split.ts";
 
 const toolDialog = expectElement("syllable-player-dialog", HTMLDialogElement);
 const openButton = expectElement("syllable-player-open", HTMLButtonElement);
 const closeButton = expectElement("syllable-player-close", HTMLButtonElement);
 
 const rootForm = expectElement("syllable-player-form", HTMLFormElement);
-const syllableInput = expectElement("syllable-player-input", HTMLInputElement);
-const hyphenatedWord = expectElement("syllable-player-output", HTMLOutputElement);
+const wordInput = expectElement("syllable-player-input", HTMLInputElement);
 const playButton = expectElement("syllable-player-play", HTMLButtonElement);
 
 let autoSubmitDebounce: number | undefined;
@@ -48,9 +49,8 @@ function handleSubmission(event: Event): void {
     }
 
     // Update state accordingly to the given input.
-    determinedSyllables = syllableInput.value.split(" ");
+    determinedSyllables = splitToSyllables(wordInput.value).toArray();
     if (determinedSyllables.length > 1) {
-        hyphenatedWord.value = determinedSyllables.join("-");
         playButton.disabled = false;
     } else {
         determinedSyllables = undefined;
@@ -66,9 +66,7 @@ async function handlePlayback(_: Event): Promise<void> {
     }
 
     // Audio contexts can only be initialized while handling user input.
-    if (playbackContext === undefined) {
-        playbackContext = new AudioContext();
-    }
+    playbackContext ??= new AudioContext();
 
     try {
         // Set up cancellation possibility and ensure the button can't be pressed early.
@@ -93,7 +91,7 @@ async function handlePlayback(_: Event): Promise<void> {
 export function initializeSyllablePlayer() {
     openButton.addEventListener("click", handleDialogOpen);
     closeButton.addEventListener("click", handleDialogClose);
-    syllableInput.addEventListener("change", handleInputChange);
+    wordInput.addEventListener("input", handleInputChange);
     rootForm.addEventListener("submit", handleSubmission);
     playButton.addEventListener("click", handlePlayback);
 }

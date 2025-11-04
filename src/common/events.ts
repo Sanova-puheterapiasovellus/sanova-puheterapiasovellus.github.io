@@ -38,8 +38,21 @@ declare global {
     }
 }
 
-/** Event when a word has been selected. */
-export type WordSelectedEvent = CustomEvent<{ name: string; index: number }>;
+/** Event when a single word has been selected. */
+export type WordSelectedEvent = CustomEvent<{
+    name: string;
+    index: number;
+}>;
+/** Event that is triggered when multiple words, for example one category has been selected */
+export type WordsSelectedEvent = CustomEvent<{
+    selections: Array<{ name: string; index: number }>;
+    category: string | null;
+    isReplay: boolean;
+}>;
+/** Event that is triggered when the game runs out of words */
+export type GameOverEvent = CustomEvent<{
+    showResults: boolean;
+}>;
 
 /** Notify other components about a word being selected. */
 export function dispatchWordSelection(source: EventTarget, name: string, index: number) {
@@ -51,8 +64,34 @@ export function dispatchWordSelection(source: EventTarget, name: string, index: 
     );
 }
 
+/** Notify other components when multiple words has been selected */
+export function dispatchWordsSelection(
+    source: EventTarget,
+    selections: Array<{ name: string; index: number }>,
+    category: string | null,
+    isReplay: boolean,
+) {
+    source.dispatchEvent(
+        new CustomEvent("words-selected", {
+            bubbles: true,
+            detail: { selections, category, isReplay },
+        }) satisfies WordsSelectedEvent,
+    );
+}
+
+export function dispatchGameOver(source: EventTarget, showResults: boolean) {
+    source.dispatchEvent(
+        new CustomEvent("show-results", {
+            bubbles: true,
+            detail: { showResults },
+        }) satisfies GameOverEvent,
+    );
+}
+
 declare global {
     interface GlobalEventHandlersEventMap {
         "word-selected": WordSelectedEvent;
+        "words-selected": WordsSelectedEvent;
+        "show-results": GameOverEvent;
     }
 }

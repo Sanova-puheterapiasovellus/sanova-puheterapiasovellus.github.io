@@ -4,10 +4,6 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Sanova</title>
-        <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-            rel="stylesheet"
-        >
         <script type="module" src="./src/index.ts"></script>
     </head>
     <body>
@@ -44,11 +40,27 @@
             <input id="hidden-input" type="text" style="opacity:0;">
             <!--style="position:absolute; opacity:0; width:1px; height:1px;"-->
             <br>
+            <div id="text-hint"></div>
+            <br>
             <button id="word-guess-letter-hint" type="button">Kirjainvihje</button>
+            <br>
+            <button id="word-guess-text-hint" type="button">Kuvaileva vihje</button>
+            <br>
+            <button id="word-guess-syllable-hint" type="button">Tavuvihje</button>
             <br>
             <button id="word-guess-close" type="button">Sulje</button>
             <br>
             <button id="word-guess-submit" type="button">Vastaa</button>
+        </dialog>
+
+        <dialog id="word-guess-results-dialog" closedby="any">
+            <h3>Tulokset</h3>
+            <p id="correct-answers" class="results-line"></p>
+            <p id="letter-hints-used" class="result-line"></p>
+            <p id="vocal-hints-used" class="result-line"></p>
+            <p id="text-hints-used" class="result-line"></p>
+            <button id="word-guess-results-close" type="button">Sulje</button>
+            <button id="word-guess-replay" type="button">Pelaa väärin menneet uudelleen</button>
         </dialog>
 
         <dialog id="syllable-player-dialog" closedby="any">
@@ -64,9 +76,10 @@
             </p>
 
             <form id="syllable-player-form">
-                <label for="syllable-player-input">Tavut toistettavaksi</label>
-                <input id="syllable-player-input" type="text" required>
-                <output id="syllable-player-output" for="syllable-player-input"></output>
+                <label>
+                    Sana toistettavaksi
+                    <input id="syllable-player-input" type="text" required>
+                </label>
                 <button id="syllable-player-play" type="button" disabled>Toista tavut</button>
             </form>
 
