@@ -174,13 +174,13 @@ button#word-guess-submit {
 /*--------------------------------------------*/
 
 /* Correct answer, green flash */
-#word-guess-dialog.correct {
+#word-guess-dialog #word-guess-card.correct {
     background-color: #c0f0cd;
     transition: background-color 0.3s ease;
 }
 
 /* Wrong answer, red flash */
-#word-guess-dialog.wrong {
+#word-guess-dialog #word-guess-card.wrong {
     background-color: #f0c0c0;
     transition: background-color 0.3s ease;
 }
@@ -189,19 +189,19 @@ button#word-guess-submit {
 @keyframes shake {
     0%,
     100% {
-        transform: translate(-50%, -50%) translateX(0);
+        transform: translateX(0);
     }
     20%,
     60% {
-        transform: translate(-50%, -50%) translateX(-8px);
+        transform: translateX(-8px);
     }
     40%,
     80% {
-        transform: translate(-50%, -50%) translateX(8px);
+        transform: translateX(8px);
     }
 }
 
 /* Apply shake effect to the dialog */
-#word-guess-dialog.shake {
+#word-guess-dialog #word-guess-card.shake {
     animation: shake 0.4s ease;
 }
