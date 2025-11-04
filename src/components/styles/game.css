@@ -171,3 +171,37 @@ button#word-guess-submit {
         0 4px 8px hsla(0, 0%, 0%, 0.25),
         0 8px 16px hsla(0, 0%, 0%, 0.2);
 }
+/*--------------------------------------------*/
+
+/* Correct answer, green flash */
+#word-guess-dialog.correct {
+    background-color: #c0f0cd;
+    transition: background-color 0.3s ease;
+}
+
+/* Wrong answer, red flash */
+#word-guess-dialog.wrong {
+    background-color: #f0c0c0;
+    transition: background-color 0.3s ease;
+}
+
+/* Shake animation to indicate invalid answer */
+@keyframes shake {
+    0%,
+    100% {
+        transform: translate(-50%, -50%) translateX(0);
+    }
+    20%,
+    60% {
+        transform: translate(-50%, -50%) translateX(-8px);
+    }
+    40%,
+    80% {
+        transform: translate(-50%, -50%) translateX(8px);
+    }
+}
+
+/* Apply shake effect to the dialog */
+#word-guess-dialog.shake {
+    animation: shake 0.4s ease;
+}

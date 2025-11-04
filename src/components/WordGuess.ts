@@ -88,17 +88,52 @@ export class WordGuess {
      *  otherwise false
      */
     useLetterHint(): boolean {
-        // if no hints yet OR user has typed something → reset to only hints
-        this.removeAllLetters();
+        const wordArray = this.word.split("");
+        const guessArray = this.currentGuess;
+        let correctLettersLength = 0;
 
-        if (this.letterHintsUsed < this.word.length) {
-            this.locked[this.letterHintsUsed] = true;
-            this.currentGuess[this.letterHintsUsed] = this.getNextHintLetter();
+        // Find how many letters are correct starting from the beginning,
+        // For example:
+        // correct word: UKKONEN
+        // User has written: UKKIN
+        // There are 3 correct letters: UKK
+        for (let i = 0; i < guessArray.length && i < wordArray.length; i++) {
+            if (guessArray[i] === wordArray[i]) {
+                correctLettersLength++;
+            } else {
+                break;
+            }
+        }
+
+        // If the first letter is incorrect, reset the whole guess
+        if (correctLettersLength === 0) {
+            this.currentGuess = [];
+            this.locked.fill(false);
+        }
+
+        // Starting from the left, lock every correct letter
+        for (let i = 0; i < correctLettersLength; i++) {
+            this.locked[i] = true;
+            this.currentGuess[i] = this.word[i]!;
+        }
+
+        // The index of the hint letter that should be given,
+        // in the example this would be 3, so the letter O
+        const nextIndex = correctLettersLength;
+
+        // If there are still more letters in the word, give the next letter
+        // and lock it (example O)
+        if (nextIndex < this.word.length) {
+            this.currentGuess[nextIndex] = this.word[nextIndex]!;
+            this.locked[nextIndex] = true;
             this.letterHintsUsed++;
         }
 
-        // return true if the word is now fully revealed
-        return this.letterHintsUsed === this.word.length;
+        // Remove all the letters after the given hint letter
+        this.currentGuess = this.currentGuess.slice(0, nextIndex + 1);
+
+        // Return true if the word has been guessed using letter hints
+        return this.locked.every((locked) => locked);
     }
 
     /**
@@ -119,7 +154,7 @@ export class WordGuess {
                 // Style hint letters differently with class: .letter-slot.locked
                 span.classList.add("locked");
                 // Some styles for debugging, should be removed later
-                span.style.color = "red"; // TODO: css file for styling
+                span.style.color = "green"; // TODO: css file for styling
             }
 
             span.addEventListener("click", () => {
