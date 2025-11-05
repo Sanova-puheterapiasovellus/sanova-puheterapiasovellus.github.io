@@ -7,11 +7,11 @@ function Navbar(): HTMLElement {
     nav.innerHTML = `
     <h1>Sanova</h1>
     <div class="${styles.navbarCenter}">
-      <a href="/index.html">
+      <a href="/index.html" id="categories-link">
         <img src="/assets/icons/home35.svg" alt="Home icon">
         <span>KATEGORIAT</span>
       </a>
-      <a href="/all-words.html">
+      <a href="/all-words.html" id="all-words-link">
         <img src="/assets/icons/search1_35.svg" alt="All words navigation icon">
         <span>KAIKKI SANAT</span>
       </a>
@@ -32,6 +32,21 @@ function Navbar(): HTMLElement {
         }
     });
 
+    // prevent normal link behaviour, open all words in dialog element instead and highlight
+    // active navbar link
+    const allWordsLink = nav.querySelector<HTMLAnchorElement>("#all-words-link");
+    const categoriesLink = nav.querySelector<HTMLAnchorElement>("#categories-link");
+    const dialog = document.getElementById("all-words-dialog") as HTMLDialogElement | null;
+    allWordsLink?.addEventListener("click", (e) => {
+        e.preventDefault();
+        dialog?.showModal();
+        allWordsLink.classList.add(styles.active);
+        categoriesLink?.classList.remove(styles.active);
+    });
+    dialog?.addEventListener("close", () => {
+        allWordsLink?.classList.remove(styles.active);
+        categoriesLink?.classList.add(styles.active);
+    });
     return nav;
 }
 
