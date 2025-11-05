@@ -133,6 +133,7 @@ function handleWordSelected(event: WordSelectedEvent) {
     }
 
     guessDialog.showModal();
+    textHint.textContent = "";
     setupWordInput();
 
     setImage();
