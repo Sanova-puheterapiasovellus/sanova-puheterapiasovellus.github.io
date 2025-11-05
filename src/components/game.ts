@@ -9,12 +9,14 @@ import { playSyllableSounds } from "../common/playback.ts";
 import { getImagePath, wordsData } from "../data/word-data-model.ts";
 import { splitToSyllables } from "../utils/syllable-split.ts";
 import { GameSession } from "./GameSession";
+import "./styles/game.css";
 import { setSyllableHintWord } from "./syllablesHint.ts";
 import type { WordGuess } from "./WordGuess";
 import { showWordGuessResults } from "./wordGuessResults.ts";
 import { initializeWordSelector } from "./words.ts";
 
 const guessDialog = expectElement("word-guess-dialog", HTMLDialogElement);
+const guessCard = expectElement("word-guess-card", HTMLDivElement);
 const closeButton = expectElement("word-guess-close", HTMLButtonElement);
 const answerButton = expectElement("word-guess-submit", HTMLButtonElement);
 const letterHintButton = expectElement("word-guess-letter-hint", HTMLButtonElement);
@@ -145,6 +147,7 @@ function handleWordSelected(event: WordSelectedEvent) {
     }
 
     guessDialog.showModal();
+    textHint.textContent = "";
     setupWordInput();
 
     setImage();
@@ -290,10 +293,10 @@ async function handleAnswer(wordGuess: WordGuess) {
     if (answer.length < correctAnswer.length) {
         // Indicate the user about invalid answer. The user can answer
         // again with a correct length word.
-        guessDialog.classList.add("shake");
+        guessCard.classList.add("shake");
         // Non-blocking timeout to remove the shake class
         setTimeout(() => {
-            guessDialog.classList.remove("shake");
+            guessCard.classList.remove("shake");
         }, 400);
         return;
     }
@@ -303,10 +306,10 @@ async function handleAnswer(wordGuess: WordGuess) {
 
     if (isCorrect) {
         gameSession.increaseCorrectCount();
-        guessDialog.classList.add("correct");
+        guessCard.classList.add("correct");
     } else {
         gameSession.saveIncorrectlyGuessed();
-        guessDialog.classList.add("wrong");
+        guessCard.classList.add("wrong");
     }
 
     // Set buttons disabled during the delay
@@ -315,7 +318,7 @@ async function handleAnswer(wordGuess: WordGuess) {
     setButtonsEnabled(true);
 
     // Remove the indication of correct/wrong answer before moving to the next card
-    guessDialog.classList.remove("correct", "wrong");
+    guessCard.classList.remove("correct", "wrong");
 
     if (isGameOver) {
         let showResults: boolean = gameSession.getAllWords().length > 1;
