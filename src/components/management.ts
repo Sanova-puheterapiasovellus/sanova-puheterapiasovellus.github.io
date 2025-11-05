@@ -1,14 +1,17 @@
 import { buildHtml, expectElement } from "../common/dom";
 import { addOrUpdateFile, createBranch, createPullRequest } from "../common/github";
 import { loadSoundClip } from "../common/playback";
+import type { Store } from "../common/reactive";
 import { type AudioSegment, offsetsData } from "../data/offset-data-model";
 
+const rootDialog = expectElement("management-dialog", HTMLDialogElement);
 const managementForm = expectElement("management-form", HTMLFormElement);
 const authToken = expectElement("management-auth-token", HTMLInputElement);
 const soundSelection = expectElement("management-sound-selection", HTMLSelectElement);
 const soundStart = expectElement("management-sound-start", HTMLInputElement);
 const soundEnd = expectElement("management-sound-end", HTMLInputElement);
 const customBranch = expectElement("management-branch", HTMLInputElement);
+const closeButton = expectElement("management-dialog-close", HTMLButtonElement);
 
 let soundsChanged = false;
 const soundOffsets = structuredClone(offsetsData);
@@ -91,10 +94,12 @@ async function handleFormSubmit(event: SubmitEvent): Promise<void> {
 }
 
 /** Build up dynamic state and connect events for using the management dialog. */
-export function initializeManagementDialog() {
+export function initializeManagementDialog(hash: Store<string>) {
+    hash.filter((value) => value === "#management").subscribe((_) => rootDialog.showModal());
+
     for (const key in offsetsData) {
         soundSelection.appendChild(
-            buildHtml("select", { value: key, innerText: key.toUpperCase() }),
+            buildHtml("option", { value: key, innerText: key.toUpperCase() }),
         );
     }
 
@@ -102,4 +107,9 @@ export function initializeManagementDialog() {
     soundStart.addEventListener("change", handleSoundOffsetChange);
     soundEnd.addEventListener("change", handleSoundOffsetChange);
     managementForm.addEventListener("submit", handleFormSubmit);
+    closeButton.addEventListener("click", (_) => {
+        rootDialog.close();
+        window.location.hash = "#";
+    });
+    soundSelection.selectedIndex = 0;
 }

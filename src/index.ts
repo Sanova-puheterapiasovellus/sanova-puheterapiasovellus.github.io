@@ -4,6 +4,7 @@ import { dispatchInternalNotification } from "./common/events.ts";
 import { initializeAllWords } from "./components/allwords.ts";
 import { initializeCategorySelector } from "./components/categories.ts";
 import { initializeGameContainer } from "./components/game.ts";
+import { initializeManagementDialog } from "./components/management.ts";
 import { initializeHeader } from "./components/navbar.ts";
 import { initializeNotificationSystem } from "./components/notifications.ts";
 import { initializeSyllablePlayer } from "./components/syllables.ts";
@@ -18,5 +19,6 @@ initializeSyllablePlayer();
 initializeSyllableHintPlayer();
 initializeAllWords(route);
 initializeNotificationSystem();
+initializeManagementDialog(route);
 
 dispatchInternalNotification(document.body, "Testi-ilmoitus", "Lisätietoja");
