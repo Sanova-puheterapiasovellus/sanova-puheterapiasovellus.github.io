@@ -20,9 +20,25 @@ function createCategoryEntry(name: string, imagePath: string): HTMLElement {
     button?.addEventListener("click", () => dispatchCategorySelection(button, name));
     return li;
 }
+/** Create a random category entry that triggers a selection change on click. */
+function createRandomCategoryEntry(): HTMLElement {
+    const li = document.createElement("li");
+    li.innerHTML = `
+        <button type="button" class="${styles.card}">
+            <img src="${getImagePath("question.png")}" alt="Random sana"/>
+            <span>Satunnainen sana</span>
+        </button>
+    `;
 
+    const button = li.querySelector("button");
+    button?.addEventListener("click", () => {
+        dispatchCategorySelection(button, "random");
+    });
+    return li;
+}
 /** Build up the category selection list. */
 export function initializeCategorySelector() {
+    categoryList.appendChild(createRandomCategoryEntry());
     wordsData.categories.forEach((category) => {
         const categoryEntry = createCategoryEntry(category.name, getImagePath(category.image));
         categoryList.appendChild(categoryEntry);

@@ -2,11 +2,21 @@ import { buildHtml, expectElement } from "../common/dom";
 import { dispatchWordSelection } from "../common/events";
 import type { Store } from "../common/reactive.ts";
 import { getImagePath, wordsData } from "../data/word-data-model.ts";
+import type { FilterOptions } from "./searchAndFilter";
+import { setupSearchAndFilter } from "./searchAndFilter";
+import styles from "./styles/allWords.module.css";
 
 const dialog = expectElement("all-words-dialog", HTMLDialogElement);
 const closeBtn = expectElement("close-all-words", HTMLElement);
 const allWordsList = expectElement("all-words-list", HTMLUListElement);
+const filtersSection = expectElement("filters-section", HTMLElement);
+const searchContainer = expectElement("search-container", HTMLElement);
+const categoriesContainer = expectElement("category-filters", HTMLElement);
 
+dialog.className = styles.dialog;
+allWordsList.className = styles.list;
+filtersSection.className = styles.filters;
+closeBtn.className = styles.closeButton;
 closeBtn.addEventListener("click", () => {
     dialog.close();
     window.location.hash = "#";
@@ -24,7 +34,7 @@ function createImageEntry(word: string, imagePath: string, index: number): HTMLE
     img.addEventListener("click", () => {
         dispatchWordSelection(img, word, index);
     });
-    return buildHtml("li", {}, img);
+    return buildHtml("li", { className: styles.card }, img);
 }
 
 function createRandomEntry(): HTMLElement {
@@ -39,18 +49,34 @@ function createRandomEntry(): HTMLElement {
     img.addEventListener("click", () => {
         // go to game with random word
     });
-    return buildHtml("li", {}, img);
+    return buildHtml("li", { className: styles.card }, img);
 }
-
-export function initializeAllWords(hash: Store<string>) {
-    hash.filter((value) => value === "#search").subscribe((_) => dialog.showModal());
-
+const separator = buildHtml("hr");
+filtersSection.after(separator);
+function renderAllImages(filters: FilterOptions) {
     allWordsList.innerHTML = "";
     allWordsList.appendChild(createRandomEntry());
+
     wordsData.categories.forEach((category) => {
+        if (
+            filters.selectedCategories.length &&
+            !filters.selectedCategories.includes(category.name)
+        )
+            return;
+
         category.words.forEach((word, index) => {
-            const li = createImageEntry(word.name, getImagePath(word.image), index);
-            allWordsList.appendChild(li);
+            if (word.name.toLowerCase().includes(filters.term)) {
+                const li = createImageEntry(word.name, getImagePath(word.image), index);
+                allWordsList.appendChild(li);
+            }
         });
     });
+}
+export function initializeAllWords(hash: Store<string>) {
+    hash.filter((value) => value === "#search").subscribe((_) => dialog.showModal());
+    const categoryData = wordsData.categories.map((category) => ({
+        name: category.name,
+        imagePath: getImagePath(category.image),
+    }));
+    setupSearchAndFilter(searchContainer, categoriesContainer, categoryData, renderAllImages);
 }

@@ -8,11 +8,11 @@ function Navbar(hash: Store<string>): HTMLElement {
     nav.innerHTML = `
     <h1>Sanova</h1>
     <div class="${styles.navbarCenter}">
-      <a href="#">
+      <a href="#" id="categories-link">
         <img src="/assets/icons/home35.svg" alt="Home icon">
         <span>KATEGORIAT</span>
       </a>
-      <a href="#search">
+      <a href="#search" id="all-words-link">
         <img src="/assets/icons/search1_35.svg" alt="All words navigation icon">
         <span>KAIKKI SANAT</span>
       </a>
@@ -24,7 +24,8 @@ function Navbar(hash: Store<string>): HTMLElement {
     // Active page - <a> tag style
     hash.subscribe((value) => {
         for (const element of links) {
-            if (element.href === value) {
+            const { hash } = new URL(element.href);
+            if (hash === value) {
                 element.classList.add(styles.active);
             } else {
                 element.classList.remove(styles.active);
