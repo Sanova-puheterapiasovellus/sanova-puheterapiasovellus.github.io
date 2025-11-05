@@ -46,19 +46,30 @@ function focusHiddenInput() {
 /** Handle the game starting with the selected category. */
 function handleGameStart(event: CategorySelectedEvent): void {
     const currentCategory: string = event.detail.name;
-    gameSession = new GameSession(currentCategory);
+    let selections: Array<{ name: string; index: number }> = [];
+    let categoryForSession: string | null = null;
+
+    if (currentCategory === "random") {
+        const allWords = wordsData.categories.flatMap((c) =>
+            c.words.map((w, idx) => ({ name: w.name, index: idx })),
+        );
+        selections = pickRandom(allWords, 10);
+    } else {
+        const category = wordsData.categories.find((c) => c.name === currentCategory);
+        if (!category) return;
+        selections = category.words.map((w, idx) => ({ name: w.name, index: idx }));
+        categoryForSession = currentCategory;
+    }
+
+    gameSession = new GameSession(categoryForSession);
     //initializeWordSelector(currentCategory, gameSession); // Uncomment to make the word view visible
-
-    const category = wordsData.categories.find((c) => c.name === currentCategory);
-    if (!category) return;
-
     // Set the words to the game session object through the WordsSelected event
     dispatchEvent(
         new CustomEvent("words-selected", {
             bubbles: true,
             detail: {
-                selections: category.words.map((w, idx) => ({ name: w.name, index: idx })),
-                category: currentCategory,
+                selections,
+                category: currentCategory === "random" ? null : currentCategory,
                 isReplay: false,
             },
         }),
@@ -76,7 +87,10 @@ function handleGameStart(event: CategorySelectedEvent): void {
         }),
     );
 }
-
+/** Helper function to pick random words */
+function pickRandom<T>(array: T[], count: number): T[] {
+    return [...array].sort(() => Math.random() - 0.5).slice(0, count);
+}
 function handleGameOver(event: GameOverEvent) {
     const showResults: boolean = event.detail.showResults;
     guessDialog.close();

@@ -35,7 +35,7 @@ function createImageEntry(word: string, imagePath: string, index: number): HTMLE
     return buildHtml("li", { className: styles.card }, img);
 }
 
-function createRandomEntry(): HTMLElement {
+function createRandomEntry(filters: FilterOptions): HTMLElement {
     const img = buildHtml("img", {
         src: getImagePath("question.png"),
         alt: "random",
@@ -45,15 +45,38 @@ function createRandomEntry(): HTMLElement {
         display: "block",
     });
     img.addEventListener("click", () => {
-        // go to game with random word
+        const randomWord = getRandomFilteredWord(filters);
+        if (randomWord) {
+            dispatchWordSelection(img, randomWord.name, randomWord.index);
+        } else {
+            alert("Ei sanoja nykyisillä filttereillä");
+        }
     });
     return buildHtml("li", { className: styles.card }, img);
 }
 const separator = buildHtml("hr");
 filtersSection.after(separator);
+
+function getRandomFilteredWord(filters: FilterOptions) {
+    const filteredWords = wordsData.categories.flatMap((category) => {
+        if (
+            filters.selectedCategories.length &&
+            !filters.selectedCategories.includes(category.name)
+        ) {
+            return [];
+        }
+        return category.words
+            .filter((word) => word.name.toLowerCase().includes(filters.term.toLowerCase()))
+            .map((word, index) => ({ ...word, index }));
+    });
+    if (filteredWords.length === 0) return null;
+
+    const randomIndex = Math.floor(Math.random() * filteredWords.length);
+    return filteredWords[randomIndex];
+}
 function renderAllImages(filters: FilterOptions) {
     allWordsList.innerHTML = "";
-    allWordsList.appendChild(createRandomEntry());
+    allWordsList.appendChild(createRandomEntry(filters));
 
     wordsData.categories.forEach((category) => {
         if (
