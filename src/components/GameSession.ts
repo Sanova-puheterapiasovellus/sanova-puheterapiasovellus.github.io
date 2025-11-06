@@ -1,4 +1,5 @@
 import { WordGuess } from "./WordGuess";
+import type { WordGuessStatus } from "./wordStatus";
 
 /** Keep track of the game progress for one category */
 export class GameSession {
@@ -7,15 +8,18 @@ export class GameSession {
     private vocalHintsCounter: number = 0; // Will be used to determine how many syllables to play
     private textHintsCounter: number = 0;
     private letterHintsCounter: number = 0;
-    private guessedWords = new Set<string>();
-    private words: string[] = [];
-    private incorrectWords: string[] = [];
+    ///private guessedWords = new Set<string>();
+    ///private words: string[] = [];
+    ///private incorrectWords: string[] = [];
     private currentWordGuess: WordGuess | null = null;
-    private currentWordIndex: number = 0;
+    ///private currentWordIndex: number = 0;
     private gameModeRandom: boolean = false;
     private outOfWords: boolean = false;
     private correctAnswers: number = 0;
     private isReplay: boolean = false;
+
+    private wordGuessList: WordGuess[] = [];
+    private wordGuessIndex: number = 0;
 
     /** Set a word to be guessed and create a new word guess object based on that */
     constructor(category: string | null) {
@@ -34,8 +38,11 @@ export class GameSession {
     }
 
     setWords(words: string[]): void {
-        this.words = words;
-        this.currentWordIndex = 0;
+        ///this.words = words;
+        ///this.currentWordIndex = 0;
+        for (const word of words) {
+            this.wordGuessList.push(new WordGuess(word));
+        }
     }
 
     setIsReplay(isReplay: boolean): void {
@@ -46,20 +53,23 @@ export class GameSession {
         return this.isReplay;
     }
 
-    getAllWords(): string[] {
-        return this.words;
-    }
+    ///getAllWords(): string[] {
+    ///    return this.words;
+    ///}
 
     /** Set the index of the word if user select the word from the list */
     setCurrentWordIndex(index: number) {
-        this.currentWordIndex = index;
-        this.currentWord = this.words[index]!;
-        this.currentWordGuess = new WordGuess(this.currentWord);
+        ///this.currentWordIndex = index;
+        ///this.currentWord = this.words[index]!;
+        this.wordGuessIndex = index;
+        ///this.currentWordGuess = new WordGuess(this.currentWord);
+        this.currentWordGuess = this.wordGuessList[index]!;
+        this.currentWord = this.currentWordGuess.getWord();
     }
 
     /** Get the word that is being guessed at the moment */
     getCurrentWord(): string {
-        return this.currentWord;
+        return this.currentWord.toLowerCase();
     }
 
     /** Get the WordGuess object for the current word */
@@ -97,29 +107,51 @@ export class GameSession {
     }
 
     getTotalWordCount(): number {
-        return this.words.length;
+        ///return this.words.length;
+        return this.wordGuessList.length;
     }
 
     saveIncorrectlyGuessed(): void {
-        this.incorrectWords.push(this.currentWord);
+        ///this.incorrectWords.push(this.currentWord);
+        const newStatus: WordGuessStatus = "guess-incorrect";
+        this.currentWordGuess?.updateStatus(newStatus);
     }
 
     getIncorrectlyGuessedWords(): string[] {
-        return this.incorrectWords;
+        ///return this.incorrectWords;
+        const wordList: string[] = [];
+        for (const wordGuess of this.wordGuessList) {
+            if (wordGuess.getStatus() === "guess-incorrect") {
+                wordList.push(wordGuess.getWord());
+            }
+        }
+        return wordList;
     }
 
     /** Mark the current word as guessed so it won't be shown again */
     private markGuessed(): void {
-        this.guessedWords.add(this.currentWord);
+        //this.guessedWords.add(this.currentWord);
+        const newStatus: WordGuessStatus = "guess-correct";
+        this.currentWordGuess?.updateStatus(newStatus);
     }
 
     setGameModeRandom(): void {
         this.gameModeRandom = true;
     }
 
+    private getUnguessedCount(): number {
+        let count: number = 0;
+        for (const wordGuess of this.wordGuessList) {
+            if (wordGuess.getStatus() === "not-guessed") {
+                count++;
+            }
+        }
+        return count;
+    }
+
     /** Check if game is over, i.e. are there any more words to be guessed */
     isGameOver(): boolean {
-        if (this.words.length === 1) {
+        if (this.getUnguessedCount() === 1) {
             // Game will always be considered over if the user
             // has only selected one word. This way the game ends
             // as soon as the user answers correctly
@@ -132,13 +164,23 @@ export class GameSession {
         }
     }
 
+    /// FIXME: Muuta tämä niin, että correct count saadaan uuden tyypin perusteella wordguess listasta
     increaseCorrectCount(): void {
         this.correctAnswers++;
     }
 
-    /** Get the amount of guessed words */
+    /** Get the amount of guessed words, no matter if guessed correctly or not
+     * so the amount of words shown for the user in this game.
+     */
     getGuessedWordCount(): number {
-        return this.guessedWords.size;
+        let guessedCount: number = 0;
+        for (const wordGuess of this.wordGuessList) {
+            if (wordGuess.getStatus() !== "not-guessed") {
+                guessedCount++;
+            }
+        }
+        return guessedCount;
+        ///return this.guessedWords.size;
     }
 
     /** Get the next word to be guessed. Return random word from the category
@@ -158,14 +200,22 @@ export class GameSession {
             this.markGuessed();
         }
 
-        if (this.guessedWords.size === this.words.length - 1) {
+        const totalWords = this.getTotalWordCount();
+        const guessedWordsCount = totalWords - this.getUnguessedCount();
+
+        if (guessedWordsCount === totalWords - 1) {
             this.outOfWords = true;
         }
-
-        const totalWords = this.words.length;
+        this.wordGuessIndex++;
+        this.currentWordGuess = this.wordGuessList[this.wordGuessIndex]!;
+        this.vocalHintsCounter = 0;
+        this.currentWord = this.currentWordGuess.getWord();
+        return this.currentWord;
 
         // Start by trying the next word in the list (current index + 1)
-        let candidateIndex = this.currentWordIndex + 1;
+        ///let candidateIndex = this.currentWordIndex + 1;
+        /*let candidateIndex = this.wordGuessIndex + 1;
+
 
         if (candidateIndex >= totalWords || this.guessedWords.has(this.words[candidateIndex]!)) {
             // Wrap around: check from the start of the list
@@ -186,7 +236,7 @@ export class GameSession {
         this.currentWordGuess = new WordGuess(this.currentWord);
         this.vocalHintsCounter = 0;
 
-        return this.currentWord;
+        return this.currentWord;*/
     }
 
     /** Get the next word to be guessed but randomly from the list */
@@ -197,7 +247,22 @@ export class GameSession {
         }
 
         // Filter out guessed words
-        const remainingWords = this.words.filter((word) => !this.guessedWords.has(word));
+        const notGuessed = this.wordGuessList.filter((wg) => wg.getStatus() === "not-guessed");
+
+        const totalWords = this.getTotalWordCount();
+        const guessedWordsCount = totalWords - this.getUnguessedCount();
+
+        if (guessedWordsCount === totalWords - 1) {
+            this.outOfWords = true;
+        }
+
+        const randomIndex = Math.floor(Math.random() * notGuessed.length);
+        const randomWordGuess = notGuessed[randomIndex]!;
+        this.currentWordGuess = randomWordGuess;
+        this.currentWord = this.currentWordGuess.getWord();
+        return this.currentWord;
+
+        /*const remainingWords = this.words.filter((word) => !this.guessedWords.has(word));
 
         if (this.guessedWords.size === this.words.length - 1) {
             this.outOfWords = true;
@@ -211,6 +276,6 @@ export class GameSession {
         this.currentWord = nextWord;
         this.currentWordGuess = new WordGuess(nextWord);
 
-        return this.currentWord;
+        return this.currentWord;*/
     }
 }

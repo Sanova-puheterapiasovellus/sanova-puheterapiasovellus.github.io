@@ -329,7 +329,7 @@ async function handleAnswer(wordGuess: WordGuess) {
     guessCard.classList.remove("correct", "wrong");
 
     if (isGameOver) {
-        let showResults: boolean = gameSession.getAllWords().length > 1;
+        let showResults: boolean = gameSession.getTotalWordCount() > 1;
         const isReplay: boolean = gameSession.getIsReplay();
         if (isReplay) {
             // Always show results if the user is replaying correct words,

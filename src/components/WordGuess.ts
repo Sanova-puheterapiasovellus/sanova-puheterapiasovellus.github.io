@@ -1,9 +1,12 @@
+import type { WordGuessStatus } from "./wordStatus";
+
 /** Keeps track of the guessed letters of a single word, renders the typed letters*/
 export class WordGuess {
     private word: string = ""; // The current word as a string
     private currentGuess: string[] = []; // The current guess as an individual letters
     private locked: boolean[]; // Locked letters, using a letter hint locks a correct letter in place
     private letterHintsUsed = 0; // Count the amount of letter hints used
+    private status: WordGuessStatus = "not-guessed"; // Default status
 
     /** Initialize a WordGuess object with current guess being
      * empty, i.e. no letter written. No letter hints used, so
@@ -13,6 +16,14 @@ export class WordGuess {
         this.word = word.toUpperCase();
         this.currentGuess = [];
         this.locked = new Array(this.word.length).fill(false);
+    }
+
+    updateStatus(newStatus: WordGuessStatus): void {
+        this.status = newStatus;
+    }
+
+    getStatus(): WordGuessStatus {
+        return this.status;
     }
 
     /** Get the array containing the hint letters of the current guess */
