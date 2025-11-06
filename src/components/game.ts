@@ -26,6 +26,7 @@ const wordImage = expectElement("word-guess-image", HTMLImageElement);
 const letterSlots = expectElement("word-guess-slots", HTMLDivElement);
 const hiddenInput = document.getElementById("hidden-input") as HTMLInputElement;
 const textHint = expectElement("text-hint", HTMLDivElement);
+const guessProgressCounter = expectElement("word-guess-progress-counter", HTMLDivElement);
 
 // Keep track of the game progress, initially null
 let gameSession: GameSession | null = null;
@@ -70,7 +71,7 @@ function handleGameStart(event: CategorySelectedEvent): void {
     const word = gameSession.getNextWord();
     textHint.textContent = "";
     setSyllableHintWord(word);
-    // Fake the word selection event
+
     dispatchEvent(
         new CustomEvent("word-selected", {
             bubbles: true,
@@ -116,6 +117,12 @@ function setImage() {
     wordImage.src = getImagePath(wordData.image);
 }
 
+function updateGameProgressCounter() {
+    if (gameSession) {
+        guessProgressCounter.textContent = `${gameSession.getGuessedWordCount() + 1}/${gameSession.getTotalWordCount()}`;
+    }
+}
+
 /** Handle the word selection, i.e. show the guessing modal for the user */
 function handleWordSelected(event: WordSelectedEvent) {
     if (!gameSession) {
@@ -134,6 +141,7 @@ function handleWordSelected(event: WordSelectedEvent) {
 
     guessDialog.showModal();
     textHint.textContent = "";
+    updateGameProgressCounter();
     setupWordInput();
 
     setImage();
@@ -325,6 +333,7 @@ async function handleAnswer(wordGuess: WordGuess) {
 
     const nextWord: string = gameSession.getNextWord();
     textHint.textContent = "";
+    updateGameProgressCounter();
     setSyllableHintWord(nextWord);
     setImage();
 
