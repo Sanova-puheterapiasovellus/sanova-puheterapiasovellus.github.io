@@ -1,5 +1,6 @@
 import { buildHtml, expectElement } from "../common/dom";
 import { dispatchWordSelection } from "../common/events";
+import type { Store } from "../common/reactive.ts";
 import { getImagePath, wordsData } from "../data/word-data-model.ts";
 import type { FilterOptions } from "./searchAndFilter";
 import { setupSearchAndFilter } from "./searchAndFilter";
@@ -18,6 +19,7 @@ filtersSection.className = styles.filters;
 closeBtn.className = styles.closeButton;
 closeBtn.addEventListener("click", () => {
     dialog.close();
+    window.location.hash = "#";
 });
 dialog.addEventListener("click", (e) => {
     if (e.target === dialog) dialog.close();
@@ -93,7 +95,8 @@ function renderAllImages(filters: FilterOptions) {
         });
     });
 }
-export function initializeAllWords() {
+export function initializeAllWords(hash: Store<string>) {
+    hash.filter((value) => value === "#search").subscribe((_) => dialog.showModal());
     const categoryData = wordsData.categories.map((category) => ({
         name: category.name,
         imagePath: getImagePath(category.image),
