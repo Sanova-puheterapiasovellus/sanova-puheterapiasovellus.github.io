@@ -1,3 +1,5 @@
+import { Store } from "./reactive";
+
 /**
  * Find a fundamentally required element with the given ID, throwing an exception
  * if it isn't found or the type doesn't match.
@@ -110,4 +112,15 @@ export class TemplatedElement extends HTMLElement {
         // Trigger graceful removal of registered event listeners.
         this.#dismountController.abort();
     }
+}
+
+/** Create a reactive store connected to the URL hash. */
+export function reactiveHash(): Store<string> {
+    return new Store((store, signal) => {
+        store.set(window.location.hash);
+        store.subscribe((value) => window.history.pushState(undefined, "", value), signal);
+        window.addEventListener("hashchange", (_) => store.set(window.location.hash), {
+            signal,
+        });
+    });
 }

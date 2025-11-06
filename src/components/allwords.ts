@@ -1,5 +1,6 @@
 import { buildHtml, expectElement } from "../common/dom";
 import { dispatchWordSelection } from "../common/events";
+import type { Store } from "../common/reactive.ts";
 import { getImagePath, wordsData } from "../data/word-data-model.ts";
 import type { FilterOptions } from "./searchAndFilter";
 import { setupSearchAndFilter } from "./searchAndFilter";
@@ -18,6 +19,7 @@ filtersSection.className = styles.filters;
 closeBtn.className = styles.closeButton;
 closeBtn.addEventListener("click", () => {
     dialog.close();
+    window.location.hash = "#";
 });
 dialog.addEventListener("click", (e) => {
     if (e.target === dialog) dialog.close();
@@ -35,7 +37,7 @@ function createImageEntry(word: string, imagePath: string, index: number): HTMLE
     return buildHtml("li", { className: styles.card }, img);
 }
 
-function createRandomEntry(): HTMLElement {
+function createRandomEntry(filters: FilterOptions): HTMLElement {
     const img = buildHtml("img", {
         src: getImagePath("question.png"),
         alt: "random",
@@ -45,15 +47,38 @@ function createRandomEntry(): HTMLElement {
         display: "block",
     });
     img.addEventListener("click", () => {
-        // go to game with random word
+        const randomWord = getRandomFilteredWord(filters);
+        if (randomWord) {
+            dispatchWordSelection(img, randomWord.name, randomWord.index);
+        } else {
+            alert("Ei sanoja nykyisillä filttereillä");
+        }
     });
     return buildHtml("li", { className: styles.card }, img);
 }
 const separator = buildHtml("hr");
 filtersSection.after(separator);
+
+function getRandomFilteredWord(filters: FilterOptions) {
+    const filteredWords = wordsData.categories.flatMap((category) => {
+        if (
+            filters.selectedCategories.length &&
+            !filters.selectedCategories.includes(category.name)
+        ) {
+            return [];
+        }
+        return category.words
+            .filter((word) => word.name.toLowerCase().includes(filters.term.toLowerCase()))
+            .map((word, index) => ({ ...word, index }));
+    });
+    if (filteredWords.length === 0) return null;
+
+    const randomIndex = Math.floor(Math.random() * filteredWords.length);
+    return filteredWords[randomIndex];
+}
 function renderAllImages(filters: FilterOptions) {
     allWordsList.innerHTML = "";
-    allWordsList.appendChild(createRandomEntry());
+    allWordsList.appendChild(createRandomEntry(filters));
 
     wordsData.categories.forEach((category) => {
         if (
@@ -70,7 +95,8 @@ function renderAllImages(filters: FilterOptions) {
         });
     });
 }
-export function initializeAllWords() {
+export function initializeAllWords(hash: Store<string>) {
+    hash.filter((value) => value === "#search").subscribe((_) => dialog.showModal());
     const categoryData = wordsData.categories.map((category) => ({
         name: category.name,
         imagePath: getImagePath(category.image),
