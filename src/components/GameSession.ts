@@ -5,7 +5,7 @@ import type { WordGuessStatus } from "./wordStatus";
 export class GameSession {
     private category: string | null = null; // Will be used to fetch a word from the correct category
     private currentWord: string = "";
-    private vocalHintsCounter: number = 0; // Will be used to determine how many syllables to play
+    private vocalHintsCounter: number = 0;
     private textHintsCounter: number = 0;
     private letterHintsCounter: number = 0;
     ///private guessedWords = new Set<string>();
@@ -85,6 +85,7 @@ export class GameSession {
 
     useVocalHint(): void {
         this.vocalHintsCounter++;
+        this.currentWordGuess?.setHintsUsed();
     }
 
     getTextHintsUsed(): number {
@@ -93,6 +94,7 @@ export class GameSession {
 
     useTextHint(): void {
         this.textHintsCounter++;
+        this.currentWordGuess?.setHintsUsed();
     }
 
     getLetterHintsUsed(): number {
@@ -101,6 +103,7 @@ export class GameSession {
 
     useLetterHint(): void {
         this.letterHintsCounter++;
+        this.currentWordGuess?.setHintsUsed();
     }
 
     getCorrectAnswerCount(): number {
@@ -123,6 +126,11 @@ export class GameSession {
         ///this.incorrectWords.push(this.currentWord);
         console.log("Mark current incorrect!");
         const newStatus: WordGuessStatus = "guess-incorrect";
+        this.currentWordGuess?.updateStatus(newStatus);
+    }
+
+    markHintUsed(): void {
+        const newStatus: WordGuessStatus = "used-hint";
         this.currentWordGuess?.updateStatus(newStatus);
     }
 

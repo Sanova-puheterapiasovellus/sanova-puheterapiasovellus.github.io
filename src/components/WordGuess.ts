@@ -5,8 +5,8 @@ export class WordGuess {
     private word: string = ""; // The current word as a string
     private currentGuess: string[] = []; // The current guess as an individual letters
     private locked: boolean[]; // Locked letters, using a letter hint locks a correct letter in place
-    private letterHintsUsed = 0; // Count the amount of letter hints used
     private status: WordGuessStatus = "not-guessed"; // Default status
+    private anyHintsUsed: boolean = false;
 
     /** Initialize a WordGuess object with current guess being
      * empty, i.e. no letter written. No letter hints used, so
@@ -16,6 +16,14 @@ export class WordGuess {
         this.word = word.toUpperCase();
         this.currentGuess = [];
         this.locked = new Array(this.word.length).fill(false);
+    }
+
+    setHintsUsed(): void {
+        this.anyHintsUsed = true;
+    }
+
+    getHintsUsed(): boolean {
+        return this.anyHintsUsed;
     }
 
     updateStatus(newStatus: WordGuessStatus): void {
@@ -86,14 +94,6 @@ export class WordGuess {
         this.currentGuess = [];
     }
 
-    /** Get the next hint letter based on used hints */
-    private getNextHintLetter(): string {
-        if (this.letterHintsUsed >= this.word.length) {
-            throw new Error("No more letter hints!");
-        }
-        return this.word[this.letterHintsUsed]!;
-    }
-
     /** Remove all the letters the user has written and get the next hint letter
      *  Return true if the whole word has been guessed only using letter hints,
      *  otherwise false
@@ -137,7 +137,6 @@ export class WordGuess {
         if (nextIndex < this.word.length) {
             this.currentGuess[nextIndex] = this.word[nextIndex]!;
             this.locked[nextIndex] = true;
-            this.letterHintsUsed++;
         }
 
         // Remove all the letters after the given hint letter

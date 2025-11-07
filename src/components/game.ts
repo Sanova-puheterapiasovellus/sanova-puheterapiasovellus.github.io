@@ -313,7 +313,12 @@ async function handleAnswer(wordGuess: WordGuess) {
     const isGameOver: boolean = gameSession.isGameOver();
 
     if (isCorrect) {
-        gameSession.increaseCorrectCount();
+        const usedAnyHints: boolean = gameSession.getCurrentWordGuess().getHintsUsed();
+        if (usedAnyHints) {
+            gameSession.markHintUsed();
+        } else {
+            gameSession.increaseCorrectCount();
+        }
         guessCard.classList.add("correct");
     } else {
         gameSession.saveIncorrectlyGuessed();
