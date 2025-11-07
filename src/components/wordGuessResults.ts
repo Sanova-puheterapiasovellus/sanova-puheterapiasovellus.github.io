@@ -1,6 +1,7 @@
 import { expectElement } from "../common/dom";
 import type { GameSession } from "./GameSession";
 import "./styles/word-guess-results.css";
+import { unlockPageScroll } from "../common/preventScroll.ts";
 
 const resultsDialog = expectElement("word-guess-results-dialog", HTMLDialogElement);
 const resultsCloseButton = expectElement("word-guess-results-close", HTMLButtonElement);
@@ -8,6 +9,7 @@ const replayIncorrectButton = expectElement("word-guess-replay", HTMLButtonEleme
 
 function handleDialogClose(_: Event): void {
     resultsDialog.close();
+    unlockPageScroll();
 }
 
 export function showWordGuessResults(gameSession: GameSession): void {

@@ -10,6 +10,7 @@ import { getImagePath, wordsData } from "../data/word-data-model.ts";
 import { splitToSyllables } from "../utils/syllable-split.ts";
 import { GameSession } from "./GameSession";
 import "./styles/game.css";
+import { lockPageScroll, unlockPageScroll } from "../common/preventScroll.ts";
 import { setSyllableHintWord } from "./syllablesHint.ts";
 import type { WordGuess } from "./WordGuess";
 import { showWordGuessResults } from "./wordGuessResults.ts";
@@ -38,6 +39,7 @@ function handleDialogClose(_: Event): void {
     // closed category would appear.
     gameSession = null;
     // Close the guessing dialog
+    unlockPageScroll();
     guessDialog.close();
 }
 
@@ -154,6 +156,8 @@ function handleWordSelected(event: WordSelectedEvent) {
     }
 
     guessDialog.showModal();
+    guessCard.scrollTop = 0; //reset scroll position of game to top when game opens
+    lockPageScroll();
     textHint.textContent = "";
     updateGameProgressCounter();
     setupWordInput();
@@ -329,6 +333,9 @@ async function handleAnswer(wordGuess: WordGuess) {
     guessCard.classList.remove("correct", "wrong");
 
     if (isGameOver) {
+        if (gameSession.getAllWords().length === 1) {
+            unlockPageScroll();
+        }
         let showResults: boolean = gameSession.getAllWords().length > 1;
         const isReplay: boolean = gameSession.getIsReplay();
         if (isReplay) {
