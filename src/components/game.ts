@@ -317,11 +317,11 @@ async function handleAnswer(wordGuess: WordGuess) {
         if (usedAnyHints) {
             gameSession.markHintUsed();
         } else {
-            gameSession.increaseCorrectCount();
+            gameSession.markCurrentCorrect();
         }
         guessCard.classList.add("correct");
     } else {
-        gameSession.saveIncorrectlyGuessed();
+        gameSession.markIncorrectlyGuessed();
         guessCard.classList.add("wrong");
     }
 
