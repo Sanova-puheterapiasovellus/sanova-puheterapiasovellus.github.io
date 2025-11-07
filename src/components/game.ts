@@ -27,6 +27,7 @@ const letterSlots = expectElement("word-guess-slots", HTMLDivElement);
 const hiddenInput = document.getElementById("hidden-input") as HTMLInputElement;
 const textHint = expectElement("text-hint", HTMLDivElement);
 const guessProgressCounter = expectElement("word-guess-progress-counter", HTMLDivElement);
+const skipButton = expectElement("next-btn", HTMLButtonElement);
 
 // Keep track of the game progress, initially null
 let gameSession: GameSession | null = null;
@@ -290,6 +291,37 @@ function delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function handleSkipWord(): void {
+    if (!gameSession) return;
+    gameSession.markCurrentSkipped();
+    //const currentWordGuess = gameSession.getCurrentWordGuess();
+    const isGameOver: boolean = gameSession.isGameOver();
+    if (isGameOver) {
+        let showResults: boolean = gameSession.getTotalWordCount() > 1;
+        const isReplay: boolean = gameSession.getIsReplay();
+        if (isReplay) {
+            // Always show results if the user is replaying correct words,
+            // even if there was only one word replayed
+            showResults = true;
+        }
+        dispatchEvent(
+            new CustomEvent("show-results", {
+                bubbles: true,
+                detail: { showResults: showResults },
+            }),
+        );
+        return;
+    }
+
+    const nextWord: string = gameSession.getNextWord();
+    textHint.textContent = "";
+    updateGameProgressCounter();
+    setSyllableHintWord(nextWord);
+    setImage();
+
+    setupWordInput();
+}
+
 /** Handle the user's guess when the answer btn is pressed */
 async function handleAnswer(wordGuess: WordGuess) {
     const gameSession: GameSession = getGameSession();
@@ -381,6 +413,8 @@ export function initializeGameContainer() {
     letterHintButton.addEventListener("click", handleUseLetterHint);
     textHintButton.addEventListener("click", handleUseTextHint);
     syllableHintButton.addEventListener("click", handleUseVocalHint);
+
+    skipButton.addEventListener("click", handleSkipWord);
 
     hiddenInput.addEventListener("input", handleInputEvent);
 

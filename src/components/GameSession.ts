@@ -137,6 +137,11 @@ export class GameSession {
         this.currentWordGuess?.updateStatus(newStatus);
     }
 
+    markCurrentSkipped(): void {
+        const newStatus: WordGuessStatus = "skipped";
+        this.currentWordGuess?.updateStatus(newStatus);
+    }
+
     setGameModeRandom(): void {
         this.gameModeRandom = true;
     }
