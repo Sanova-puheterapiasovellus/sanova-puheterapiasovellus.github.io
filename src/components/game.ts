@@ -293,9 +293,9 @@ function delay(ms: number): Promise<void> {
 
 function handleSkipWord(): void {
     if (!gameSession) return;
+    const isGameOver: boolean = gameSession.isGameOver();
     gameSession.markCurrentSkipped();
     //const currentWordGuess = gameSession.getCurrentWordGuess();
-    const isGameOver: boolean = gameSession.isGameOver();
     if (isGameOver) {
         let showResults: boolean = gameSession.getTotalWordCount() > 1;
         const isReplay: boolean = gameSession.getIsReplay();
