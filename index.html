@@ -17,8 +17,6 @@
 
         <footer>
             <h2>Työkalut</h2>
-
-            <button id="syllable-player-open" type="button">Tavutoistin</button>
         </footer>
 
         <dialog id="all-words-dialog">
@@ -86,29 +84,6 @@
             <p id="text-hints-used" class="result-line"></p>
             <button id="word-guess-results-close" type="button">Sulje</button>
             <button id="word-guess-replay" type="button">Pelaa väärin menneet uudelleen</button>
-        </dialog>
-
-        <dialog id="syllable-player-dialog" closedby="any">
-            <h3>Tavutoistin</h3>
-
-            <p>
-                Tavutoistin mahdollistaa koneellisen tavuäänien kuuntelemisen, käyttäen
-                <a href="https://papunet.net/materiaalit/aanipankki/">
-                    Papunet Äänipankin Äännetiedostoja
-                </a>
-                muokattuina ilman hiljaisia kohtia äänteiden alussa ja lopussa ominaisuuden
-                toteuttamisen mahdollistamiseksi.
-            </p>
-
-            <form id="syllable-player-form">
-                <label>
-                    Sana toistettavaksi
-                    <input id="syllable-player-input" type="text" required>
-                </label>
-                <button id="syllable-player-play" type="button" disabled>Toista tavut</button>
-            </form>
-
-            <button id="syllable-player-close" type="button">Sulje</button>
         </dialog>
 
         <template id="notification-item">
