@@ -64,6 +64,7 @@ export class GameSession {
         this.wordGuessIndex = index;
         ///this.currentWordGuess = new WordGuess(this.currentWord);
         this.currentWordGuess = this.wordGuessList[index]!;
+        console.log("");
         this.currentWord = this.currentWordGuess.getWord();
     }
 
@@ -103,7 +104,14 @@ export class GameSession {
     }
 
     getCorrectAnswerCount(): number {
-        return this.correctAnswers;
+        ///return this.correctAnswers;
+        let correctCount: number = 0;
+        for (const wordGuess of this.wordGuessList) {
+            if (wordGuess.getStatus() === "guess-correct") {
+                correctCount++;
+            }
+        }
+        return correctCount;
     }
 
     getTotalWordCount(): number {
@@ -113,6 +121,7 @@ export class GameSession {
 
     saveIncorrectlyGuessed(): void {
         ///this.incorrectWords.push(this.currentWord);
+        console.log("Mark current incorrect!");
         const newStatus: WordGuessStatus = "guess-incorrect";
         this.currentWordGuess?.updateStatus(newStatus);
     }
@@ -125,13 +134,15 @@ export class GameSession {
                 wordList.push(wordGuess.getWord());
             }
         }
+        console.log("Wordlist:", wordList);
         return wordList;
     }
 
     /** Mark the current word as guessed so it won't be shown again */
-    private markGuessed(): void {
+    private markCurrentCorrect(): void {
         //this.guessedWords.add(this.currentWord);
         const newStatus: WordGuessStatus = "guess-correct";
+        console.log("Mark current answer correct!");
         this.currentWordGuess?.updateStatus(newStatus);
     }
 
@@ -167,6 +178,7 @@ export class GameSession {
     /// FIXME: Muuta tämä niin, että correct count saadaan uuden tyypin perusteella wordguess listasta
     increaseCorrectCount(): void {
         this.correctAnswers++;
+        this.markCurrentCorrect();
     }
 
     /** Get the amount of guessed words, no matter if guessed correctly or not
@@ -197,7 +209,7 @@ export class GameSession {
     /** Get the next word (in the order the list defines) to be guessed and create a new WordGuess object */
     getNextWordOrder(): string {
         if (this.currentWord !== "placeholder") {
-            this.markGuessed();
+            ///this.markGuessed();
         }
 
         const totalWords = this.getTotalWordCount();
@@ -243,7 +255,7 @@ export class GameSession {
     getNextWordRandom(): string {
         // Mark the current one as guessed
         if (this.currentWord !== "placeholder") {
-            this.markGuessed();
+            ///this.markGuessed();
         }
 
         // Filter out guessed words
