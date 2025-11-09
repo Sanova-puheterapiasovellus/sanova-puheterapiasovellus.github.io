@@ -21,7 +21,7 @@ const guessCard = expectElement("word-guess-card", HTMLDivElement);
 const closeButton = expectElement("word-guess-close", HTMLButtonElement);
 const answerButton = expectElement("word-guess-submit", HTMLButtonElement);
 const letterHintButton = expectElement("word-guess-letter-hint", HTMLButtonElement);
-const textHintButton = expectElement("word-guess-text-hint", HTMLButtonElement);
+const textHintDetails = expectElement("word-guess-text-hint", HTMLDetailsElement);
 const syllableHintButton = expectElement("word-guess-syllable-hint", HTMLButtonElement);
 const wordImage = expectElement("word-guess-image", HTMLImageElement);
 const letterSlots = expectElement("word-guess-slots", HTMLDivElement);
@@ -286,7 +286,6 @@ function isCorrectAnswer(correctAnswer: string, answer: string): boolean {
 function setButtonsEnabled(enabled: boolean): void {
     answerButton.disabled = !enabled;
     letterHintButton.disabled = !enabled;
-    textHintButton.disabled = !enabled;
     syllableHintButton.disabled = !enabled;
 }
 
@@ -294,6 +293,9 @@ function delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function resetTextHint() {
+    textHintDetails.open = false;
+}
 /** Handle the user's guess when the answer btn is pressed */
 async function handleAnswer(wordGuess: WordGuess) {
     const gameSession: GameSession = getGameSession();
@@ -355,6 +357,7 @@ async function handleAnswer(wordGuess: WordGuess) {
     const nextWord: string = gameSession.getNextWord();
     textHint.textContent = "";
     updateGameProgressCounter();
+    resetTextHint();
     setSyllableHintWord(nextWord);
     setImage();
 
@@ -381,7 +384,7 @@ export function initializeGameContainer() {
     });
 
     letterHintButton.addEventListener("click", handleUseLetterHint);
-    textHintButton.addEventListener("click", handleUseTextHint);
+    textHintDetails.addEventListener("toggle", handleUseTextHint);
     syllableHintButton.addEventListener("click", handleUseVocalHint);
 
     hiddenInput.addEventListener("input", handleInputEvent);
