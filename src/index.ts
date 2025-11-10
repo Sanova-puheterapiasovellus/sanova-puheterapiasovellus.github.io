@@ -13,7 +13,6 @@ const route = reactiveHash();
 initializeHeader(route);
 initializeCategorySelector();
 initializeGameContainer();
-initializeSyllablePlayer();
 initializeSyllableHintPlayer();
 initializeAllWords(route);
 initializeNotificationSystem();
