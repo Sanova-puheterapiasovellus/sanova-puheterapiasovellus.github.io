@@ -30,7 +30,7 @@
     cursor: pointer;
 }
 
-#word-guess-close {
+.dialog-close-button {
     position: absolute;
     top: 16px;
     right: 16px;
@@ -38,13 +38,13 @@
     border: none;
 }
 
-#word-guess-close > img {
+.dialog-close-button > img {
     border: 1px solid hsl(0, 0%, 80%);
     border-radius: 100%;
     background-color: hsl(0, 0%, 90%);
 }
 
-#word-guess-close > img:hover {
+.dialog-close-button > img:hover {
     background-color: hsl(0, 0%, 87%);
 }
 

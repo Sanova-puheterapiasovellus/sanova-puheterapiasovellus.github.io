@@ -18,24 +18,6 @@
     overflow: hidden;
 }
 
-#image-credits-close {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    cursor: pointer;
-    border: none;
-}
-
-#image-credits-close > img {
-    border: 1px solid hsl(0, 0%, 80%);
-    border-radius: 100%;
-    background-color: hsl(0, 0%, 90%);
-}
-
-#image-credits-close > img:hover {
-    background-color: hsl(0, 0%, 87%);
-}
-
 .image-credits-header {
     padding-bottom: 12px;
 }
