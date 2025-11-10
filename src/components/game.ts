@@ -14,7 +14,6 @@ import { lockPageScroll, unlockPageScroll } from "../common/preventScroll.ts";
 import { setSyllableHintWord } from "./syllablesHint.ts";
 import type { WordGuess } from "./WordGuess";
 import { showWordGuessResults } from "./wordGuessResults.ts";
-import { initializeWordSelector } from "./words.ts";
 
 const guessDialog = expectElement("word-guess-dialog", HTMLDialogElement);
 const guessCard = expectElement("word-guess-card", HTMLDivElement);
@@ -67,7 +66,6 @@ function handleGameStart(event: CategorySelectedEvent): void {
     }
 
     gameSession = new GameSession(categoryForSession);
-    //initializeWordSelector(currentCategory, gameSession); // Uncomment to make the word view visible
     // Set the words to the game session object through the WordsSelected event
     dispatchEvent(
         new CustomEvent("words-selected", {
