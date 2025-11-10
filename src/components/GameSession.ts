@@ -8,7 +8,7 @@ export class GameSession {
     private vocalHintsCounter: number = 0; // Will be used to determine how many syllables to play
     private textHintsCounter: number = 0;
     private letterHintsCounter: number = 0;
-    private guessedWords = new Set<Word>();
+    private guessedWords = new Set<string>();
     private words: Word[] = [];
     private incorrectWords: Word[] = [];
     private currentWordGuess: WordGuess | null = null;
@@ -116,7 +116,7 @@ export class GameSession {
 
     /** Mark the current word as guessed so it won't be shown again */
     private markGuessed(): void {
-        this.guessedWords.add(this.currentWord);
+        this.guessedWords.add(this.currentWord.name);
     }
 
     setGameModeRandom(): void {
@@ -172,14 +172,16 @@ export class GameSession {
 
         // Start by trying the next word in the list (current index + 1)
         let candidateIndex = this.currentWordIndex + 1;
-
-        if (candidateIndex >= totalWords || this.guessedWords.has(this.words[candidateIndex]!)) {
+        if (
+            candidateIndex >= totalWords ||
+            this.guessedWords.has(this.words[candidateIndex]!.name)
+        ) {
             // Wrap around: check from the start of the list
             candidateIndex = 0;
         }
 
         // Loop until we find an unguessed word
-        while (this.guessedWords.has(this.words[candidateIndex]!)) {
+        while (this.guessedWords.has(this.words[candidateIndex]!.name)) {
             candidateIndex++;
             if (candidateIndex >= totalWords) {
                 candidateIndex = 0; // wrap around
@@ -203,7 +205,7 @@ export class GameSession {
         }
 
         // Filter out guessed words
-        const remainingWords = this.words.filter((word) => !this.guessedWords.has(word));
+        const remainingWords = this.words.filter((word) => !this.guessedWords.has(word.name));
 
         if (this.guessedWords.size === this.words.length - 1) {
             this.outOfWords = true;
