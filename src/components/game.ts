@@ -11,6 +11,7 @@ import { splitToSyllables } from "../utils/syllable-split.ts";
 import { GameSession } from "./GameSession";
 import "./styles/game.css";
 import { lockPageScroll, unlockPageScroll } from "../common/preventScroll.ts";
+import { showCreditsModal } from "./imageCredits.ts";
 import { setSyllableHintWord } from "./syllablesHint.ts";
 import type { WordGuess } from "./WordGuess";
 import { showWordGuessResults } from "./wordGuessResults.ts";
@@ -28,6 +29,7 @@ const letterSlots = expectElement("word-guess-slots", HTMLDivElement);
 const hiddenInput = document.getElementById("hidden-input") as HTMLInputElement;
 const textHint = expectElement("text-hint", HTMLDivElement);
 const guessProgressCounter = expectElement("word-guess-progress-counter", HTMLDivElement);
+const imageCreditsButton = expectElement("word-guess-image-credits-button", HTMLElement);
 
 // Keep track of the game progress, initially null
 let gameSession: GameSession | null = null;
@@ -361,6 +363,19 @@ async function handleAnswer(wordGuess: WordGuess) {
     setupWordInput();
 }
 
+function handleImageCredits(): void {
+    const currentWord = gameSession?.getCurrentWord();
+
+    const currentWordData = wordsData.categories
+        .flatMap((category) => category.words)
+        .find((word) => word.name === currentWord);
+
+    const imageCredits = currentWordData?.image_credit;
+    if (!imageCredits) return;
+
+    showCreditsModal(imageCredits);
+}
+
 function moveCursorToEnd(input: HTMLInputElement) {
     const length = input.value.length;
     input.setSelectionRange(length, length);
@@ -383,6 +398,8 @@ export function initializeGameContainer() {
     letterHintButton.addEventListener("click", handleUseLetterHint);
     textHintButton.addEventListener("click", handleUseTextHint);
     syllableHintButton.addEventListener("click", handleUseVocalHint);
+
+    imageCreditsButton.addEventListener("click", handleImageCredits);
 
     hiddenInput.addEventListener("input", handleInputEvent);
 
