@@ -24,7 +24,7 @@ export class GameSession {
         // Fetch all the words from this category, for now, use the placeholder words
         this.currentWord = {
             name: "placeholder",
-            image: "placeholder.png",
+            image: "question.png",
             image_credit: "",
             hint: "",
         };
