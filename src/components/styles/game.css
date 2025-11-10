@@ -52,6 +52,20 @@
     min-width: 40px;
 }
 
+#word-guess-card-content .word-guess-image-credits-button {
+    padding-top: 12px;
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color 0.2s ease;
+}
+
+#word-guess-card-content .word-guess-image-credits-button:hover {
+    color: #005fa3;
+}
+
 #word-guess-card-content .word-guess-button {
     width: 224px;
     min-height: 40px;
