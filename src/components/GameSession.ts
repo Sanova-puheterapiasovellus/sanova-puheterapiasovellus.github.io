@@ -1,15 +1,16 @@
+import type { Category, Word } from "../data/word-data-model";
 import { WordGuess } from "./WordGuess";
 
 /** Keep track of the game progress for one category */
 export class GameSession {
-    private category: string | null = null; // Will be used to fetch a word from the correct category
-    private currentWord: string = "";
+    private category: Category | null = null; // Will be used to fetch a word from the correct category
+    private currentWord: Word;
     private vocalHintsCounter: number = 0; // Will be used to determine how many syllables to play
     private textHintsCounter: number = 0;
     private letterHintsCounter: number = 0;
-    private guessedWords = new Set<string>();
-    private words: string[] = [];
-    private incorrectWords: string[] = [];
+    private guessedWords = new Set<Word>();
+    private words: Word[] = [];
+    private incorrectWords: Word[] = [];
     private currentWordGuess: WordGuess | null = null;
     private currentWordIndex: number = 0;
     private gameModeRandom: boolean = false;
@@ -18,14 +19,19 @@ export class GameSession {
     private isReplay: boolean = false;
 
     /** Set a word to be guessed and create a new word guess object based on that */
-    constructor(category: string | null) {
+    constructor(category: Category | null) {
         this.category = category;
         // Fetch all the words from this category, for now, use the placeholder words
-        this.currentWord = "placeholder";
-        this.currentWordGuess = new WordGuess(this.currentWord);
+        this.currentWord = {
+            name: "placeholder",
+            image: "placeholder.png",
+            image_credit: "",
+            hint: "",
+        };
+        this.currentWordGuess = new WordGuess(this.currentWord.name);
     }
 
-    setCategory(category: string | null): void {
+    setCategory(category: Category | null): void {
         this.category = category;
     }
 
@@ -33,7 +39,7 @@ export class GameSession {
         return this.category;
     }
 
-    setWords(words: string[]): void {
+    setWords(words: Word[]): void {
         this.words = words;
         this.currentWordIndex = 0;
     }
@@ -46,19 +52,19 @@ export class GameSession {
         return this.isReplay;
     }
 
-    getAllWords(): string[] {
+    getAllWords(): Word[] {
         return this.words;
     }
 
     /** Set the index of the word if user select the word from the list */
-    setCurrentWordIndex(index: number) {
+    setCurrentWordIndex(index: number): void {
         this.currentWordIndex = index;
         this.currentWord = this.words[index]!;
-        this.currentWordGuess = new WordGuess(this.currentWord);
+        this.currentWordGuess = new WordGuess(this.currentWord.name);
     }
 
     /** Get the word that is being guessed at the moment */
-    getCurrentWord(): string {
+    getCurrentWord(): Word {
         return this.currentWord;
     }
 
@@ -104,7 +110,7 @@ export class GameSession {
         this.incorrectWords.push(this.currentWord);
     }
 
-    getIncorrectlyGuessedWords(): string[] {
+    getIncorrectlyGuessedWords(): Word[] {
         return this.incorrectWords;
     }
 
@@ -144,7 +150,7 @@ export class GameSession {
     /** Get the next word to be guessed. Return random word from the category
      * or the next one in the list depending on the game mode.
      */
-    getNextWord(): string {
+    getNextWord(): Word {
         if (this.gameModeRandom) {
             return this.getNextWordRandom();
         } else {
@@ -153,8 +159,8 @@ export class GameSession {
     }
 
     /** Get the next word (in the order the list defines) to be guessed and create a new WordGuess object */
-    getNextWordOrder(): string {
-        if (this.currentWord !== "placeholder") {
+    getNextWordOrder(): Word {
+        if (this.currentWord.name !== "placeholder") {
             this.markGuessed();
         }
 
@@ -183,16 +189,16 @@ export class GameSession {
         // Update state
         this.currentWordIndex = candidateIndex;
         this.currentWord = this.words[candidateIndex]!;
-        this.currentWordGuess = new WordGuess(this.currentWord);
+        this.currentWordGuess = new WordGuess(this.currentWord.name);
         this.vocalHintsCounter = 0;
 
         return this.currentWord;
     }
 
     /** Get the next word to be guessed but randomly from the list */
-    getNextWordRandom(): string {
+    getNextWordRandom(): Word {
         // Mark the current one as guessed
-        if (this.currentWord !== "placeholder") {
+        if (this.currentWord.name !== "placeholder") {
             this.markGuessed();
         }
 
@@ -209,7 +215,7 @@ export class GameSession {
 
         // Update state
         this.currentWord = nextWord;
-        this.currentWordGuess = new WordGuess(nextWord);
+        this.currentWordGuess = new WordGuess(this.currentWord.name);
 
         return this.currentWord;
     }
