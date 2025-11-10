@@ -35,7 +35,7 @@ export class GameSession {
         this.category = category;
     }
 
-    getCategory() {
+    getCategory(): Category | null {
         return this.category;
     }
 

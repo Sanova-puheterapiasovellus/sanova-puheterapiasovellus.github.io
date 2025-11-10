@@ -41,7 +41,7 @@ function handleDialogClose(_: Event): void {
 }
 
 /** Trigger the mobile keyboard */
-function focusHiddenInput() {
+function focusHiddenInput(): void {
     hiddenInput.focus();
 }
 
@@ -104,7 +104,7 @@ function handleGameOver(event: GameOverEvent) {
     gameSession = null;
 }
 
-function setImage() {
+function setImage(): void {
     if (!gameSession) return;
     const word = gameSession.getCurrentWord();
 
@@ -112,14 +112,14 @@ function setImage() {
     wordImage.src = getImagePath(word.image);
 }
 
-function updateGameProgressCounter() {
+function updateGameProgressCounter(): void {
     if (gameSession) {
         guessProgressCounter.textContent = `${gameSession.getGuessedWordCount() + 1}/${gameSession.getTotalWordCount()}`;
     }
 }
 
 /** Handle the word selection, i.e. show the guessing modal for the user */
-function handleWordSelected(event: WordSelectedEvent) {
+function handleWordSelected(event: WordSelectedEvent): void {
     if (!gameSession) {
         // If gameSession does not exist, then only one word was selected
         gameSession = new GameSession(null);
@@ -144,7 +144,7 @@ function handleWordSelected(event: WordSelectedEvent) {
     setImage();
 }
 
-function handleWordsSelected(event: WordsSelectedEvent) {
+function handleWordsSelected(event: WordsSelectedEvent): void {
     const { category, selections, isReplay } = event.detail;
     gameSession = new GameSession(category);
     //if (!gameSession) return;
@@ -155,7 +155,7 @@ function handleWordsSelected(event: WordsSelectedEvent) {
 }
 
 /** Renders the empty slots after answering or when initializing the first word */
-function setupWordInput() {
+function setupWordInput(): void {
     const wordGuess = getGameSession().getCurrentWordGuess();
     wordGuess.render(letterSlots);
     hiddenInput.value = "";
@@ -164,7 +164,7 @@ function setupWordInput() {
 }
 
 /** Handle the typing events when using both physical keyboard and phone's keyboard */
-function handleInputEvent() {
+function handleInputEvent(): void {
     if (!gameSession) return;
 
     const wordGuess = gameSession.getCurrentWordGuess();
@@ -341,7 +341,7 @@ function moveCursorToEnd(input: HTMLInputElement) {
 }
 
 /** Wire up events to react to the game being started. */
-export function initializeGameContainer() {
+export function initializeGameContainer(): void {
     window.addEventListener("category-selected", handleGameStart);
     window.addEventListener("word-selected", handleWordSelected);
     window.addEventListener("words-selected", handleWordsSelected);
