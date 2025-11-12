@@ -4,7 +4,8 @@
     max-height: 100%;
     height: 100%;
     border: none;
-    background-color: rgba(0, 0, 0, 0.6);
+    /*background-color: rgba(0, 0, 0, 0.6);*/
+    background-color: var(--bg-dark);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -56,12 +57,16 @@
     cursor: pointer;
 }
 
+#replay-options input {
+    margin-right: 2px;
+}
+
 #word-guess-replay {
     margin-top: 1rem;
     padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 8px;
-    background-color: #007bff;
+    background-color: var(--bg-card-btns);
     color: white;
     cursor: pointer;
     font-size: 1rem;

@@ -98,8 +98,8 @@ function buildDialogContent(): void {
             <p id="correct-answers" class="results-line"></p>
             <p id="skipped-answers" class="results-line"></p>
             <p id="letter-hints-used" class="results-line"></p>
-            <p id="vocal-hints-used" class="results-line"></p>
             <p id="text-hints-used" class="results-line"></p>
+            <p id="vocal-hints-used" class="results-line"></p>
             <fieldset id="replay-options">
                 <legend>Valitse kerrattavaksi:</legend>
                 <label><input type="checkbox" id="replay-skipped">Ohitetut sanat</label>
