@@ -263,6 +263,20 @@ function setButtonsEnabled(enabled: boolean): void {
     syllableHintButton.disabled = !enabled;
 }
 
+function getGameResults(gameSession: GameSession): GameResults {
+    const gameResults: GameResults = {
+        correctAnswers: gameSession.getCountByStatus("guess-correct"),
+        incorrectAnswers: gameSession.getCountByStatus("guess-incorrect"),
+        skippedWords: gameSession.getCountByStatus("skipped"),
+        wordsSolvedUsingHints: gameSession.getCountByStatus("used-hint"),
+        totalWords: gameSession.getTotalWordCount(),
+        totalVocalHintsUsed: gameSession.getVocalHintsUsed(),
+        totalTextHintsUsed: gameSession.getTextHintsUsed(),
+        totalLetterHintsUsed: gameSession.getLetterHintsUsed(),
+    };
+    return gameResults;
+}
+
 function delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -280,17 +294,11 @@ function handleSkipWord(): void {
             // even if there was only one word replayed
             showResults = true;
         }
-        const gameResults: GameResults = {
-            correctAnswers: gameSession.getCountByStatus("guess-correct"),
-            incorrectAnswers: gameSession.getCountByStatus("guess-incorrect"),
-            skippedWords: gameSession.getCountByStatus("skipped"),
-            wordsSolvedUsingHints: gameSession.getCountByStatus("used-hint"),
-            totalWords: gameSession.getTotalWordCount(),
-        };
+
         dispatchEvent(
             new CustomEvent("show-results", {
                 bubbles: true,
-                detail: { showResults: showResults, gameResults: gameResults },
+                detail: { showResults: showResults, gameResults: getGameResults(gameSession) },
             }),
         );
         return;
@@ -359,17 +367,11 @@ async function handleAnswer(wordGuess: WordGuess) {
             // even if there was only one word replayed
             showResults = true;
         }
-        const gameResults: GameResults = {
-            correctAnswers: gameSession.getCountByStatus("guess-correct"),
-            incorrectAnswers: gameSession.getCountByStatus("guess-incorrect"),
-            skippedWords: gameSession.getCountByStatus("skipped"),
-            wordsSolvedUsingHints: gameSession.getCountByStatus("used-hint"),
-            totalWords: gameSession.getTotalWordCount(),
-        };
+
         dispatchEvent(
             new CustomEvent("show-results", {
                 bubbles: true,
-                detail: { showResults: showResults, gameResults: gameResults },
+                detail: { showResults: showResults, gameResults: getGameResults(gameSession) },
             }),
         );
         return;

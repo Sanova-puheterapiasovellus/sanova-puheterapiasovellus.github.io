@@ -59,6 +59,9 @@ export interface GameResults {
     skippedWords: number;
     wordsSolvedUsingHints: number;
     totalWords: number;
+    totalVocalHintsUsed: number;
+    totalTextHintsUsed: number;
+    totalLetterHintsUsed: number;
 }
 
 /** Event that is triggered when the game runs out of words */
