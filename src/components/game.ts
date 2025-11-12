@@ -5,6 +5,11 @@ import type {
     WordSelectedEvent,
     WordsSelectedEvent,
 } from "../common/events";
+import {
+    dispatchGameOver,
+    dispatchWordSelection,
+    dispatchWordsSelection,
+} from "../common/events.ts";
 import { type Category, getImagePath, type Word, wordsData } from "../data/word-data-model.ts";
 import { GameSession } from "./GameSession";
 import "./styles/game.css";
@@ -25,6 +30,7 @@ const letterSlots = expectElement("word-guess-slots", HTMLDivElement);
 const hiddenInput = document.getElementById("hidden-input") as HTMLInputElement;
 const textHint = expectElement("text-hint", HTMLDivElement);
 const guessProgressCounter = expectElement("word-guess-progress-counter", HTMLDivElement);
+const skipButton = expectElement("next-btn", HTMLButtonElement);
 
 // Keep track of the game progress, initially null
 let gameSession: GameSession | null = null;
@@ -63,15 +69,11 @@ function handleGameStart(event: CategorySelectedEvent): void {
 
     gameSession = new GameSession(categoryForSession);
     // Set the words to the game session object through the WordsSelected event
-    dispatchEvent(
-        new CustomEvent("words-selected", {
-            bubbles: true,
-            detail: {
-                selections,
-                category: currentCategory.name === "random" ? null : currentCategory,
-                isReplay: false,
-            },
-        }),
+    dispatchWordsSelection(
+        window,
+        selections,
+        currentCategory.name === "random" ? null : currentCategory,
+        false,
     );
 
     gameSession.setGameModeRandom(); // Show words in random order
@@ -79,12 +81,7 @@ function handleGameStart(event: CategorySelectedEvent): void {
     textHint.textContent = "";
     setSyllableHintWord(word.name);
 
-    dispatchEvent(
-        new CustomEvent("word-selected", {
-            bubbles: true,
-            detail: { word: word, index: 0 },
-        }),
-    );
+    dispatchWordSelection(window, word, 0);
 }
 /** Helper function to pick random words */
 function pickRandom<T>(array: T[], count: number): T[] {
@@ -265,6 +262,40 @@ function delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+async function handleSkipWord(): Promise<void> {
+    if (!gameSession) return;
+    const isGameOver: boolean = gameSession.isGameOver();
+    gameSession.markCurrentSkipped();
+    //const currentWordGuess = gameSession.getCurrentWordGuess();
+    if (isGameOver) {
+        let showResults: boolean = gameSession.getTotalWordCount() > 1;
+        const isReplay: boolean = gameSession.getIsReplay();
+        if (isReplay) {
+            // Always show results if the user is replaying correct words,
+            // even if there was only one word replayed
+            showResults = true;
+        }
+        dispatchGameOver(window, showResults);
+        return;
+    }
+    // Style the card to indicate skipping
+    guessCard.classList.add("skip");
+    // Short delay when skipping a word
+    setButtonsEnabled(false);
+    await delay(1000);
+    setButtonsEnabled(true);
+    // Remove the skip style
+    guessCard.classList.remove("skip");
+
+    const nextWord: Word = gameSession.getNextWord();
+    textHint.textContent = "";
+    updateGameProgressCounter();
+    setSyllableHintWord(nextWord.name);
+    setImage();
+
+    setupWordInput();
+}
+
 /** Handle the user's guess when the answer btn is pressed */
 async function handleAnswer(wordGuess: WordGuess) {
     const gameSession: GameSession = getGameSession();
@@ -288,10 +319,15 @@ async function handleAnswer(wordGuess: WordGuess) {
     const isGameOver: boolean = gameSession.isGameOver();
 
     if (isCorrect) {
-        gameSession.increaseCorrectCount();
+        const usedAnyHints: boolean = gameSession.getCurrentWordGuess().getHintsUsed();
+        if (usedAnyHints) {
+            gameSession.markHintUsed();
+        } else {
+            gameSession.markCurrentCorrect();
+        }
         guessCard.classList.add("correct");
     } else {
-        gameSession.saveIncorrectlyGuessed();
+        gameSession.markIncorrectlyGuessed();
         guessCard.classList.add("wrong");
     }
 
@@ -304,22 +340,17 @@ async function handleAnswer(wordGuess: WordGuess) {
     guessCard.classList.remove("correct", "wrong");
 
     if (isGameOver) {
-        if (gameSession.getAllWords().length === 1) {
+        if (gameSession.getTotalWordCount() === 1) {
             unlockPageScroll();
         }
-        let showResults: boolean = gameSession.getAllWords().length > 1;
+        let showResults: boolean = gameSession.getTotalWordCount() > 1;
         const isReplay: boolean = gameSession.getIsReplay();
         if (isReplay) {
             // Always show results if the user is replaying correct words,
             // even if there was only one word replayed
             showResults = true;
         }
-        dispatchEvent(
-            new CustomEvent("show-results", {
-                bubbles: true,
-                detail: { showResults: showResults },
-            }),
-        );
+        dispatchGameOver(window, showResults);
         return;
     }
 
@@ -354,6 +385,8 @@ export function initializeGameContainer(): void {
     letterHintButton.addEventListener("click", handleUseLetterHint);
     textHintButton.addEventListener("click", handleUseTextHint);
     syllableHintButton.addEventListener("click", handleUseVocalHint);
+
+    skipButton.addEventListener("click", handleSkipWord);
 
     hiddenInput.addEventListener("input", handleInputEvent);
 

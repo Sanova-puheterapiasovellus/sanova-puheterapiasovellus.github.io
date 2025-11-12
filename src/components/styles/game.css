@@ -185,6 +185,12 @@ button#word-guess-submit {
     transition: background-color 0.3s ease;
 }
 
+/* Skip word, yellow flash */
+#word-guess-dialog #word-guess-card.skip {
+    background-color: #e3f0c0;
+    transition: background-color 0.3s ease;
+}
+
 /* Shake animation to indicate invalid answer */
 @keyframes shake {
     0%,
