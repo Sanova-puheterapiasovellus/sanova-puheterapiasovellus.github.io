@@ -5,6 +5,11 @@ import type {
     WordSelectedEvent,
     WordsSelectedEvent,
 } from "../common/events";
+import {
+    dispatchGameOver,
+    dispatchWordSelection,
+    dispatchWordsSelection,
+} from "../common/events.ts";
 import { type Category, getImagePath, type Word, wordsData } from "../data/word-data-model.ts";
 import { GameSession } from "./GameSession";
 import "./styles/game.css";
@@ -64,15 +69,11 @@ function handleGameStart(event: CategorySelectedEvent): void {
 
     gameSession = new GameSession(categoryForSession);
     // Set the words to the game session object through the WordsSelected event
-    dispatchEvent(
-        new CustomEvent("words-selected", {
-            bubbles: true,
-            detail: {
-                selections,
-                category: currentCategory.name === "random" ? null : currentCategory,
-                isReplay: false,
-            },
-        }),
+    dispatchWordsSelection(
+        window,
+        selections,
+        currentCategory.name === "random" ? null : currentCategory,
+        false,
     );
 
     gameSession.setGameModeRandom(); // Show words in random order
@@ -80,12 +81,7 @@ function handleGameStart(event: CategorySelectedEvent): void {
     textHint.textContent = "";
     setSyllableHintWord(word.name);
 
-    dispatchEvent(
-        new CustomEvent("word-selected", {
-            bubbles: true,
-            detail: { word: word, index: 0 },
-        }),
-    );
+    dispatchWordSelection(window, word, 0);
 }
 /** Helper function to pick random words */
 function pickRandom<T>(array: T[], count: number): T[] {
@@ -279,12 +275,7 @@ function handleSkipWord(): void {
             // even if there was only one word replayed
             showResults = true;
         }
-        dispatchEvent(
-            new CustomEvent("show-results", {
-                bubbles: true,
-                detail: { showResults: showResults },
-            }),
-        );
+        dispatchGameOver(window, showResults);
         return;
     }
 
@@ -351,12 +342,7 @@ async function handleAnswer(wordGuess: WordGuess) {
             // even if there was only one word replayed
             showResults = true;
         }
-        dispatchEvent(
-            new CustomEvent("show-results", {
-                bubbles: true,
-                detail: { showResults: showResults },
-            }),
-        );
+        dispatchGameOver(window, showResults);
         return;
     }
 
