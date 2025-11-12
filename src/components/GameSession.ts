@@ -76,6 +76,10 @@ export class GameSession {
         this.vocalHintsCounter++;
     }
 
+    resetVocalHints(): void {
+        this.vocalHintsCounter = 0;
+    }
+
     getTextHintsUsed(): number {
         return this.textHintsCounter;
     }

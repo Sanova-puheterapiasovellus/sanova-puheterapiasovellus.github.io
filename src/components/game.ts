@@ -30,7 +30,7 @@ const textHint = expectElement("text-hint", HTMLDivElement);
 const guessProgressCounter = expectElement("word-guess-progress-counter", HTMLDivElement);
 
 // Keep track of the game progress, initially null
-let gameSession: GameSession | null = null;
+export let gameSession: GameSession | null = null;
 
 /** Close the dialog as requested. */
 function handleDialogClose(_: Event): void {
@@ -356,6 +356,7 @@ async function handleAnswer(wordGuess: WordGuess) {
 
     const nextWord: string = gameSession.getNextWord();
     textHint.textContent = "";
+    gameSession.resetVocalHints();
     updateGameProgressCounter();
     resetTextHint();
     setSyllableHintWord(nextWord);
