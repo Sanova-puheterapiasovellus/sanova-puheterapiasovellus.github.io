@@ -262,7 +262,7 @@ function delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function handleSkipWord(): void {
+async function handleSkipWord(): Promise<void> {
     if (!gameSession) return;
     const isGameOver: boolean = gameSession.isGameOver();
     gameSession.markCurrentSkipped();
@@ -278,6 +278,14 @@ function handleSkipWord(): void {
         dispatchGameOver(window, showResults);
         return;
     }
+    // Style the card to indicate skipping
+    guessCard.classList.add("skip");
+    // Short delay when skipping a word
+    setButtonsEnabled(false);
+    await delay(1000);
+    setButtonsEnabled(true);
+    // Remove the skip style
+    guessCard.classList.remove("skip");
 
     const nextWord: Word = gameSession.getNextWord();
     textHint.textContent = "";
