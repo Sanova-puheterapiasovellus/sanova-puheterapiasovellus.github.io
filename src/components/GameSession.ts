@@ -29,7 +29,7 @@ export class GameSession {
             image_credit: "",
             hint: "",
         };
-        this.currentWordGuess = new WordGuess(this.currentWord.name, null);
+        this.currentWordGuess = new WordGuess(this.currentWord);
     }
 
     setCategory(category: Category | null): void {
@@ -42,7 +42,7 @@ export class GameSession {
 
     setWords(words: Word[]): void {
         for (const word of words) {
-            this.wordGuessList.push(new WordGuess(word.name, word));
+            this.wordGuessList.push(new WordGuess(word));
         }
     }
 

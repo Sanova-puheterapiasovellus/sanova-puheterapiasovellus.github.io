@@ -14,8 +14,8 @@ export class WordGuess {
      * empty, i.e. no letter written. No letter hints used, so
      * no locked letters
      */
-    constructor(word: string, wordObj: Word | null) {
-        this.word = word.toUpperCase();
+    constructor(wordObj: Word) {
+        this.word = wordObj.name.toUpperCase();
         this.currentGuess = [];
         this.locked = new Array(this.word.length).fill(false);
         this.wordObject = wordObj;
