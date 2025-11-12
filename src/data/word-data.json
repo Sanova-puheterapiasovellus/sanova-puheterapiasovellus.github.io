@@ -330,13 +330,13 @@
                     "name": "sammakko",
                     "image": "sammakko.png",
                     "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
-                    "hint": "Hyppivä ja kurnuttava eläin, joka elää esimerkiksi puutarhassa tai metsässä"
+                    "hint": "Hyppivä ja kurnuttava eläin, joka elää esimerkiksi metsässä tai vesistöjen äärellä"
                 },
                 {
                     "name": "sudenkorento",
                     "image": "sudenkorento.png",
                     "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
-                    "hint": "Hyönteinen, joka lentää ja jolla on suippo ja pitkä ruumis"
+                    "hint": "Hyönteinen, joka liikkuu etenkin vesistöjen läheisyydessä, lentää ja jolla on suippo ja pitkä ruumis"
                 }
             ]
         },
@@ -452,7 +452,7 @@
                     "name": "metro",
                     "image": "metro.png",
                     "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
-                    "hint": "Pitkä kulkuneuvo, joka kulkee maan alla"
+                    "hint": "Pitkä kulkuneuvo, joka kulkee maan alla raiteilla"
                 },
                 {
                     "name": "bussi",
@@ -564,7 +564,7 @@
                     "hint": "Osallistua peliin tai urheiluun"
                 },
                 {
-                    "name": "katsoa (tv:tä)",
+                    "name": "katsoa televisiota",
                     "image": "katsoa.png",
                     "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
                     "hint": "Suunnata katse johonkin, esim. televisioon ja nähdä se"
@@ -722,8 +722,8 @@
                     "hint": "Pullo, josta juodaan vettä tai muuta juomaa"
                 },
                 {
-                    "name": "aterimet/ruokailuvälineet",
-                    "image": "aterimet-ruokailuvalineet.png",
+                    "name": "aterimet",
+                    "image": "aterimet.png",
                     "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
                     "hint": "Haarukka, veitsi ja lusikka"
                 },

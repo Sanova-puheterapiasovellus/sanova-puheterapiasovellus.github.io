@@ -1,3 +1,4 @@
+import type { Word } from "../data/word-data-model";
 import type { WordGuessStatus } from "./wordStatus";
 
 /** Keeps track of the guessed letters of a single word, renders the typed letters*/
@@ -7,15 +8,17 @@ export class WordGuess {
     private locked: boolean[]; // Locked letters, using a letter hint locks a correct letter in place
     private status: WordGuessStatus = "not-guessed"; // Default status
     private anyHintsUsed: boolean = false;
+    private wordObject: Word | null = null;
 
     /** Initialize a WordGuess object with current guess being
      * empty, i.e. no letter written. No letter hints used, so
      * no locked letters
      */
-    constructor(word: string) {
+    constructor(word: string, wordObj: Word | null) {
         this.word = word.toUpperCase();
         this.currentGuess = [];
         this.locked = new Array(this.word.length).fill(false);
+        this.wordObject = wordObj;
     }
 
     setHintsUsed(): void {
@@ -47,6 +50,10 @@ export class WordGuess {
     /** Get the current word as a string */
     getWord(): string {
         return this.word;
+    }
+
+    getWordObject(): Word | null {
+        return this.wordObject;
     }
 
     /** Update the current guess based on the string parameter */
