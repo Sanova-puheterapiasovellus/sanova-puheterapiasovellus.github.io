@@ -47,20 +47,18 @@ function focusHiddenInput(): void {
 
 /** Handle the game starting with the selected category. */
 function handleGameStart(event: CategorySelectedEvent): void {
-    const currentCategory: string = event.detail.name;
+    const currentCategory: Category = event.detail.category;
     let selections: Array<{ word: Word; index: number }> = [];
     let categoryForSession: Category | null = null;
 
-    if (currentCategory === "random") {
+    if (currentCategory.name === "random") {
         const allWords = wordsData.categories.flatMap((c) =>
             c.words.map((w, idx) => ({ word: w, index: idx })),
         );
         selections = pickRandom(allWords, 10);
     } else {
-        const category = wordsData.categories.find((c) => c.name === currentCategory);
-        if (!category) return;
-        selections = category.words.map((w, idx) => ({ word: w, index: idx }));
-        categoryForSession = category;
+        selections = currentCategory.words.map((w, idx) => ({ word: w, index: idx }));
+        categoryForSession = currentCategory;
     }
 
     gameSession = new GameSession(categoryForSession);
@@ -70,7 +68,7 @@ function handleGameStart(event: CategorySelectedEvent): void {
             bubbles: true,
             detail: {
                 selections,
-                category: currentCategory === "random" ? null : currentCategory,
+                category: currentCategory.name === "random" ? null : currentCategory,
                 isReplay: false,
             },
         }),
@@ -84,7 +82,7 @@ function handleGameStart(event: CategorySelectedEvent): void {
     dispatchEvent(
         new CustomEvent("word-selected", {
             bubbles: true,
-            detail: { name: word, index: 0 },
+            detail: { word: word, index: 0 },
         }),
     );
 }

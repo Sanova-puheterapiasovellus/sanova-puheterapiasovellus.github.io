@@ -1,7 +1,7 @@
 import type { Category, Word } from "../data/word-data-model";
 
 /** The event when a category has been selected. */
-export type CategorySelectedEvent = CustomEvent<{ name: string }>;
+export type CategorySelectedEvent = CustomEvent<{ category: Category }>;
 
 /** Event for notifications shown to user. */
 export type InternalNotificationEvent = CustomEvent<{
@@ -10,11 +10,11 @@ export type InternalNotificationEvent = CustomEvent<{
 }>;
 
 /** Notify other components about a category being selected. */
-export function dispatchCategorySelection(source: EventTarget, name: string) {
+export function dispatchCategorySelection(source: EventTarget, category: Category) {
     source.dispatchEvent(
         new CustomEvent("category-selected", {
             bubbles: true,
-            detail: { name },
+            detail: { category },
         }) satisfies CategorySelectedEvent,
     );
 }
