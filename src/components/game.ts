@@ -337,16 +337,11 @@ async function handleAnswer(wordGuess: WordGuess) {
 }
 
 function handleImageCredits(): void {
-    const currentWord = gameSession?.getCurrentWord();
+    if (!gameSession) return;
 
-    const currentWordData = wordsData.categories
-        .flatMap((category) => category.words)
-        .find((word) => word.name === currentWord);
+    const currentWord = gameSession.getCurrentWord();
 
-    const imageCredits = currentWordData?.image_credit;
-    if (!imageCredits) return;
-
-    showCreditsModal(imageCredits);
+    showCreditsModal(currentWord.image_credit);
 }
 
 function moveCursorToEnd(input: HTMLInputElement) {
