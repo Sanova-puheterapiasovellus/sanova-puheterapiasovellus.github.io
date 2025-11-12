@@ -2,6 +2,7 @@ import { expectElement } from "../common/dom";
 import type { GameSession } from "./GameSession";
 import "./styles/word-guess-results.css";
 import { unlockPageScroll } from "../common/preventScroll.ts";
+import type { Word } from "../data/word-data-model.ts";
 
 const resultsDialog = expectElement("word-guess-results-dialog", HTMLDialogElement);
 const resultsCloseButton = expectElement("word-guess-results-close", HTMLButtonElement);
@@ -17,14 +18,14 @@ export function showWordGuessResults(gameSession: GameSession): void {
 
     // Handler here to get access to the gameSession
     function handleReplayIncorrect(_: Event): void {
-        const words: string[] = gameSession.getIncorrectlyGuessedWords();
+        const words: Word[] = gameSession.getIncorrectlyGuessedWords();
         if (words.length > 0) {
             // Update the gameSession
             dispatchEvent(
                 new CustomEvent("words-selected", {
                     bubbles: true,
                     detail: {
-                        selections: words.map((w, idx) => ({ name: w, index: idx })),
+                        selections: words.map((w, idx) => ({ word: w, index: idx })),
                         category: null,
                         isReplay: true,
                     },
@@ -35,7 +36,7 @@ export function showWordGuessResults(gameSession: GameSession): void {
             dispatchEvent(
                 new CustomEvent("word-selected", {
                     bubbles: true,
-                    detail: { name: null, index: 0 },
+                    detail: { word: null, index: 0 },
                 }),
             );
         }

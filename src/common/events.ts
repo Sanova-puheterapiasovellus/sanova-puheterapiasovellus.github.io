@@ -1,3 +1,5 @@
+import type { Category, Word } from "../data/word-data-model";
+
 /** The event when a category has been selected. */
 export type CategorySelectedEvent = CustomEvent<{ name: string }>;
 
@@ -40,13 +42,13 @@ declare global {
 
 /** Event when a single word has been selected. */
 export type WordSelectedEvent = CustomEvent<{
-    name: string;
+    word: Word;
     index: number;
 }>;
 /** Event that is triggered when multiple words, for example one category has been selected */
 export type WordsSelectedEvent = CustomEvent<{
-    selections: Array<{ name: string; index: number }>;
-    category: string | null;
+    selections: Array<{ word: Word; index: number }>;
+    category: Category | null;
     isReplay: boolean;
 }>;
 /** Event that is triggered when the game runs out of words */
@@ -55,11 +57,11 @@ export type GameOverEvent = CustomEvent<{
 }>;
 
 /** Notify other components about a word being selected. */
-export function dispatchWordSelection(source: EventTarget, name: string, index: number) {
+export function dispatchWordSelection(source: EventTarget, word: Word, index: number) {
     source.dispatchEvent(
         new CustomEvent("word-selected", {
             bubbles: true,
-            detail: { name, index },
+            detail: { word, index },
         }) satisfies WordSelectedEvent,
     );
 }
@@ -67,8 +69,8 @@ export function dispatchWordSelection(source: EventTarget, name: string, index: 
 /** Notify other components when multiple words has been selected */
 export function dispatchWordsSelection(
     source: EventTarget,
-    selections: Array<{ name: string; index: number }>,
-    category: string | null,
+    selections: Array<{ word: Word; index: number }>,
+    category: Category | null,
     isReplay: boolean,
 ) {
     source.dispatchEvent(

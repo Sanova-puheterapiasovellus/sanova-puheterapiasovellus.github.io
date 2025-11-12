@@ -11,15 +11,8 @@
 
         <main class="mainview-main">
             <ul id="category-selector-list"></ul>
-            <ul id="word-selector-list"></ul>
             <ul id="notification-list"></ul>
         </main>
-
-        <footer>
-            <h2>Työkalut</h2>
-
-            <button id="syllable-player-open" type="button">Tavutoistin</button>
-        </footer>
 
         <dialog id="all-words-dialog">
             <button id="close-all-words">&times;</button>
@@ -105,29 +98,6 @@
                 </header>
                 <div id="image-credits-text"></div>
             </article>
-        </dialog>
-
-        <dialog id="syllable-player-dialog" closedby="any">
-            <h3>Tavutoistin</h3>
-
-            <p>
-                Tavutoistin mahdollistaa koneellisen tavuäänien kuuntelemisen, käyttäen
-                <a href="https://papunet.net/materiaalit/aanipankki/">
-                    Papunet Äänipankin Äännetiedostoja
-                </a>
-                muokattuina ilman hiljaisia kohtia äänteiden alussa ja lopussa ominaisuuden
-                toteuttamisen mahdollistamiseksi.
-            </p>
-
-            <form id="syllable-player-form">
-                <label>
-                    Sana toistettavaksi
-                    <input id="syllable-player-input" type="text" required>
-                </label>
-                <button id="syllable-player-play" type="button" disabled>Toista tavut</button>
-            </form>
-
-            <button id="syllable-player-close" type="button">Sulje</button>
         </dialog>
 
         <template id="notification-item">
