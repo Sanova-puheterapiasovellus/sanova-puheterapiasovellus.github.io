@@ -51,9 +51,20 @@ export type WordsSelectedEvent = CustomEvent<{
     category: Category | null;
     isReplay: boolean;
 }>;
+
+/** Structure for game results */
+export interface GameResults {
+    correctAnswers: number;
+    incorrectAnswers: number;
+    skippedWords: number;
+    wordsSolvedUsingHints: number;
+    totalWords: number;
+}
+
 /** Event that is triggered when the game runs out of words */
 export type GameOverEvent = CustomEvent<{
     showResults: boolean;
+    gameResults: GameResults;
 }>;
 
 /** Notify other components about a word being selected. */
@@ -81,11 +92,15 @@ export function dispatchWordsSelection(
     );
 }
 
-export function dispatchGameOver(source: EventTarget, showResults: boolean) {
+export function dispatchGameOver(
+    source: EventTarget,
+    showResults: boolean,
+    gameResults: GameResults,
+) {
     source.dispatchEvent(
         new CustomEvent("show-results", {
             bubbles: true,
-            detail: { showResults },
+            detail: { showResults, gameResults },
         }) satisfies GameOverEvent,
     );
 }

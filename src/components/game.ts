@@ -2,6 +2,7 @@ import { expectElement } from "../common/dom";
 import type {
     CategorySelectedEvent,
     GameOverEvent,
+    GameResults,
     WordSelectedEvent,
     WordsSelectedEvent,
 } from "../common/events";
@@ -279,10 +280,17 @@ function handleSkipWord(): void {
             // even if there was only one word replayed
             showResults = true;
         }
+        const gameResults: GameResults = {
+            correctAnswers: gameSession.getCountByStatus("guess-correct"),
+            incorrectAnswers: gameSession.getCountByStatus("guess-incorrect"),
+            skippedWords: gameSession.getCountByStatus("skipped"),
+            wordsSolvedUsingHints: gameSession.getCountByStatus("used-hint"),
+            totalWords: gameSession.getTotalWordCount(),
+        };
         dispatchEvent(
             new CustomEvent("show-results", {
                 bubbles: true,
-                detail: { showResults: showResults },
+                detail: { showResults: showResults, gameResults: gameResults },
             }),
         );
         return;
@@ -351,10 +359,17 @@ async function handleAnswer(wordGuess: WordGuess) {
             // even if there was only one word replayed
             showResults = true;
         }
+        const gameResults: GameResults = {
+            correctAnswers: gameSession.getCountByStatus("guess-correct"),
+            incorrectAnswers: gameSession.getCountByStatus("guess-incorrect"),
+            skippedWords: gameSession.getCountByStatus("skipped"),
+            wordsSolvedUsingHints: gameSession.getCountByStatus("used-hint"),
+            totalWords: gameSession.getTotalWordCount(),
+        };
         dispatchEvent(
             new CustomEvent("show-results", {
                 bubbles: true,
-                detail: { showResults: showResults },
+                detail: { showResults: showResults, gameResults: gameResults },
             }),
         );
         return;
