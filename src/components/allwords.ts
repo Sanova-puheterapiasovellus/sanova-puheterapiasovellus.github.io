@@ -1,7 +1,7 @@
 import { buildHtml, expectElement } from "../common/dom";
 import { dispatchWordSelection } from "../common/events";
 import type { Store } from "../common/reactive.ts";
-import { getImagePath, wordsData } from "../data/word-data-model.ts";
+import { getImagePath, type Word, wordsData } from "../data/word-data-model.ts";
 import type { FilterOptions } from "./searchAndFilter";
 import { setupSearchAndFilter } from "./searchAndFilter";
 import styles from "./styles/allWords.module.css";
@@ -25,8 +25,8 @@ dialog.addEventListener("click", (e) => {
     if (e.target === dialog) dialog.close();
 });
 
-function createImageEntry(word: string, imagePath: string, index: number): HTMLElement {
-    const img = buildHtml("img", { src: imagePath, alt: word });
+function createImageEntry(word: Word, index: number): HTMLElement {
+    const img = buildHtml("img", { src: getImagePath(word.image), alt: word.name });
     Object.assign(img.style, {
         cursor: "pointer",
         display: "block",
@@ -49,7 +49,7 @@ function createRandomEntry(filters: FilterOptions): HTMLElement {
     img.addEventListener("click", () => {
         const randomWord = getRandomFilteredWord(filters);
         if (randomWord) {
-            dispatchWordSelection(img, randomWord.name, randomWord.index);
+            dispatchWordSelection(img, randomWord, randomWord.index);
         } else {
             alert("Ei sanoja nykyisillä filttereillä");
         }
@@ -89,7 +89,7 @@ function renderAllImages(filters: FilterOptions) {
 
         category.words.forEach((word, index) => {
             if (word.name.toLowerCase().includes(filters.term)) {
-                const li = createImageEntry(word.name, getImagePath(word.image), index);
+                const li = createImageEntry(word, index);
                 allWordsList.appendChild(li);
             }
         });

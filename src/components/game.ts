@@ -5,9 +5,7 @@ import type {
     WordSelectedEvent,
     WordsSelectedEvent,
 } from "../common/events";
-import { playSyllableSounds } from "../common/playback.ts";
-import { getImagePath, wordsData } from "../data/word-data-model.ts";
-import { splitToSyllables } from "../utils/syllable-split.ts";
+import { type Category, getImagePath, type Word, wordsData } from "../data/word-data-model.ts";
 import { GameSession } from "./GameSession";
 import "./styles/game.css";
 import { lockPageScroll, unlockPageScroll } from "../common/preventScroll.ts";
@@ -43,26 +41,26 @@ function handleDialogClose(_: Event): void {
 }
 
 /** Trigger the mobile keyboard */
-function focusHiddenInput() {
+function focusHiddenInput(): void {
     hiddenInput.focus();
 }
 
 /** Handle the game starting with the selected category. */
 function handleGameStart(event: CategorySelectedEvent): void {
     const currentCategory: string = event.detail.name;
-    let selections: Array<{ name: string; index: number }> = [];
-    let categoryForSession: string | null = null;
+    let selections: Array<{ word: Word; index: number }> = [];
+    let categoryForSession: Category | null = null;
 
     if (currentCategory === "random") {
         const allWords = wordsData.categories.flatMap((c) =>
-            c.words.map((w, idx) => ({ name: w.name, index: idx })),
+            c.words.map((w, idx) => ({ word: w, index: idx })),
         );
         selections = pickRandom(allWords, 10);
     } else {
         const category = wordsData.categories.find((c) => c.name === currentCategory);
         if (!category) return;
-        selections = category.words.map((w, idx) => ({ name: w.name, index: idx }));
-        categoryForSession = currentCategory;
+        selections = category.words.map((w, idx) => ({ word: w, index: idx }));
+        categoryForSession = category;
     }
 
     gameSession = new GameSession(categoryForSession);
@@ -81,7 +79,7 @@ function handleGameStart(event: CategorySelectedEvent): void {
     gameSession.setGameModeRandom(); // Show words in random order
     const word = gameSession.getNextWord();
     textHint.textContent = "";
-    setSyllableHintWord(word);
+    setSyllableHintWord(word.name);
 
     dispatchEvent(
         new CustomEvent("word-selected", {
@@ -105,50 +103,32 @@ function handleGameOver(event: GameOverEvent) {
     gameSession = null;
 }
 
-function setImage() {
+function setImage(): void {
     if (!gameSession) return;
     const word = gameSession.getCurrentWord();
-    const category = gameSession.getCategory();
 
-    let wordData: { name: string; image: string } | undefined;
-
-    if (category) {
-        const categoryData = wordsData.categories.find((c) => c.name === category);
-        wordData = categoryData?.words.find((w) => w.name === word);
-    } else {
-        for (const c of wordsData.categories) {
-            const found = c.words.find((w) => w.name === word);
-            if (found) {
-                wordData = found;
-                break;
-            }
-        }
-    }
-
-    if (!wordData) return;
-
-    wordImage.alt = wordData.name;
-    wordImage.src = getImagePath(wordData.image);
+    wordImage.alt = word.name;
+    wordImage.src = getImagePath(word.image);
 }
 
-function updateGameProgressCounter() {
+function updateGameProgressCounter(): void {
     if (gameSession) {
         guessProgressCounter.textContent = `${gameSession.getGuessedWordCount() + 1}/${gameSession.getTotalWordCount()}`;
     }
 }
 
 /** Handle the word selection, i.e. show the guessing modal for the user */
-function handleWordSelected(event: WordSelectedEvent) {
+function handleWordSelected(event: WordSelectedEvent): void {
     if (!gameSession) {
         // If gameSession does not exist, then only one word was selected
         gameSession = new GameSession(null);
-        const { name } = event.detail;
-        gameSession.setWords([name]);
+        const { word } = event.detail;
+        gameSession.setWords([word]);
         gameSession.setCurrentWordIndex(0);
-        setSyllableHintWord(name);
+        setSyllableHintWord(word.name);
     }
 
-    if (event.detail.name === null) {
+    if (event.detail.word === null) {
         // No word was set, set it here
         gameSession.setCurrentWordIndex(0);
     }
@@ -163,18 +143,18 @@ function handleWordSelected(event: WordSelectedEvent) {
     setImage();
 }
 
-function handleWordsSelected(event: WordsSelectedEvent) {
+function handleWordsSelected(event: WordsSelectedEvent): void {
     const { category, selections, isReplay } = event.detail;
     gameSession = new GameSession(category);
     //if (!gameSession) return;
 
     gameSession.setIsReplay(isReplay);
     gameSession.setCategory(category);
-    gameSession.setWords(selections.map((s) => s.name));
+    gameSession.setWords(selections.map((s) => s.word));
 }
 
 /** Renders the empty slots after answering or when initializing the first word */
-function setupWordInput() {
+function setupWordInput(): void {
     const wordGuess = getGameSession().getCurrentWordGuess();
     wordGuess.render(letterSlots);
     hiddenInput.value = "";
@@ -183,7 +163,7 @@ function setupWordInput() {
 }
 
 /** Handle the typing events when using both physical keyboard and phone's keyboard */
-function handleInputEvent() {
+function handleInputEvent(): void {
     if (!gameSession) return;
 
     const wordGuess = gameSession.getCurrentWordGuess();
@@ -193,8 +173,8 @@ function handleInputEvent() {
     let typed = hiddenInput.value.toUpperCase();
 
     // Restrict the length of the input word to the length of the word being guessed
-    if (typed.length > currentWord.length) {
-        typed = typed.slice(0, currentWord.length);
+    if (typed.length > currentWord.name.length) {
+        typed = typed.slice(0, currentWord.name.length);
         hiddenInput.value = typed;
     }
 
@@ -259,13 +239,8 @@ function handleUseTextHint(): void {
     gameSession.useTextHint();
 
     const currentWord = gameSession.getCurrentWord();
-    const currentWordData = wordsData.categories
-        .flatMap((category) => category.words)
-        .find((word) => word.name === currentWord);
 
-    if (!currentWordData) return;
-
-    textHint.textContent = currentWordData.hint;
+    textHint.textContent = currentWord.hint;
 }
 
 function handleUseVocalHint(): void {
@@ -350,10 +325,10 @@ async function handleAnswer(wordGuess: WordGuess) {
         return;
     }
 
-    const nextWord: string = gameSession.getNextWord();
+    const nextWord = gameSession.getNextWord();
     textHint.textContent = "";
     updateGameProgressCounter();
-    setSyllableHintWord(nextWord);
+    setSyllableHintWord(nextWord.name);
     setImage();
 
     setupWordInput();
@@ -365,7 +340,7 @@ function moveCursorToEnd(input: HTMLInputElement) {
 }
 
 /** Wire up events to react to the game being started. */
-export function initializeGameContainer() {
+export function initializeGameContainer(): void {
     window.addEventListener("category-selected", handleGameStart);
     window.addEventListener("word-selected", handleWordSelected);
     window.addEventListener("words-selected", handleWordsSelected);
