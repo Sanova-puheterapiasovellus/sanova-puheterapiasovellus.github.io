@@ -123,7 +123,6 @@ export class GameSession {
         this.currentWordGuess?.updateStatus(newStatus);
     }
 
-    // MUOKKAA NIIN, ETTÄ PALAUTTAA WORD listan
     getIncorrectlyGuessedWords(): Word[] {
         const wordList: Word[] = [];
         // Count as incorrect:
@@ -132,7 +131,7 @@ export class GameSession {
         //  - words that were skipped
         for (const wordGuess of this.wordGuessList) {
             if (wordGuess.getStatus() !== "guess-correct") {
-                wordList.push(wordGuess.getWordObject()!);
+                wordList.push(wordGuess.getWordObject());
             }
         }
         return wordList;
@@ -204,7 +203,6 @@ export class GameSession {
     }
 
     /** Get the next word (in the order the list defines) to be guessed and create a new WordGuess object */
-    // PITÄÄ PALAUTTAA WORD
     getNextWordOrder(): Word {
         const totalWords = this.getTotalWordCount();
         const guessedWordsCount = totalWords - this.getUnguessedCount();
@@ -215,7 +213,7 @@ export class GameSession {
         this.wordGuessIndex++;
         this.currentWordGuess = this.wordGuessList[this.wordGuessIndex]!;
         this.vocalHintsCounter = 0;
-        this.currentWord = this.currentWordGuess.getWordObject()!;
+        this.currentWord = this.currentWordGuess.getWordObject();
         return this.currentWord;
     }
 
@@ -235,7 +233,7 @@ export class GameSession {
         const randomIndex = Math.floor(Math.random() * notGuessed.length);
         const randomWordGuess = notGuessed[randomIndex]!;
         this.currentWordGuess = randomWordGuess;
-        this.currentWord = this.currentWordGuess.getWordObject()!;
+        this.currentWord = this.currentWordGuess.getWordObject();
         return this.currentWord;
     }
 }

@@ -8,7 +8,7 @@ export class WordGuess {
     private locked: boolean[]; // Locked letters, using a letter hint locks a correct letter in place
     private status: WordGuessStatus = "not-guessed"; // Default status
     private anyHintsUsed: boolean = false;
-    private wordObject: Word | null = null;
+    private wordObject: Word;
 
     /** Initialize a WordGuess object with current guess being
      * empty, i.e. no letter written. No letter hints used, so
@@ -52,7 +52,7 @@ export class WordGuess {
         return this.word;
     }
 
-    getWordObject(): Word | null {
+    getWordObject(): Word {
         return this.wordObject;
     }
 
