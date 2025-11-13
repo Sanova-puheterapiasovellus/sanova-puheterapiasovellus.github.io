@@ -1,7 +1,8 @@
 .dialog {
     top: 80px;
-    width: 100vw;
-    height: 100vw;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
 }
 /*
 .list {
@@ -13,14 +14,15 @@
 */
 
 .list {
+    background-color: #2165ed;
     display: grid;
     grid-template-columns: repeat(auto-fit, 170px);
     justify-content: center;
-    column-gap: 55px;
-    row-gap: 75px;
-    max-width: 955px /*845px*/;
+    column-gap: 20px;
+    row-gap: 20px;
+    max-width: 100% /*955px*/ /*845px*/;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 20px 20px;
     list-style-type: none;
 }
 .filters {
