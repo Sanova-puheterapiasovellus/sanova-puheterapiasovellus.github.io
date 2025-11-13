@@ -258,7 +258,9 @@ function handleUseLetterHint(): void {
 /** Set current word's text hint */
 function handleUseTextHint(): void {
     if (!gameSession) return;
-    gameSession.useTextHint();
+    if (textHintDetails.open) {
+        gameSession.useTextHint();
+    }
 
     const currentWord = gameSession.getCurrentWord();
     const currentWordData = wordsData.categories
@@ -294,7 +296,8 @@ function delay(ms: number): Promise<void> {
 }
 
 function resetTextHint() {
-    textHintDetails.open = false;
+    if (textHintDetails) textHintDetails.open = false;
+    gameSession?.resetTextHintFlag();
 }
 /** Handle the user's guess when the answer btn is pressed */
 async function handleAnswer(wordGuess: WordGuess) {

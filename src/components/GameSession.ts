@@ -6,6 +6,7 @@ export class GameSession {
     private currentWord: string = "";
     private vocalHintsCounter: number = 0; // Will be used to determine how many syllables to play
     private textHintsCounter: number = 0;
+    private textHintUsedForCurrentWord = false;
     private letterHintsCounter: number = 0;
     private guessedWords = new Set<string>();
     private words: string[] = [];
@@ -85,7 +86,18 @@ export class GameSession {
     }
 
     useTextHint(): void {
-        this.textHintsCounter++;
+        if (!this.textHintUsedForCurrentWord) {
+            this.textHintsCounter++;
+            this.textHintUsedForCurrentWord = true;
+        }
+    }
+
+    resetTextHintFlag(): void {
+        this.textHintUsedForCurrentWord = false;
+    }
+
+    hasUsedTextHint(): boolean {
+        return this.textHintUsedForCurrentWord;
     }
 
     getLetterHintsUsed(): number {
