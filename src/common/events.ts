@@ -1,7 +1,7 @@
 import type { Category, Word } from "../data/word-data-model";
 
 /** The event when a category has been selected. */
-export type CategorySelectedEvent = CustomEvent<{ name: string }>;
+export type CategorySelectedEvent = CustomEvent<{ category: Category }>;
 
 /** Event for notifications shown to user. */
 export type InternalNotificationEvent = CustomEvent<{
@@ -10,11 +10,11 @@ export type InternalNotificationEvent = CustomEvent<{
 }>;
 
 /** Notify other components about a category being selected. */
-export function dispatchCategorySelection(source: EventTarget, name: string) {
+export function dispatchCategorySelection(source: EventTarget, category: Category) {
     source.dispatchEvent(
         new CustomEvent("category-selected", {
             bubbles: true,
-            detail: { name },
+            detail: { category },
         }) satisfies CategorySelectedEvent,
     );
 }
@@ -51,9 +51,23 @@ export type WordsSelectedEvent = CustomEvent<{
     category: Category | null;
     isReplay: boolean;
 }>;
+
+/** Structure for game results */
+export interface GameResults {
+    correctAnswers: number;
+    incorrectAnswers: number;
+    skippedWords: number;
+    wordsSolvedUsingHints: number;
+    totalWords: number;
+    totalVocalHintsUsed: number;
+    totalTextHintsUsed: number;
+    totalLetterHintsUsed: number;
+}
+
 /** Event that is triggered when the game runs out of words */
 export type GameOverEvent = CustomEvent<{
     showResults: boolean;
+    gameResults: GameResults;
 }>;
 
 /** Notify other components about a word being selected. */
@@ -81,11 +95,15 @@ export function dispatchWordsSelection(
     );
 }
 
-export function dispatchGameOver(source: EventTarget, showResults: boolean) {
+export function dispatchGameOver(
+    source: EventTarget,
+    showResults: boolean,
+    gameResults: GameResults,
+) {
     source.dispatchEvent(
         new CustomEvent("show-results", {
             bubbles: true,
-            detail: { showResults },
+            detail: { showResults, gameResults },
         }) satisfies GameOverEvent,
     );
 }
