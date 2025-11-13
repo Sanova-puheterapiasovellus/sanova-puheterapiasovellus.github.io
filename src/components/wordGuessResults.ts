@@ -53,18 +53,21 @@ function handleDialogClose(_: Event): void {
     unlockPageScroll();
 }
 
+function getUniqueWords(words: Word[]): Word[] {
+    return Array.from(new Map(words.map((w) => [w.name, w])).values());
+}
+
 // Handler here to get access to the gameSession
 function handleReplay(gameSession: GameSession): void {
     const words: Word[] = [];
-    // TODO: implement .getSkippedWords() and .getHintedWords()
-    // then open two comments below
-    //if (checkboxSkipped.checked) words.push(...gameSession.getSkippedWords());
-    //if (checkboxHints.checked) words.push(...gameSession.getHintedWords());
+
+    if (checkboxSkipped.checked) words.push(...gameSession.getSkippedWords());
+    if (checkboxHints.checked) words.push(...gameSession.getHintedWords());
     if (checkboxIncorrect.checked) words.push(...gameSession.getIncorrectlyGuessedWords());
     if (words.length === 0) return;
 
     // Remove duplicates
-    //const uniqueWords = [...new Set(words)];
+    const uniqueWords = getUniqueWords(words);
 
     // Remove result dialog immediately
     // when starting a new game
@@ -75,7 +78,7 @@ function handleReplay(gameSession: GameSession): void {
         new CustomEvent("words-selected", {
             bubbles: true,
             detail: {
-                selections: words.map((w, idx) => ({ word: w, index: idx })),
+                selections: uniqueWords.map((w, idx) => ({ word: w, index: idx })),
                 category: null,
                 isReplay: true,
             },
@@ -116,10 +119,8 @@ function buildDialogContent(): void {
 }
 
 export function showWordGuessResults(gameSession: GameSession): void {
-    if (!resultsCloseButton) {
-        buildDialogContent();
-        replayButton.addEventListener("click", () => handleReplay(gameSession));
-    }
+    buildDialogContent();
+    replayButton.onclick = () => handleReplay(gameSession);
 
     // Reset checkboxes
     checkboxSkipped.checked = false;
@@ -128,23 +129,21 @@ export function showWordGuessResults(gameSession: GameSession): void {
 
     // Update UI stats
     correctAnswerP.textContent = `Oikeita vastauksia: ${gameSession.getCorrectAnswerCount()} / ${gameSession.getTotalWordCount()}`;
-    // TODO: open this after method implemented: skippedAnswerP.textContent = `Ohitettuja sanoja: ${gameSession.getSkippedWords()}`;
+    skippedAnswerP.textContent = `Ohitettuja sanoja: ${gameSession.getSkippedWords().length ?? 0}`;
     letterHintsP.textContent = `Käytettyja kirjainvihjeitä: ${gameSession.getLetterHintsUsed()}`;
     vocalHintsP.textContent = `Käytettyja äänivihjeitä: ${gameSession.getVocalHintsUsed()}`;
     textHintsP.textContent = `Käytettyja tekstivihjeitä: ${gameSession.getTextHintsUsed()}`;
 
     // Show/Hide checkbox replay-options
-    // TODO: open ALL below comments when getSkippedWords()
-    // and getHintedWords() gets implemented
-    //const hasSkipped = gameSession.getSkippedWords().length > 0;
-    //const hasHints = gameSession.getHintedWords().length > 0;
+    const hasSkipped = gameSession.getSkippedWords().length > 0;
+    const hasHints = gameSession.getHintedWords().length > 0;
     const hasIncorrect = gameSession.getIncorrectlyGuessedWords().length > 0;
 
-    //checkboxSkipped.parentElement?.classList.toggle("hidden", !hasSkipped);
-    //checkboxHints.parentElement?.classList.toggle("hidden", !hasHints);
+    checkboxSkipped.parentElement?.classList.toggle("hidden", !hasSkipped);
+    checkboxHints.parentElement?.classList.toggle("hidden", !hasHints);
     checkboxIncorrect.parentElement?.classList.toggle("hidden", !hasIncorrect);
 
-    const anyReplayAvailable = /*hasSkipped || hasHints ||*/ hasIncorrect;
+    const anyReplayAvailable = hasSkipped || hasHints || hasIncorrect;
     replayOptionsFieldset.classList.toggle("hidden", !anyReplayAvailable);
     replayButton.classList.toggle("hidden", !anyReplayAvailable);
 
