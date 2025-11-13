@@ -218,7 +218,6 @@ export class GameSession {
         }
         this.wordGuessIndex++;
         this.currentWordGuess = this.wordGuessList[this.wordGuessIndex]!;
-        this.vocalHintsCounter = 0;
         this.currentWord = this.currentWordGuess.getWordObject();
         return this.currentWord;
     }

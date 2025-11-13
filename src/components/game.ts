@@ -122,13 +122,14 @@ function handleWordSelected(event: WordSelectedEvent): void {
         const { word } = event.detail;
         gameSession.setWords([word]);
         gameSession.setCurrentWordIndex(0);
-        setSyllableHintWord(word.name);
     }
 
     if (event.detail.word === null) {
         // No word was set, set it here
         gameSession.setCurrentWordIndex(0);
     }
+
+    setSyllableHintWord(gameSession.getCurrentWord().name);
 
     guessDialog.showModal();
     guessCard.scrollTop = 0; //reset scroll position of game to top when game opens
@@ -258,6 +259,7 @@ function setButtonsEnabled(enabled: boolean): void {
     letterHintButton.disabled = !enabled;
     textHintButton.disabled = !enabled;
     syllableHintButton.disabled = !enabled;
+    skipButton.disabled = !enabled;
 }
 
 function getGameResults(gameSession: GameSession): GameResults {
