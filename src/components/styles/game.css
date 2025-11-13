@@ -30,7 +30,7 @@
     cursor: pointer;
 }
 
-#word-guess-close {
+.dialog-close-button {
     position: absolute;
     top: 16px;
     right: 16px;
@@ -38,13 +38,13 @@
     border: none;
 }
 
-#word-guess-close > img {
+.dialog-close-button > img {
     border: 1px solid hsl(0, 0%, 80%);
     border-radius: 100%;
     background-color: hsl(0, 0%, 90%);
 }
 
-#word-guess-close > img:hover {
+.dialog-close-button > img:hover {
     background-color: hsl(0, 0%, 87%);
 }
 
@@ -52,7 +52,21 @@
     min-width: 40px;
 }
 
-#word-guess-card-content button {
+#word-guess-card-content .word-guess-image-credits-button {
+    padding-top: 12px;
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color 0.2s ease;
+}
+
+#word-guess-card-content .word-guess-image-credits-button:hover {
+    color: #005fa3;
+}
+
+#word-guess-card-content .word-guess-button {
     width: 224px;
     min-height: 40px;
     border: 1.5px solid var(--bg-card-btns);
@@ -73,7 +87,7 @@
         filter 0.25s ease;
 }
 
-#word-guess-card-content button:hover {
+#word-guess-card-content .word-guess-button:hover {
     background-color: var(--bg-card-btns);
     box-shadow:
         0 4px 8px hsla(0, 0%, 0%, 0.25),
@@ -84,16 +98,16 @@
     color: var(--bg-light);
 }
 
-#word-guess-card-content button:hover > span {
+#word-guess-card-content .word-guess-button:hover > span {
     color: var(--bg-light);
 }
 
-#word-guess-card-content button:hover img.icon {
+#word-guess-card-content .word-guess-button:hover img.icon {
     filter: brightness(0) saturate(100%) invert(1);
     transition: filter 0.25s ease;
 }
 
-#word-guess-card-content button .icon {
+#word-guess-card-content .word-guess-button .icon {
     position: absolute;
     left: 34px;
 }
@@ -153,7 +167,7 @@
     font-size: 1.5rem;
 }
 
-button#word-guess-submit {
+.word-guess-button#word-guess-submit {
     margin-bottom: 22px;
 }
 
@@ -182,6 +196,12 @@ button#word-guess-submit {
 /* Wrong answer, red flash */
 #word-guess-dialog #word-guess-card.wrong {
     background-color: #f0c0c0;
+    transition: background-color 0.3s ease;
+}
+
+/* Skip word, yellow flash */
+#word-guess-dialog #word-guess-card.skip {
+    background-color: #e3f0c0;
     transition: background-color 0.3s ease;
 }
 
