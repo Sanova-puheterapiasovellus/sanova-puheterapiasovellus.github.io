@@ -1,6 +1,6 @@
 import type { Category, Word } from "../data/word-data-model";
 import { WordGuess } from "./WordGuess";
-import type { WordGuessStatus } from "./wordStatus";
+import { WordGuessStatus } from "./wordStatus";
 
 /** Keep track of the game progress for one category */
 export class GameSession {
@@ -102,7 +102,7 @@ export class GameSession {
     getCorrectAnswerCount(): number {
         let correctCount: number = 0;
         for (const wordGuess of this.wordGuessList) {
-            if (wordGuess.getStatus() === "guess-correct") {
+            if (wordGuess.getStatus() === WordGuessStatus.GUESS_CORRECT) {
                 correctCount++;
             }
         }
@@ -124,13 +124,11 @@ export class GameSession {
     }
 
     markIncorrectlyGuessed(): void {
-        const newStatus: WordGuessStatus = "guess-incorrect";
-        this.currentWordGuess?.updateStatus(newStatus);
+        this.currentWordGuess?.updateStatus(WordGuessStatus.GUESS_INCORRECT);
     }
 
     markHintUsed(): void {
-        const newStatus: WordGuessStatus = "used-hint";
-        this.currentWordGuess?.updateStatus(newStatus);
+        this.currentWordGuess?.updateStatus(WordGuessStatus.USED_HINT);
     }
 
     getIncorrectlyGuessedWords(): Word[] {
@@ -140,7 +138,7 @@ export class GameSession {
         //  - Words that were actually incorrect
         //  - words that were skipped
         for (const wordGuess of this.wordGuessList) {
-            if (wordGuess.getStatus() !== "guess-correct") {
+            if (wordGuess.getStatus() !== WordGuessStatus.GUESS_CORRECT) {
                 wordList.push(wordGuess.getWordObject());
             }
         }
@@ -149,13 +147,11 @@ export class GameSession {
 
     /** Mark the current word as guessed so it won't be shown again */
     markCurrentCorrect(): void {
-        const newStatus: WordGuessStatus = "guess-correct";
-        this.currentWordGuess?.updateStatus(newStatus);
+        this.currentWordGuess?.updateStatus(WordGuessStatus.GUESS_CORRECT);
     }
 
     markCurrentSkipped(): void {
-        const newStatus: WordGuessStatus = "skipped";
-        this.currentWordGuess?.updateStatus(newStatus);
+        this.currentWordGuess?.updateStatus(WordGuessStatus.SKIPPED);
     }
 
     setGameModeRandom(): void {
@@ -165,7 +161,7 @@ export class GameSession {
     private getUnguessedCount(): number {
         let count: number = 0;
         for (const wordGuess of this.wordGuessList) {
-            if (wordGuess.getStatus() === "not-guessed") {
+            if (wordGuess.getStatus() === WordGuessStatus.NOT_GUESSED) {
                 count++;
             }
         }
@@ -193,7 +189,7 @@ export class GameSession {
     getGuessedWordCount(): number {
         let guessedCount: number = 0;
         for (const wordGuess of this.wordGuessList) {
-            if (wordGuess.getStatus() !== "not-guessed") {
+            if (wordGuess.getStatus() !== WordGuessStatus.NOT_GUESSED) {
                 guessedCount++;
             }
         }
@@ -228,10 +224,11 @@ export class GameSession {
     }
 
     /** Get the next word to be guessed but randomly from the list */
-    // PITÄÄ PALAUTTAA WORD
     getNextWordRandom(): Word {
         // Filter out guessed words
-        const notGuessed = this.wordGuessList.filter((wg) => wg.getStatus() === "not-guessed");
+        const notGuessed = this.wordGuessList.filter(
+            (wg) => wg.getStatus() === WordGuessStatus.NOT_GUESSED,
+        );
 
         const totalWords = this.getTotalWordCount();
         const guessedWordsCount = totalWords - this.getUnguessedCount();

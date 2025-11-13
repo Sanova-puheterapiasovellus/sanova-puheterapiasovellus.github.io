@@ -6,6 +6,11 @@ import type {
     WordSelectedEvent,
     WordsSelectedEvent,
 } from "../common/events";
+import {
+    dispatchGameOver,
+    dispatchWordSelection,
+    dispatchWordsSelection,
+} from "../common/events.ts";
 import { type Category, getImagePath, type Word, wordsData } from "../data/word-data-model.ts";
 import { GameSession } from "./GameSession";
 import "./styles/game.css";
@@ -13,6 +18,7 @@ import { lockPageScroll, unlockPageScroll } from "../common/preventScroll.ts";
 import { setSyllableHintWord } from "./syllablesHint.ts";
 import type { WordGuess } from "./WordGuess";
 import { showWordGuessResults } from "./wordGuessResults.ts";
+import { WordGuessStatus } from "./wordStatus.ts";
 
 const guessDialog = expectElement("word-guess-dialog", HTMLDialogElement);
 const guessCard = expectElement("word-guess-card", HTMLDivElement);
@@ -65,15 +71,11 @@ function handleGameStart(event: CategorySelectedEvent): void {
 
     gameSession = new GameSession(categoryForSession);
     // Set the words to the game session object through the WordsSelected event
-    dispatchEvent(
-        new CustomEvent("words-selected", {
-            bubbles: true,
-            detail: {
-                selections,
-                category: currentCategory.name === "random" ? null : currentCategory,
-                isReplay: false,
-            },
-        }),
+    dispatchWordsSelection(
+        window,
+        selections,
+        currentCategory.name === "random" ? null : currentCategory,
+        false,
     );
 
     gameSession.setGameModeRandom(); // Show words in random order
@@ -81,12 +83,7 @@ function handleGameStart(event: CategorySelectedEvent): void {
     textHint.textContent = "";
     setSyllableHintWord(word.name);
 
-    dispatchEvent(
-        new CustomEvent("word-selected", {
-            bubbles: true,
-            detail: { word: word, index: 0 },
-        }),
-    );
+    dispatchWordSelection(window, word, 0);
 }
 /** Helper function to pick random words */
 function pickRandom<T>(array: T[], count: number): T[] {
@@ -265,10 +262,10 @@ function setButtonsEnabled(enabled: boolean): void {
 
 function getGameResults(gameSession: GameSession): GameResults {
     const gameResults: GameResults = {
-        correctAnswers: gameSession.getCountByStatus("guess-correct"),
-        incorrectAnswers: gameSession.getCountByStatus("guess-incorrect"),
-        skippedWords: gameSession.getCountByStatus("skipped"),
-        wordsSolvedUsingHints: gameSession.getCountByStatus("used-hint"),
+        correctAnswers: gameSession.getCountByStatus(WordGuessStatus.GUESS_CORRECT),
+        incorrectAnswers: gameSession.getCountByStatus(WordGuessStatus.GUESS_INCORRECT),
+        skippedWords: gameSession.getCountByStatus(WordGuessStatus.SKIPPED),
+        wordsSolvedUsingHints: gameSession.getCountByStatus(WordGuessStatus.USED_HINT),
         totalWords: gameSession.getTotalWordCount(),
         totalVocalHintsUsed: gameSession.getVocalHintsUsed(),
         totalTextHintsUsed: gameSession.getTextHintsUsed(),
@@ -281,7 +278,7 @@ function delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function handleSkipWord(): void {
+async function handleSkipWord(): Promise<void> {
     if (!gameSession) return;
     const isGameOver: boolean = gameSession.isGameOver();
     gameSession.markCurrentSkipped();
@@ -294,15 +291,17 @@ function handleSkipWord(): void {
             // even if there was only one word replayed
             showResults = true;
         }
-
-        dispatchEvent(
-            new CustomEvent("show-results", {
-                bubbles: true,
-                detail: { showResults: showResults, gameResults: getGameResults(gameSession) },
-            }),
-        );
+        dispatchGameOver(window, showResults, getGameResults(gameSession));
         return;
     }
+    // Style the card to indicate skipping
+    guessCard.classList.add("skip");
+    // Short delay when skipping a word
+    setButtonsEnabled(false);
+    await delay(1000);
+    setButtonsEnabled(true);
+    // Remove the skip style
+    guessCard.classList.remove("skip");
 
     const nextWord: Word = gameSession.getNextWord();
     textHint.textContent = "";
@@ -368,12 +367,7 @@ async function handleAnswer(wordGuess: WordGuess) {
             showResults = true;
         }
 
-        dispatchEvent(
-            new CustomEvent("show-results", {
-                bubbles: true,
-                detail: { showResults: showResults, gameResults: getGameResults(gameSession) },
-            }),
-        );
+        dispatchGameOver(window, showResults, getGameResults(gameSession));
         return;
     }
 

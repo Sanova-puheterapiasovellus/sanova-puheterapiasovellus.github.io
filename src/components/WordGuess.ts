@@ -1,12 +1,12 @@
 import type { Word } from "../data/word-data-model";
-import type { WordGuessStatus } from "./wordStatus";
+import { WordGuessStatus } from "./wordStatus";
 
 /** Keeps track of the guessed letters of a single word, renders the typed letters*/
 export class WordGuess {
     private word: string = ""; // The current word as a string
     private currentGuess: string[] = []; // The current guess as an individual letters
     private locked: boolean[]; // Locked letters, using a letter hint locks a correct letter in place
-    private status: WordGuessStatus = "not-guessed"; // Default status
+    private status: WordGuessStatus = WordGuessStatus.NOT_GUESSED; // Default status
     private anyHintsUsed: boolean = false;
     private wordObject: Word;
 
