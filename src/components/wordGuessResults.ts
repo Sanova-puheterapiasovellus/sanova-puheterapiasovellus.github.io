@@ -2,6 +2,7 @@ import { expectElement } from "../common/dom";
 import type { GameSession } from "./GameSession";
 import "./styles/word-guess-results.css";
 import { unlockPageScroll } from "../common/preventScroll.ts";
+import type { Word } from "../data/word-data-model.ts";
 
 const resultsDialog = expectElement("word-guess-results-dialog", HTMLDialogElement);
 
@@ -54,7 +55,7 @@ function handleDialogClose(_: Event): void {
 
 // Handler here to get access to the gameSession
 function handleReplay(gameSession: GameSession): void {
-    const words: string[] = [];
+    const words: Word[] = [];
     // TODO: implement .getSkippedWords() and .getHintedWords()
     // then open two comments below
     //if (checkboxSkipped.checked) words.push(...gameSession.getSkippedWords());
@@ -63,7 +64,7 @@ function handleReplay(gameSession: GameSession): void {
     if (words.length === 0) return;
 
     // Remove duplicates
-    const uniqueWords = [...new Set(words)];
+    //const uniqueWords = [...new Set(words)];
 
     // Remove result dialog immediately
     // when starting a new game
@@ -74,7 +75,7 @@ function handleReplay(gameSession: GameSession): void {
         new CustomEvent("words-selected", {
             bubbles: true,
             detail: {
-                selections: uniqueWords.map((w, idx) => ({ name: w, index: idx })),
+                selections: words.map((w, idx) => ({ word: w, index: idx })),
                 category: null,
                 isReplay: true,
             },
@@ -85,7 +86,7 @@ function handleReplay(gameSession: GameSession): void {
     dispatchEvent(
         new CustomEvent("word-selected", {
             bubbles: true,
-            detail: { name: null, index: 0 },
+            detail: { word: null, index: 0 },
         }),
     );
 }
