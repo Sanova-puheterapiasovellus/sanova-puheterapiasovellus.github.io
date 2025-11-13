@@ -25,7 +25,7 @@
 
         <dialog id="word-guess-dialog" closedby="any">
             <div id="word-guess-card">
-                <button id="word-guess-close" type="button">
+                <button id="word-guess-close" type="button" class="dialog-close-button">
                     <img src="/assets/icons/close_36dp.svg">
                 </button>
                 <div id="prev-btn-container">
@@ -36,17 +36,24 @@
                 <div id="word-guess-card-content">
                     <h3>Sanaharjoittelu</h3>
                     <div id="word-guess-progress-counter"></div>
+                    <button
+                        id="word-guess-image-credits-button"
+                        type="button"
+                        class="word-guess-image-credits-button"
+                    >
+                        <span> Tekijänoikeustiedot </span>
+                    </button>
                     <img id="word-guess-image" src="placeholder.png" alt="placeholder">
                     <!--<div id="word-guess-slots"></div>-->
                     <div id="word-guess-slots"></div>
                     <input id="hidden-input" type="text" style="opacity:0;">
                     <!--style="position:absolute; opacity:0; width:1px; height:1px;"-->
                     <div id="text-hint"></div>
-                    <button id="word-guess-submit" type="button">
+                    <button id="word-guess-submit" type="button" class="word-guess-button">
                         <img src="/assets/icons/reply_24dp.svg" alt="Vastaa" class="icon">
                         <span>Vastaa</span>
                     </button>
-                    <button id="word-guess-letter-hint" type="button">
+                    <button id="word-guess-letter-hint" type="button" class="word-guess-button">
                         <img
                             src="/assets/icons/text_rotation_none_22dp.svg"
                             alt="Kirjainvihje"
@@ -54,11 +61,11 @@
                         >
                         <span>Kirjainvihje</span>
                     </button>
-                    <button id="word-guess-text-hint" type="button">
+                    <button id="word-guess-text-hint" type="button" class="word-guess-button">
                         <img src="/assets/icons/book_5_22dp.svg" alt="Kuvaileva vihje" class="icon">
                         <span>Kuvaileva vihje</span>
                     </button>
-                    <button id="word-guess-syllable-hint" type="button">
+                    <button id="word-guess-syllable-hint" type="button" class="word-guess-button">
                         <img src="/assets/icons/ear_sound_22dp.svg" alt="Tavuvihje" class="icon">
                         <span>Tavuvihje</span>
                     </button>
@@ -79,6 +86,18 @@
             <p id="text-hints-used" class="result-line"></p>
             <button id="word-guess-results-close" type="button">Sulje</button>
             <button id="word-guess-replay" type="button">Pelaa väärin menneet uudelleen</button>
+        </dialog>
+
+        <dialog id="image-credits" closedby="any">
+            <button id="image-credits-close" type="button" class="dialog-close-button">
+                <img src="/assets/icons/close_36dp.svg">
+            </button>
+            <article>
+                <header class="image-credits-header">
+                    <h2>Kuvan tekijänoikeustiedot</h2>
+                </header>
+                <div id="image-credits-text"></div>
+            </article>
         </dialog>
 
         <template id="notification-item">

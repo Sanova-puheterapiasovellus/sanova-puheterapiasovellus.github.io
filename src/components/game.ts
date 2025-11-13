@@ -15,6 +15,7 @@ import { type Category, getImagePath, type Word, wordsData } from "../data/word-
 import { GameSession } from "./GameSession";
 import "./styles/game.css";
 import { lockPageScroll, unlockPageScroll } from "../common/preventScroll.ts";
+import { showCreditsModal } from "./imageCredits.ts";
 import { setSyllableHintWord } from "./syllablesHint.ts";
 import type { WordGuess } from "./WordGuess";
 import { showWordGuessResults } from "./wordGuessResults.ts";
@@ -32,6 +33,7 @@ const letterSlots = expectElement("word-guess-slots", HTMLDivElement);
 const hiddenInput = document.getElementById("hidden-input") as HTMLInputElement;
 const textHint = expectElement("text-hint", HTMLDivElement);
 const guessProgressCounter = expectElement("word-guess-progress-counter", HTMLDivElement);
+const imageCreditsButton = expectElement("word-guess-image-credits-button", HTMLElement);
 const skipButton = expectElement("next-btn", HTMLButtonElement);
 
 // Keep track of the game progress, initially null
@@ -382,6 +384,14 @@ async function handleAnswer(wordGuess: WordGuess) {
     setupWordInput();
 }
 
+function handleImageCredits(): void {
+    if (!gameSession) return;
+
+    const currentWord = gameSession.getCurrentWord();
+
+    showCreditsModal(currentWord.image_credit);
+}
+
 function moveCursorToEnd(input: HTMLInputElement) {
     const length = input.value.length;
     input.setSelectionRange(length, length);
@@ -404,7 +414,7 @@ export function initializeGameContainer(): void {
     letterHintButton.addEventListener("click", handleUseLetterHint);
     textHintButton.addEventListener("click", handleUseTextHint);
     syllableHintButton.addEventListener("click", handleUseVocalHint);
-
+    imageCreditsButton.addEventListener("click", handleImageCredits);
     skipButton.addEventListener("click", handleSkipWord);
 
     hiddenInput.addEventListener("input", handleInputEvent);
