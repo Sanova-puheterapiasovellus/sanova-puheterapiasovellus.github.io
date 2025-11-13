@@ -92,7 +92,7 @@ function handleReplay(gameSession: GameSession): void {
 
 function buildDialogContent(): void {
     resultsDialog.innerHTML = `
-        <div id="word-guess-card">
+        <div id="word-guess-results-card">
             <button id="word-guess-results-close" type="button" aria-label="Sulje">&times;</button>
             <h3>Tulokset</h3>
             <p id="correct-answers" class="results-line"></p>
