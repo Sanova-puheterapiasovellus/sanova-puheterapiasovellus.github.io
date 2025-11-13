@@ -16,6 +16,11 @@ const categoriesContainer = expectElement("category-filters", HTMLElement);
 dialog.className = styles.dialog;
 allWordsList.className = styles.list;
 filtersSection.className = styles.filters;
+
+//added by Lilja may change
+categoriesContainer.className = styles.categoryFilters;
+searchContainer.className = styles.searchContainer;
+
 closeBtn.className = styles.closeButton;
 closeBtn.addEventListener("click", () => {
     dialog.close();

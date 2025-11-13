@@ -1,24 +1,39 @@
 .dialog {
     top: 80px;
     width: 100vw;
-    height: calc(100vh - 80px);
+    height: 100vw;
 }
-
+/*
 .list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     gap: 12px;
     list-style: none;
 }
+*/
 
+.list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 170px);
+    justify-content: center;
+    column-gap: 55px;
+    row-gap: 75px;
+    max-width: 955px /*845px*/;
+    margin: 0 auto;
+    padding: 0 20px;
+    list-style-type: none;
+}
 .filters {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
 .searchContainer {
     display: flex;
-    max-width: calc(50%);
+    min-width: 50%;
+    max-width: 100%;
 }
 
 .searchInput {
@@ -26,6 +41,12 @@
     height: 32px;
     border: 1px solid;
     font-size: 14px;
+}
+
+.categoryFilters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .categoryLabel {
@@ -47,7 +68,20 @@
     cursor: pointer;
 }
 .card {
+    min-height: 50px;
+    padding: 14px 14px 20px 14px;
+    background-color: var(--bg-light);
     border: 1px solid var(--border);
+    border-radius: 6px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    transition:
+        transform 0.1s ease,
+        box-shadow 0.1s ease;
+
+    /* border: 1px solid var(--border);
     border-radius: 6px;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
     cursor: pointer;
@@ -56,7 +90,7 @@
     align-items: center;
     transition:
         transform 0.1s ease,
-        box-shadow 0.1s ease;
+        box-shadow 0.1s ease; */
 }
 
 .card:hover {
@@ -68,6 +102,11 @@
     width: 100%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
+}
+
+.card > span {
+    padding-top: 20px;
+    font-size: 16px;
 }
 
 .closeButton {
