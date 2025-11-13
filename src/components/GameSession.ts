@@ -109,6 +109,16 @@ export class GameSession {
         return correctCount;
     }
 
+    getCountByStatus(status: WordGuessStatus): number {
+        let count: number = 0;
+        for (const wordGuess of this.wordGuessList) {
+            if (wordGuess.getStatus() === status) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     getTotalWordCount(): number {
         return this.wordGuessList.length;
     }

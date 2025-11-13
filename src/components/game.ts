@@ -2,6 +2,7 @@ import { expectElement } from "../common/dom";
 import type {
     CategorySelectedEvent,
     GameOverEvent,
+    GameResults,
     WordSelectedEvent,
     WordsSelectedEvent,
 } from "../common/events";
@@ -17,6 +18,7 @@ import { lockPageScroll, unlockPageScroll } from "../common/preventScroll.ts";
 import { setSyllableHintWord } from "./syllablesHint.ts";
 import type { WordGuess } from "./WordGuess";
 import { showWordGuessResults } from "./wordGuessResults.ts";
+import { WordGuessStatus } from "./wordStatus.ts";
 
 const guessDialog = expectElement("word-guess-dialog", HTMLDialogElement);
 const guessCard = expectElement("word-guess-card", HTMLDivElement);
@@ -258,6 +260,20 @@ function setButtonsEnabled(enabled: boolean): void {
     syllableHintButton.disabled = !enabled;
 }
 
+function getGameResults(gameSession: GameSession): GameResults {
+    const gameResults: GameResults = {
+        correctAnswers: gameSession.getCountByStatus(WordGuessStatus.GUESS_CORRECT),
+        incorrectAnswers: gameSession.getCountByStatus(WordGuessStatus.GUESS_INCORRECT),
+        skippedWords: gameSession.getCountByStatus(WordGuessStatus.SKIPPED),
+        wordsSolvedUsingHints: gameSession.getCountByStatus(WordGuessStatus.USED_HINT),
+        totalWords: gameSession.getTotalWordCount(),
+        totalVocalHintsUsed: gameSession.getVocalHintsUsed(),
+        totalTextHintsUsed: gameSession.getTextHintsUsed(),
+        totalLetterHintsUsed: gameSession.getLetterHintsUsed(),
+    };
+    return gameResults;
+}
+
 function delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -275,7 +291,7 @@ async function handleSkipWord(): Promise<void> {
             // even if there was only one word replayed
             showResults = true;
         }
-        dispatchGameOver(window, showResults);
+        dispatchGameOver(window, showResults, getGameResults(gameSession));
         return;
     }
     // Style the card to indicate skipping
@@ -350,7 +366,8 @@ async function handleAnswer(wordGuess: WordGuess) {
             // even if there was only one word replayed
             showResults = true;
         }
-        dispatchGameOver(window, showResults);
+
+        dispatchGameOver(window, showResults, getGameResults(gameSession));
         return;
     }
 
