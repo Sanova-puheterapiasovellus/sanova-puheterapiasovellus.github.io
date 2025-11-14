@@ -231,6 +231,8 @@ function handleUseLetterHint(): void {
         // word completed with hints, move to next word
         handleAnswer(wordGuess);
     }
+    // Focus back to input from the button
+    hiddenInput.focus();
 }
 
 /** Set current word's text hint */
@@ -241,11 +243,15 @@ function handleUseTextHint(): void {
     const currentWord = gameSession.getCurrentWord();
 
     textHint.textContent = currentWord.hint;
+    // Focus back to input from the button
+    hiddenInput.focus();
 }
 
 function handleUseVocalHint(): void {
     if (!gameSession) return;
     gameSession.useVocalHint();
+    // Focus back to input from the button
+    hiddenInput.focus();
 }
 
 /** Check if the user's answer is correct */
@@ -409,6 +415,26 @@ export function initializeGameContainer(): void {
         if (!gameSession) return;
         const wordGuess = gameSession.getCurrentWordGuess();
         handleAnswer(wordGuess);
+        // Focus back to input from the button
+        hiddenInput.focus();
+    });
+
+    // No suggestions
+    hiddenInput.setAttribute("autocomplete", "off");
+    hiddenInput.setAttribute("autocorrect", "off");
+    hiddenInput.setAttribute("autocapitalize", "off");
+    hiddenInput.setAttribute("spellcheck", "false");
+    hiddenInput.setAttribute("name", "hidden-no-autocomplete");
+
+    // Use enter as "Answer buttton"
+    hiddenInput.addEventListener("keydown", (e: KeyboardEvent) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            if (!gameSession) return;
+
+            const wordGuess = gameSession.getCurrentWordGuess();
+            handleAnswer(wordGuess);
+        }
     });
 
     letterHintButton.addEventListener("click", handleUseLetterHint);
