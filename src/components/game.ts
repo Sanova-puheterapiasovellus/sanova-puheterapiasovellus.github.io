@@ -153,13 +153,27 @@ function handleWordsSelected(event: WordsSelectedEvent): void {
     gameSession.setWords(selections.map((s) => s.word));
 }
 
+/** Return true if mobile device, else false.
+ *  This is based on detecting touch points that mobile
+ *  devices have.
+ */
+function isMobile(): boolean {
+    const hasCoarsePointer = matchMedia("(pointer: coarse)").matches;
+    const maxTouchPoints = navigator.maxTouchPoints > 0;
+
+    return hasCoarsePointer && maxTouchPoints;
+}
+
 /** Renders the empty slots after answering or when initializing the first word */
 function setupWordInput(): void {
     const wordGuess = getGameSession().getCurrentWordGuess();
     wordGuess.render(letterSlots);
     hiddenInput.value = "";
-    hiddenInput.focus();
     letterSlots.addEventListener("click", () => hiddenInput.focus());
+    if (!isMobile) {
+        // Only focus if not using mobile device
+        hiddenInput.focus();
+    }
 }
 
 /** Handle the typing events when using both physical keyboard and phone's keyboard */
@@ -215,17 +229,6 @@ function getGameSession(): GameSession {
         throw new Error("Game session is not initialized yet!");
     }
     return gameSession;
-}
-
-/** Return true if mobile device, else false.
- *  This is based on detecting touch points that mobile
- *  devices have.
- */
-function isMobile(): boolean {
-    const hasCoarsePointer = matchMedia("(pointer: coarse)").matches;
-    const maxTouchPoints = navigator.maxTouchPoints > 0;
-
-    return hasCoarsePointer && maxTouchPoints;
 }
 
 /** Handle the letter hint logic when the letter hint is requested */
