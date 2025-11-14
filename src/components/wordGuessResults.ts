@@ -59,11 +59,25 @@ function getUniqueWords(words: Word[]): Word[] {
 
 // Handler here to get access to the gameSession
 function handleReplay(gameSession: GameSession): void {
-    const words: Word[] = [];
+    const option = (
+        document.querySelector("input[name='replay-option']:checked") as HTMLInputElement | null
+    )?.value;
+    if (!option) return;
 
-    if (checkboxSkipped.checked) words.push(...gameSession.getSkippedWords());
-    if (checkboxHints.checked) words.push(...gameSession.getHintedWords());
-    if (checkboxIncorrect.checked) words.push(...gameSession.getIncorrectlyGuessedWords());
+    let words: Word[];
+    switch (option) {
+        case "skipped":
+            words = gameSession.getSkippedWords();
+            break;
+        case "hints":
+            words = gameSession.getHintedWords();
+            break;
+        case "incorrect":
+            words = gameSession.getUnsuccessfullyGuessedWords();
+            break;
+        default:
+            return;
+    }
     if (words.length === 0) return;
 
     // Remove duplicates
@@ -71,7 +85,7 @@ function handleReplay(gameSession: GameSession): void {
 
     // Remove result dialog immediately
     // when starting a new game
-    handleDialogClose(new Event("click"));
+    //handleDialogClose(new Event("click"));
 
     // Update the gameSession
     dispatchEvent(
@@ -97,7 +111,9 @@ function handleReplay(gameSession: GameSession): void {
 function buildDialogContent(): void {
     resultsDialog.innerHTML = `
         <div id="word-guess-results-card">
-            <button id="word-guess-results-close" type="button" aria-label="Sulje">&times;</button>
+            <button id="word-guess-results-close" type="button" class="dialog-close-button">
+                <img src="/assets/icons/close_36dp.svg">
+            </button>
             <h3>Tulokset</h3>
             <p id="correct-answers" class="results-line"></p>
             <p id="skipped-answers" class="results-line"></p>
@@ -106,9 +122,18 @@ function buildDialogContent(): void {
             <p id="vocal-hints-used" class="results-line"></p>
             <fieldset id="replay-options">
                 <legend>Valitse kerrattavaksi:</legend>
-                <label><input type="checkbox" id="replay-skipped">Ohitetut sanat</label>
-                <label><input type="checkbox" id="replay-hints">Sanat, joissa käytetty vihjeitä</label>
-                <label><input type="checkbox" id="replay-incorrect">Väärin menneet sanat</label>
+                <label>
+                    <input type="radio" name="replay-option" value="skipped" id="replay-skipped">
+                    Ohitetut sanat
+                </label>
+                <label>
+                    <input type="radio" name="replay-option" value="hints" id="replay-hints">
+                    Sanat, joissa käytetty vihjeitä
+                </label>
+                <label>
+                    <input type="radio" name="replay-option" value="incorrect" id="replay-incorrect">
+                    Väärin menneet sanat (ohitetut + vihjeet + väärin kirjoitetut)
+                </label>
             </fieldset>
             <button id="word-guess-replay" type="button">Pelaa uudelleen</button>
         </div>
@@ -131,8 +156,8 @@ export function showWordGuessResults(gameSession: GameSession): void {
     correctAnswerP.textContent = `Oikeita vastauksia: ${gameSession.getCorrectAnswerCount()} / ${gameSession.getTotalWordCount()}`;
     skippedAnswerP.textContent = `Ohitettuja sanoja: ${gameSession.getSkippedWords().length ?? 0}`;
     letterHintsP.textContent = `Käytettyja kirjainvihjeitä: ${gameSession.getLetterHintsUsed()}`;
-    vocalHintsP.textContent = `Käytettyja äänivihjeitä: ${gameSession.getVocalHintsUsed()}`;
-    textHintsP.textContent = `Käytettyja tekstivihjeitä: ${gameSession.getTextHintsUsed()}`;
+    vocalHintsP.textContent = `Käytettyja tavuvihjeitä: ${gameSession.getVocalHintsUsed()}`;
+    textHintsP.textContent = `Käytettyja kuvailevia vihjeitä: ${gameSession.getTextHintsUsed()}`;
 
     // Show/Hide checkbox replay-options
     const hasSkipped = gameSession.getSkippedWords().length > 0;
