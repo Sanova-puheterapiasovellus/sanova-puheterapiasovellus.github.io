@@ -109,6 +109,19 @@ export class GameSession {
         return correctCount;
     }
 
+    /**
+     * @returns {number} The count of words that were guessed correctly after using any hints
+     */
+    getCorrectWithHintsCount(): number {
+        return this.wordGuessList.filter((wg) => {
+            const hintUsed = wg.getHintsUsed();
+            const eventuallyCorrect =
+                wg.getStatus() !== WordGuessStatus.NOT_GUESSED &&
+                wg.getStatus() !== WordGuessStatus.SKIPPED;
+            return hintUsed && eventuallyCorrect;
+        }).length;
+    }
+
     getCountByStatus(status: WordGuessStatus): number {
         let count: number = 0;
         for (const wordGuess of this.wordGuessList) {

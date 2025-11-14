@@ -13,6 +13,7 @@ let checkboxHints: HTMLInputElement;
 let checkboxIncorrect: HTMLInputElement;
 let replayOptionsFieldset: HTMLFieldSetElement;
 let correctAnswerP: HTMLParagraphElement;
+let correctWithHintsP: HTMLParagraphElement;
 let skippedAnswerP: HTMLParagraphElement;
 let letterHintsP: HTMLParagraphElement;
 let vocalHintsP: HTMLParagraphElement;
@@ -42,6 +43,7 @@ function setupDialogElements(dialog: HTMLDialogElement): void {
     checkboxIncorrect = expectScopedElement(dialog, "#replay-incorrect", HTMLInputElement);
     replayOptionsFieldset = expectScopedElement(dialog, "#replay-options", HTMLFieldSetElement);
     correctAnswerP = expectScopedElement(dialog, "#correct-answers", HTMLParagraphElement);
+    correctWithHintsP = expectScopedElement(dialog, "#correct-with-hints", HTMLParagraphElement);
     skippedAnswerP = expectScopedElement(dialog, "#skipped-answers", HTMLParagraphElement);
     letterHintsP = expectScopedElement(dialog, "#letter-hints-used", HTMLParagraphElement);
     vocalHintsP = expectScopedElement(dialog, "#vocal-hints-used", HTMLParagraphElement);
@@ -115,11 +117,16 @@ function buildDialogContent(): void {
                 <img src="/assets/icons/close_36dp.svg">
             </button>
             <h3>Tulokset</h3>
-            <p id="correct-answers" class="results-line"></p>
+            <div>
+                <p id="correct-answers" class="results-line"></p>
+                <p id="correct-with-hints" class="results-line"></p>
+            </div>
             <p id="skipped-answers" class="results-line"></p>
-            <p id="letter-hints-used" class="results-line"></p>
-            <p id="text-hints-used" class="results-line"></p>
-            <p id="vocal-hints-used" class="results-line"></p>
+            <div>
+                <p id="letter-hints-used" class="results-line"></p>
+                <p id="text-hints-used" class="results-line"></p>
+                <p id="vocal-hints-used" class="results-line"></p>
+            </div>
             <fieldset id="replay-options">
                 <legend>Valitse kerrattavaksi:</legend>
                 <label>
@@ -141,6 +148,14 @@ function buildDialogContent(): void {
 
     setupDialogElements(resultsDialog);
     resultsCloseButton.addEventListener("click", handleDialogClose);
+    replayButton.disabled = true;
+
+    // Enable replay button when any option is selected
+    resultsDialog.querySelectorAll("input[name='replay-option']").forEach((input) => {
+        input.addEventListener("change", () => {
+            replayButton.disabled = false;
+        });
+    });
 }
 
 export function showWordGuessResults(gameSession: GameSession): void {
@@ -153,7 +168,20 @@ export function showWordGuessResults(gameSession: GameSession): void {
     checkboxIncorrect.checked = false;
 
     // Update UI stats
-    correctAnswerP.textContent = `Oikeita vastauksia: ${gameSession.getCorrectAnswerCount()} / ${gameSession.getTotalWordCount()}`;
+    const correctCount = gameSession.getCorrectAnswerCount();
+    const correctWithHintsCount = gameSession.getCorrectWithHintsCount();
+    const totalCount = gameSession.getTotalWordCount();
+    correctAnswerP.textContent = `Oikeita vastauksia: ${correctCount} / ${totalCount}`;
+    if (correctWithHintsCount > 0) {
+        correctWithHintsP.textContent = `Oikeita vastauksia vihjeitä käyttäen: ${correctWithHintsCount + correctCount} / ${totalCount}`;
+        correctWithHintsP.style.display = "block";
+    } else {
+        correctWithHintsP.style.display = "none";
+    }
+    skippedAnswerP.textContent = `Ohitettuja sanoja: ${gameSession.getSkippedWords().length ?? 0}`;
+    letterHintsP.textContent = `Käytettyja kirjainvihjeitä: ${gameSession.getLetterHintsUsed()}`;
+    vocalHintsP.textContent = `Käytettyja tavuvihjeitä: ${gameSession.getVocalHintsUsed()}`;
+    textHintsP.textContent = `Käytettyja kuvailevia vihjeitä: ${gameSession.getTextHintsUsed()}`;
     skippedAnswerP.textContent = `Ohitettuja sanoja: ${gameSession.getSkippedWords().length ?? 0}`;
     letterHintsP.textContent = `Käytettyja kirjainvihjeitä: ${gameSession.getLetterHintsUsed()}`;
     vocalHintsP.textContent = `Käytettyja tavuvihjeitä: ${gameSession.getVocalHintsUsed()}`;
@@ -162,7 +190,7 @@ export function showWordGuessResults(gameSession: GameSession): void {
     // Show/Hide checkbox replay-options
     const hasSkipped = gameSession.getSkippedWords().length > 0;
     const hasHints = gameSession.getHintedWords().length > 0;
-    const hasIncorrect = gameSession.getIncorrectlyGuessedWords().length > 0;
+    const hasIncorrect = gameSession.getUnsuccessfullyGuessedWords().length > 0;
 
     checkboxSkipped.parentElement?.classList.toggle("hidden", !hasSkipped);
     checkboxHints.parentElement?.classList.toggle("hidden", !hasHints);

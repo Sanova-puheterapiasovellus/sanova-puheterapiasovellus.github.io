@@ -84,6 +84,11 @@
     font-size: 1rem;
 }
 
+#word-guess-replay:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 #word-guess-replay.hidden {
     display: none;
 }
