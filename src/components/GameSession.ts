@@ -109,6 +109,19 @@ export class GameSession {
         return correctCount;
     }
 
+    /**
+     * @returns {number} The count of words that were guessed correctly after using any hints
+     */
+    getCorrectWithHintsCount(): number {
+        return this.wordGuessList.filter((wg) => {
+            const hintUsed = wg.getHintsUsed();
+            const eventuallyCorrect =
+                wg.getStatus() !== WordGuessStatus.NOT_GUESSED &&
+                wg.getStatus() !== WordGuessStatus.SKIPPED;
+            return hintUsed && eventuallyCorrect;
+        }).length;
+    }
+
     getCountByStatus(status: WordGuessStatus): number {
         let count: number = 0;
         for (const wordGuess of this.wordGuessList) {
@@ -131,7 +144,7 @@ export class GameSession {
         this.currentWordGuess?.updateStatus(WordGuessStatus.USED_HINT);
     }
 
-    getIncorrectlyGuessedWords(): Word[] {
+    getUnsuccessfullyGuessedWords(): Word[] {
         const wordList: Word[] = [];
         // Count as incorrect:
         //  - Words where the user used any hint
@@ -143,6 +156,24 @@ export class GameSession {
             }
         }
         return wordList;
+    }
+
+    getIncorrectlyGuessedWords(): Word[] {
+        return this.wordGuessList
+            .filter((wg) => wg.getStatus() === WordGuessStatus.GUESS_INCORRECT)
+            .map((wg) => wg.getWordObject());
+    }
+
+    getHintedWords(): Word[] {
+        return this.wordGuessList
+            .filter((wg) => wg.getStatus() === WordGuessStatus.USED_HINT || wg.getHintsUsed())
+            .map((wg) => wg.getWordObject());
+    }
+
+    getSkippedWords(): Word[] {
+        return this.wordGuessList
+            .filter((wg) => wg.getStatus() === WordGuessStatus.SKIPPED)
+            .map((wg) => wg.getWordObject());
     }
 
     /** Mark the current word as guessed so it won't be shown again */
