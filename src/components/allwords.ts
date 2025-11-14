@@ -12,14 +12,23 @@ const allWordsList = expectElement("all-words-list", HTMLUListElement);
 const filtersSection = expectElement("filters-section", HTMLElement);
 const searchContainer = expectElement("search-container", HTMLElement);
 const categoriesContainer = expectElement("category-filters", HTMLElement);
+const collapseCategories = expectElement("collapse-categories", HTMLElement);
 
 dialog.className = styles.dialog;
 allWordsList.className = styles.list;
 filtersSection.className = styles.filters;
-
-//added by Lilja may change
 categoriesContainer.className = styles.categoryFilters;
 searchContainer.className = styles.searchContainer;
+collapseCategories.className = styles.collapseCategories;
+collapseCategories.addEventListener("click", function () {
+    this.classList.toggle(styles.active);
+
+    if (categoriesContainer.style.maxHeight) {
+        categoriesContainer.style.maxHeight = "";
+    } else {
+        categoriesContainer.style.maxHeight = `100%`;
+    }
+});
 
 closeBtn.className = styles.closeButton;
 closeBtn.addEventListener("click", () => {
