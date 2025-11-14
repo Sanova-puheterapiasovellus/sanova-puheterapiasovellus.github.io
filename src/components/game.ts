@@ -217,6 +217,17 @@ function getGameSession(): GameSession {
     return gameSession;
 }
 
+/** Return true if mobile device, else false.
+ *  This is based on detecting touch points that mobile
+ *  devices have.
+ */
+function isMobile(): boolean {
+    const hasCoarsePointer = matchMedia("(pointer: coarse)").matches;
+    const maxTouchPoints = navigator.maxTouchPoints > 0;
+
+    return hasCoarsePointer && maxTouchPoints;
+}
+
 /** Handle the letter hint logic when the letter hint is requested */
 function handleUseLetterHint(): void {
     if (!gameSession) return;
@@ -231,8 +242,12 @@ function handleUseLetterHint(): void {
         // word completed with hints, move to next word
         handleAnswer(wordGuess);
     }
-    // Focus back to input from the button
-    hiddenInput.focus();
+    if (!isMobile()) {
+        // Focus back to input from the button. Do not do this
+        // if using mobile device since this will pop the
+        // keyboard.
+        hiddenInput.focus();
+    }
 }
 
 /** Set current word's text hint */
@@ -243,15 +258,24 @@ function handleUseTextHint(): void {
     const currentWord = gameSession.getCurrentWord();
 
     textHint.textContent = currentWord.hint;
-    // Focus back to input from the button
-    hiddenInput.focus();
+    if (!isMobile()) {
+        // Focus back to input from the button. Do not do this
+        // if using mobile device since this will pop the
+        // keyboard.
+        hiddenInput.focus();
+    }
 }
 
 function handleUseVocalHint(): void {
     if (!gameSession) return;
     gameSession.useVocalHint();
     // Focus back to input from the button
-    hiddenInput.focus();
+    if (!isMobile()) {
+        // Focus back to input from the button. Do not do this
+        // if using mobile device since this will pop the
+        // keyboard.
+        hiddenInput.focus();
+    }
 }
 
 /** Check if the user's answer is correct */
@@ -416,7 +440,12 @@ export function initializeGameContainer(): void {
         const wordGuess = gameSession.getCurrentWordGuess();
         handleAnswer(wordGuess);
         // Focus back to input from the button
-        hiddenInput.focus();
+        if (!isMobile()) {
+            // Focus back to input from the button. Do not do this
+            // if using mobile device since this will pop the
+            // keyboard.
+            hiddenInput.focus();
+        }
     });
 
     // No suggestions
@@ -426,7 +455,7 @@ export function initializeGameContainer(): void {
     hiddenInput.setAttribute("spellcheck", "false");
     hiddenInput.setAttribute("name", "hidden-no-autocomplete");
 
-    // Use enter as "Answer buttton"
+    // Use enter as "Answer button"
     hiddenInput.addEventListener("keydown", (e: KeyboardEvent) => {
         if (e.key === "Enter") {
             e.preventDefault();
