@@ -170,7 +170,7 @@ function setupWordInput(): void {
     wordGuess.render(letterSlots);
     hiddenInput.value = "";
     letterSlots.addEventListener("click", () => hiddenInput.focus());
-    if (!isMobile) {
+    if (!isMobile()) {
         // Only focus if not using mobile device
         hiddenInput.focus();
     }
