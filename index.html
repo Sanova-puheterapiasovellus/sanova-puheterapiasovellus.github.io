@@ -48,7 +48,6 @@
                     <div id="word-guess-slots"></div>
                     <input id="hidden-input" type="text" style="opacity:0;">
                     <!--style="position:absolute; opacity:0; width:1px; height:1px;"-->
-                    <div id="text-hint"></div>
                     <button id="word-guess-submit" type="button" class="word-guess-button">
                         <img src="/assets/icons/reply_24dp.svg" alt="Vastaa" class="icon">
                         <span>Vastaa</span>
@@ -61,14 +60,21 @@
                         >
                         <span>Kirjainvihje</span>
                     </button>
-                    <button id="word-guess-text-hint" type="button" class="word-guess-button">
-                        <img src="/assets/icons/book_5_22dp.svg" alt="Kuvaileva vihje" class="icon">
-                        <span>Kuvaileva vihje</span>
-                    </button>
                     <button id="word-guess-syllable-hint" type="button" class="word-guess-button">
                         <img src="/assets/icons/ear_sound_22dp.svg" alt="Tavuvihje" class="icon">
                         <span>Tavuvihje</span>
                     </button>
+                    <details id="word-guess-text-hint">
+                        <summary>
+                            <img
+                                src="/assets/icons/book_5_22dp.svg"
+                                alt="Kuvaileva vihje"
+                                class="icon"
+                            >
+                            <span>Kuvaileva vihje</span>
+                        </summary>
+                        <div id="text-hint"></div>
+                    </details>
                 </div>
                 <div id="prev-btn-container">
                     <button id="next-btn">

@@ -26,7 +26,7 @@ const guessCard = expectElement("word-guess-card", HTMLDivElement);
 const closeButton = expectElement("word-guess-close", HTMLButtonElement);
 const answerButton = expectElement("word-guess-submit", HTMLButtonElement);
 const letterHintButton = expectElement("word-guess-letter-hint", HTMLButtonElement);
-const textHintButton = expectElement("word-guess-text-hint", HTMLButtonElement);
+const textHintDetails = expectElement("word-guess-text-hint", HTMLDetailsElement);
 const syllableHintButton = expectElement("word-guess-syllable-hint", HTMLButtonElement);
 const wordImage = expectElement("word-guess-image", HTMLImageElement);
 const letterSlots = expectElement("word-guess-slots", HTMLDivElement);
@@ -37,7 +37,7 @@ const imageCreditsButton = expectElement("word-guess-image-credits-button", HTML
 const skipButton = expectElement("next-btn", HTMLButtonElement);
 
 // Keep track of the game progress, initially null
-let gameSession: GameSession | null = null;
+export let gameSession: GameSession | null = null;
 
 /** Close the dialog as requested. */
 function handleDialogClose(_: Event): void {
@@ -236,7 +236,9 @@ function handleUseLetterHint(): void {
 /** Set current word's text hint */
 function handleUseTextHint(): void {
     if (!gameSession) return;
-    gameSession.useTextHint();
+    if (textHintDetails.open) {
+        gameSession.useTextHint();
+    }
 
     const currentWord = gameSession.getCurrentWord();
 
@@ -259,9 +261,18 @@ function isCorrectAnswer(correctAnswer: string, answer: string): boolean {
 function setButtonsEnabled(enabled: boolean): void {
     answerButton.disabled = !enabled;
     letterHintButton.disabled = !enabled;
-    textHintButton.disabled = !enabled;
     syllableHintButton.disabled = !enabled;
     skipButton.disabled = !enabled;
+}
+let detailsEnabled = true;
+function setDetailsEnabled(enabled: boolean): void {
+    detailsEnabled = enabled;
+    const summary = textHintDetails.querySelector("summary");
+    if (!summary) return;
+    summary.style.cursor = "pointer";
+    textHintDetails.addEventListener("click", (e) => {
+        if (!detailsEnabled) e.preventDefault();
+    });
 }
 
 function getGameResults(gameSession: GameSession): GameResults {
@@ -280,6 +291,11 @@ function getGameResults(gameSession: GameSession): GameResults {
 
 function delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function resetTextHint() {
+    if (textHintDetails) textHintDetails.open = false;
+    gameSession?.resetTextHintFlag();
 }
 
 async function handleSkipWord(): Promise<void> {
@@ -302,13 +318,17 @@ async function handleSkipWord(): Promise<void> {
     guessCard.classList.add("skip");
     // Short delay when skipping a word
     setButtonsEnabled(false);
+    setDetailsEnabled(false);
     await delay(1000);
     setButtonsEnabled(true);
+    setDetailsEnabled(true);
     // Remove the skip style
     guessCard.classList.remove("skip");
 
     const nextWord: Word = gameSession.getNextWord();
     textHint.textContent = "";
+    resetTextHint();
+    gameSession.resetVocalHints();
     updateGameProgressCounter();
     setSyllableHintWord(nextWord.name);
     setImage();
@@ -353,8 +373,10 @@ async function handleAnswer(wordGuess: WordGuess) {
 
     // Set buttons disabled during the delay
     setButtonsEnabled(false);
+    setDetailsEnabled(false);
     await delay(1000);
     setButtonsEnabled(true);
+    setDetailsEnabled(true);
 
     // Remove the indication of correct/wrong answer before moving to the next card
     guessCard.classList.remove("correct", "wrong");
@@ -377,7 +399,9 @@ async function handleAnswer(wordGuess: WordGuess) {
 
     const nextWord = gameSession.getNextWord();
     textHint.textContent = "";
+    gameSession.resetVocalHints();
     updateGameProgressCounter();
+    resetTextHint();
     setSyllableHintWord(nextWord.name);
     setImage();
 
@@ -412,7 +436,7 @@ export function initializeGameContainer(): void {
     });
 
     letterHintButton.addEventListener("click", handleUseLetterHint);
-    textHintButton.addEventListener("click", handleUseTextHint);
+    textHintDetails.addEventListener("toggle", handleUseTextHint);
     syllableHintButton.addEventListener("click", handleUseVocalHint);
     imageCreditsButton.addEventListener("click", handleImageCredits);
     skipButton.addEventListener("click", handleSkipWord);

@@ -2,6 +2,7 @@ import { expectElement } from "../common/dom.ts";
 import { playSyllableSounds } from "../common/playback.ts";
 import { syllableSeparationSeconds } from "../data/syllable-player-config.ts";
 import { splitToSyllables } from "../utils/syllable-split.ts";
+import { gameSession } from "./game.ts";
 
 const playButton = expectElement("word-guess-syllable-hint", HTMLButtonElement);
 
@@ -17,10 +18,15 @@ export function setSyllableHintWord(word: string): void {
 /** Play back the syllable sounds when requested. */
 async function handlePlayback(_: Event): Promise<void> {
     // This should get caught earlier, so might as well ignore it.
-    if (determinedSyllables === undefined || determinedSyllables.length === 0) {
+    if (!gameSession || determinedSyllables === undefined || determinedSyllables.length === 0) {
         return;
     }
+    const syllablesToPlayCount = Math.min(
+        gameSession.getVocalHintsUsed(),
+        determinedSyllables.length,
+    );
 
+    const syllablesToPlay = determinedSyllables.slice(0, syllablesToPlayCount);
     // Audio contexts can only be initialized while handling user input.
     playbackContext ??= new AudioContext();
 
@@ -33,7 +39,7 @@ async function handlePlayback(_: Event): Promise<void> {
         await playSyllableSounds(
             playbackCancellation.signal,
             playbackContext,
-            determinedSyllables,
+            syllablesToPlay,
             syllableSeparationSeconds,
         );
     } finally {
