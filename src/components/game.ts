@@ -264,6 +264,16 @@ function setButtonsEnabled(enabled: boolean): void {
     syllableHintButton.disabled = !enabled;
     skipButton.disabled = !enabled;
 }
+let detailsEnabled = true;
+function setDetailsEnabled(enabled: boolean): void {
+    detailsEnabled = enabled;
+    const summary = textHintDetails.querySelector("summary");
+    if (!summary) return;
+    summary.style.cursor = "pointer";
+    textHintDetails.addEventListener("click", (e) => {
+        if (!detailsEnabled) e.preventDefault();
+    });
+}
 
 function getGameResults(gameSession: GameSession): GameResults {
     const gameResults: GameResults = {
@@ -308,14 +318,17 @@ async function handleSkipWord(): Promise<void> {
     guessCard.classList.add("skip");
     // Short delay when skipping a word
     setButtonsEnabled(false);
+    setDetailsEnabled(false);
     await delay(1000);
     setButtonsEnabled(true);
+    setDetailsEnabled(true);
     // Remove the skip style
     guessCard.classList.remove("skip");
 
     const nextWord: Word = gameSession.getNextWord();
     textHint.textContent = "";
     resetTextHint();
+    gameSession.resetVocalHints();
     updateGameProgressCounter();
     setSyllableHintWord(nextWord.name);
     setImage();
@@ -360,8 +373,10 @@ async function handleAnswer(wordGuess: WordGuess) {
 
     // Set buttons disabled during the delay
     setButtonsEnabled(false);
+    setDetailsEnabled(false);
     await delay(1000);
     setButtonsEnabled(true);
+    setDetailsEnabled(true);
 
     // Remove the indication of correct/wrong answer before moving to the next card
     guessCard.classList.remove("correct", "wrong");
