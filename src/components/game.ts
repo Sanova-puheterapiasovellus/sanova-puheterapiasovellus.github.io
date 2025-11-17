@@ -2,32 +2,42 @@ import { expectElement } from "../common/dom";
 import type {
     CategorySelectedEvent,
     GameOverEvent,
+    GameResults,
     WordSelectedEvent,
     WordsSelectedEvent,
 } from "../common/events";
+import {
+    dispatchGameOver,
+    dispatchWordSelection,
+    dispatchWordsSelection,
+} from "../common/events.ts";
 import { type Category, getImagePath, type Word, wordsData } from "../data/word-data-model.ts";
 import { GameSession } from "./GameSession";
 import "./styles/game.css";
 import { lockPageScroll, unlockPageScroll } from "../common/preventScroll.ts";
+import { showCreditsModal } from "./imageCredits.ts";
 import { setSyllableHintWord } from "./syllablesHint.ts";
 import type { WordGuess } from "./WordGuess";
 import { showWordGuessResults } from "./wordGuessResults.ts";
+import { WordGuessStatus } from "./wordStatus.ts";
 
 const guessDialog = expectElement("word-guess-dialog", HTMLDialogElement);
 const guessCard = expectElement("word-guess-card", HTMLDivElement);
 const closeButton = expectElement("word-guess-close", HTMLButtonElement);
 const answerButton = expectElement("word-guess-submit", HTMLButtonElement);
 const letterHintButton = expectElement("word-guess-letter-hint", HTMLButtonElement);
-const textHintButton = expectElement("word-guess-text-hint", HTMLButtonElement);
+const textHintDetails = expectElement("word-guess-text-hint", HTMLDetailsElement);
 const syllableHintButton = expectElement("word-guess-syllable-hint", HTMLButtonElement);
 const wordImage = expectElement("word-guess-image", HTMLImageElement);
 const letterSlots = expectElement("word-guess-slots", HTMLDivElement);
 const hiddenInput = document.getElementById("hidden-input") as HTMLInputElement;
 const textHint = expectElement("text-hint", HTMLDivElement);
 const guessProgressCounter = expectElement("word-guess-progress-counter", HTMLDivElement);
+const imageCreditsButton = expectElement("word-guess-image-credits-button", HTMLElement);
+const skipButton = expectElement("next-btn", HTMLButtonElement);
 
 // Keep track of the game progress, initially null
-let gameSession: GameSession | null = null;
+export let gameSession: GameSession | null = null;
 
 /** Close the dialog as requested. */
 function handleDialogClose(_: Event): void {
@@ -63,15 +73,11 @@ function handleGameStart(event: CategorySelectedEvent): void {
 
     gameSession = new GameSession(categoryForSession);
     // Set the words to the game session object through the WordsSelected event
-    dispatchEvent(
-        new CustomEvent("words-selected", {
-            bubbles: true,
-            detail: {
-                selections,
-                category: currentCategory.name === "random" ? null : currentCategory,
-                isReplay: false,
-            },
-        }),
+    dispatchWordsSelection(
+        window,
+        selections,
+        currentCategory.name === "random" ? null : currentCategory,
+        false,
     );
 
     gameSession.setGameModeRandom(); // Show words in random order
@@ -79,12 +85,7 @@ function handleGameStart(event: CategorySelectedEvent): void {
     textHint.textContent = "";
     setSyllableHintWord(word.name);
 
-    dispatchEvent(
-        new CustomEvent("word-selected", {
-            bubbles: true,
-            detail: { word: word, index: 0 },
-        }),
-    );
+    dispatchWordSelection(window, word, 0);
 }
 /** Helper function to pick random words */
 function pickRandom<T>(array: T[], count: number): T[] {
@@ -123,13 +124,14 @@ function handleWordSelected(event: WordSelectedEvent): void {
         const { word } = event.detail;
         gameSession.setWords([word]);
         gameSession.setCurrentWordIndex(0);
-        setSyllableHintWord(word.name);
     }
 
     if (event.detail.word === null) {
         // No word was set, set it here
         gameSession.setCurrentWordIndex(0);
     }
+
+    setSyllableHintWord(gameSession.getCurrentWord().name);
 
     guessDialog.showModal();
     guessCard.scrollTop = 0; //reset scroll position of game to top when game opens
@@ -151,13 +153,27 @@ function handleWordsSelected(event: WordsSelectedEvent): void {
     gameSession.setWords(selections.map((s) => s.word));
 }
 
+/** Return true if mobile device, else false.
+ *  This is based on detecting touch points that mobile
+ *  devices have.
+ */
+function isMobile(): boolean {
+    const hasCoarsePointer = matchMedia("(pointer: coarse)").matches;
+    const maxTouchPoints = navigator.maxTouchPoints > 0;
+
+    return hasCoarsePointer && maxTouchPoints;
+}
+
 /** Renders the empty slots after answering or when initializing the first word */
 function setupWordInput(): void {
     const wordGuess = getGameSession().getCurrentWordGuess();
     wordGuess.render(letterSlots);
     hiddenInput.value = "";
-    hiddenInput.focus();
     letterSlots.addEventListener("click", () => hiddenInput.focus());
+    if (!isMobile()) {
+        // Only focus if not using mobile device
+        hiddenInput.focus();
+    }
 }
 
 /** Handle the typing events when using both physical keyboard and phone's keyboard */
@@ -229,21 +245,42 @@ function handleUseLetterHint(): void {
         // word completed with hints, move to next word
         handleAnswer(wordGuess);
     }
+    if (!isMobile()) {
+        // Focus back to input from the button. Do not do this
+        // if using mobile device since this will pop the
+        // keyboard.
+        hiddenInput.focus();
+    }
 }
 
 /** Set current word's text hint */
 function handleUseTextHint(): void {
     if (!gameSession) return;
-    gameSession.useTextHint();
+    if (textHintDetails.open) {
+        gameSession.useTextHint();
+    }
 
     const currentWord = gameSession.getCurrentWord();
 
     textHint.textContent = currentWord.hint;
+    if (!isMobile()) {
+        // Focus back to input from the button. Do not do this
+        // if using mobile device since this will pop the
+        // keyboard.
+        hiddenInput.focus();
+    }
 }
 
 function handleUseVocalHint(): void {
     if (!gameSession) return;
     gameSession.useVocalHint();
+    // Focus back to input from the button
+    if (!isMobile()) {
+        // Focus back to input from the button. Do not do this
+        // if using mobile device since this will pop the
+        // keyboard.
+        hiddenInput.focus();
+    }
 }
 
 /** Check if the user's answer is correct */
@@ -257,12 +294,79 @@ function isCorrectAnswer(correctAnswer: string, answer: string): boolean {
 function setButtonsEnabled(enabled: boolean): void {
     answerButton.disabled = !enabled;
     letterHintButton.disabled = !enabled;
-    textHintButton.disabled = !enabled;
     syllableHintButton.disabled = !enabled;
+    skipButton.disabled = !enabled;
+}
+let detailsEnabled = true;
+function setDetailsEnabled(enabled: boolean): void {
+    detailsEnabled = enabled;
+    const summary = textHintDetails.querySelector("summary");
+    if (!summary) return;
+    summary.style.cursor = "pointer";
+    textHintDetails.addEventListener("click", (e) => {
+        if (!detailsEnabled) e.preventDefault();
+    });
+}
+
+function getGameResults(gameSession: GameSession): GameResults {
+    const gameResults: GameResults = {
+        correctAnswers: gameSession.getCountByStatus(WordGuessStatus.GUESS_CORRECT),
+        incorrectAnswers: gameSession.getCountByStatus(WordGuessStatus.GUESS_INCORRECT),
+        skippedWords: gameSession.getCountByStatus(WordGuessStatus.SKIPPED),
+        wordsSolvedUsingHints: gameSession.getCountByStatus(WordGuessStatus.USED_HINT),
+        totalWords: gameSession.getTotalWordCount(),
+        totalVocalHintsUsed: gameSession.getVocalHintsUsed(),
+        totalTextHintsUsed: gameSession.getTextHintsUsed(),
+        totalLetterHintsUsed: gameSession.getLetterHintsUsed(),
+    };
+    return gameResults;
 }
 
 function delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function resetTextHint() {
+    if (textHintDetails) textHintDetails.open = false;
+    gameSession?.resetTextHintFlag();
+}
+
+async function handleSkipWord(): Promise<void> {
+    if (!gameSession) return;
+    const isGameOver: boolean = gameSession.isGameOver();
+    gameSession.markCurrentSkipped();
+    //const currentWordGuess = gameSession.getCurrentWordGuess();
+    if (isGameOver) {
+        let showResults: boolean = gameSession.getTotalWordCount() > 1;
+        const isReplay: boolean = gameSession.getIsReplay();
+        if (isReplay) {
+            // Always show results if the user is replaying correct words,
+            // even if there was only one word replayed
+            showResults = true;
+        }
+        dispatchGameOver(window, showResults, getGameResults(gameSession));
+        return;
+    }
+    // Style the card to indicate skipping
+    guessCard.classList.add("skip");
+    // Short delay when skipping a word
+    setButtonsEnabled(false);
+    setDetailsEnabled(false);
+    await delay(1000);
+    setButtonsEnabled(true);
+    setDetailsEnabled(true);
+    // Remove the skip style
+    guessCard.classList.remove("skip");
+
+    const nextWord: Word = gameSession.getNextWord();
+    textHint.textContent = "";
+    resetTextHint();
+    gameSession.resetVocalHints();
+    updateGameProgressCounter();
+    setSyllableHintWord(nextWord.name);
+    setImage();
+
+    setupWordInput();
 }
 
 /** Handle the user's guess when the answer btn is pressed */
@@ -288,48 +392,61 @@ async function handleAnswer(wordGuess: WordGuess) {
     const isGameOver: boolean = gameSession.isGameOver();
 
     if (isCorrect) {
-        gameSession.increaseCorrectCount();
+        const usedAnyHints: boolean = gameSession.getCurrentWordGuess().getHintsUsed();
+        if (usedAnyHints) {
+            gameSession.markHintUsed();
+        } else {
+            gameSession.markCurrentCorrect();
+        }
         guessCard.classList.add("correct");
     } else {
-        gameSession.saveIncorrectlyGuessed();
+        gameSession.markIncorrectlyGuessed();
         guessCard.classList.add("wrong");
     }
 
     // Set buttons disabled during the delay
     setButtonsEnabled(false);
+    setDetailsEnabled(false);
     await delay(1000);
     setButtonsEnabled(true);
+    setDetailsEnabled(true);
 
     // Remove the indication of correct/wrong answer before moving to the next card
     guessCard.classList.remove("correct", "wrong");
 
     if (isGameOver) {
-        if (gameSession.getAllWords().length === 1) {
+        if (gameSession.getTotalWordCount() === 1) {
             unlockPageScroll();
         }
-        let showResults: boolean = gameSession.getAllWords().length > 1;
+        let showResults: boolean = gameSession.getTotalWordCount() > 1;
         const isReplay: boolean = gameSession.getIsReplay();
         if (isReplay) {
             // Always show results if the user is replaying correct words,
             // even if there was only one word replayed
             showResults = true;
         }
-        dispatchEvent(
-            new CustomEvent("show-results", {
-                bubbles: true,
-                detail: { showResults: showResults },
-            }),
-        );
+
+        dispatchGameOver(window, showResults, getGameResults(gameSession));
         return;
     }
 
     const nextWord = gameSession.getNextWord();
     textHint.textContent = "";
+    gameSession.resetVocalHints();
     updateGameProgressCounter();
+    resetTextHint();
     setSyllableHintWord(nextWord.name);
     setImage();
 
     setupWordInput();
+}
+
+function handleImageCredits(): void {
+    if (!gameSession) return;
+
+    const currentWord = gameSession.getCurrentWord();
+
+    showCreditsModal(currentWord.image_credit);
 }
 
 function moveCursorToEnd(input: HTMLInputElement) {
@@ -349,11 +466,38 @@ export function initializeGameContainer(): void {
         if (!gameSession) return;
         const wordGuess = gameSession.getCurrentWordGuess();
         handleAnswer(wordGuess);
+        // Focus back to input from the button
+        if (!isMobile()) {
+            // Focus back to input from the button. Do not do this
+            // if using mobile device since this will pop the
+            // keyboard.
+            hiddenInput.focus();
+        }
+    });
+
+    // No suggestions
+    hiddenInput.setAttribute("autocomplete", "off");
+    hiddenInput.setAttribute("autocorrect", "off");
+    hiddenInput.setAttribute("autocapitalize", "off");
+    hiddenInput.setAttribute("spellcheck", "false");
+    hiddenInput.setAttribute("name", "hidden-no-autocomplete");
+
+    // Use enter as "Answer button"
+    hiddenInput.addEventListener("keydown", (e: KeyboardEvent) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            if (!gameSession) return;
+
+            const wordGuess = gameSession.getCurrentWordGuess();
+            handleAnswer(wordGuess);
+        }
     });
 
     letterHintButton.addEventListener("click", handleUseLetterHint);
-    textHintButton.addEventListener("click", handleUseTextHint);
+    textHintDetails.addEventListener("toggle", handleUseTextHint);
     syllableHintButton.addEventListener("click", handleUseVocalHint);
+    imageCreditsButton.addEventListener("click", handleImageCredits);
+    skipButton.addEventListener("click", handleSkipWord);
 
     hiddenInput.addEventListener("input", handleInputEvent);
 
