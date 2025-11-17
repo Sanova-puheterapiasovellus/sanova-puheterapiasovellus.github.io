@@ -1,5 +1,8 @@
 import { type AudioSegment, offsetsData } from "../data/offset-data-model";
 
+/** Lazily initialized context for syllable playback. */
+let audioContext: AudioContext | undefined;
+
 /** All previously loaded audio snippets as there's a reasonable finite amount of them. */
 const snippetCache = new Map<string, Promise<AudioBuffer>>();
 
@@ -18,6 +21,12 @@ async function loadCachedValue<T>(
     storage.set(key, promise);
 
     return promise;
+}
+
+/** Lazily initialize the global audio context object. */
+function getGlobalAudioContext(): AudioContext {
+    audioContext ??= new AudioContext();
+    return audioContext;
 }
 
 /**
@@ -109,8 +118,8 @@ function audioBufferSubset(
 /** Cached load of an individual sound clip in it's raw form. */
 export function loadSoundClip(
     signal: AbortSignal,
-    context: AudioContext,
     name: string,
+    context: AudioContext = getGlobalAudioContext(),
 ): Promise<AudioBuffer> {
     return loadCachedValue(snippetCache, name, async () => {
         const response = await fetch(`sounds/${name}.mp3`, { signal });
@@ -135,7 +144,7 @@ async function formSyllableSound(
             context,
             await Promise.all(
                 value.split("").map(async (character) => {
-                    const buffer = await loadSoundClip(cancellation, context, character);
+                    const buffer = await loadSoundClip(cancellation, character, context);
                     const meta = offsetsData[character];
                     if (meta === undefined) {
                         return buffer;
@@ -169,9 +178,9 @@ async function waitFullPlayback(
 /** Spell out the given syllables with a separation in seconds. */
 export async function playSyllableSounds(
     cancellation: AbortSignal,
-    context: AudioContext,
     syllables: string[],
     separation: number,
+    context: AudioContext = getGlobalAudioContext(),
 ): Promise<void> {
     const segments = await Promise.all(
         syllables.map((name) => formSyllableSound(cancellation, context, name)),
