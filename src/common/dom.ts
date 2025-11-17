@@ -26,9 +26,15 @@ export function buildHtml<T extends keyof HTMLElementTagNameMap>(
     properties: Partial<HTMLElementTagNameMap[T]> = {},
     ...children: (string | HTMLElement)[]
 ): HTMLElementTagNameMap[T] {
-    const element = document.createElement(name);
-    Object.assign(element, properties);
-    element.append(...children);
+    const element = Object.assign(document.createElement(name), properties);
+
+    // This is stupid but templates don't ever have children themselves.
+    if (element instanceof HTMLTemplateElement) {
+        element.content.append(...children);
+    } else {
+        element.append(...children);
+    }
+
     return element;
 }
 

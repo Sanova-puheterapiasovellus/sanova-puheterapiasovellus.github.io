@@ -5,6 +5,18 @@
         "lib": ["ESNext", "DOM", "DOM.Iterable"],
         "module": "esnext",
 
+        // Define some import aliases for clarity.
+        "paths": {
+            "@common/*": ["./src/common/*"],
+            "@components/*": ["./src/components/*"],
+            "@data/*": ["./src/data/*"],
+            "@utils/*": ["./src/utils/*"]
+        },
+
+        // Use our custom JSX runtime.
+        "jsx": "react-jsx",
+        "jsxImportSource": "@utils",
+
         // Appropriate options for using an bundler.
         "allowImportingTsExtensions": true,
         "isolatedModules": true,
@@ -35,5 +47,5 @@
         "strictPropertyInitialization": true,
         "useUnknownInCatchVariables": true
     },
-    "include": ["src/**/*.ts"]
+    "include": ["src/**/*.ts", "src/**/*.tsx"]
 }

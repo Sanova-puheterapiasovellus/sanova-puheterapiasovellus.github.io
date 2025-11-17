@@ -24,9 +24,11 @@ export default {
             usePolling: true,
             interval: 200,
         },
-        /*allowedHosts: ["treasonous-improbably-bobby.ngrok-free.dev"],
-        host: true,*/
-        /*host: "0.0.0.0",
-        port: 5173,*/
+        // Listen on all addresses, not just localhost.
+        host: true,
+    },
+    resolve: {
+        // Consider defined import aliases in path resolution.
+        tsconfigPaths: true,
     },
 } satisfies UserConfig;
