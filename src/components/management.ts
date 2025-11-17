@@ -3,6 +3,8 @@ import { addOrUpdateFile, createBranch, createPullRequest } from "../common/gith
 import { loadSoundClip } from "../common/playback";
 import type { Store } from "../common/reactive";
 import { type AudioSegment, offsetsData } from "../data/offset-data-model";
+import { wordsData } from "../data/word-data-model";
+import { splitToSyllables } from "../utils/syllable-split";
 
 const rootDialog = expectElement("management-dialog", HTMLDialogElement);
 const managementForm = expectElement("management-form", HTMLFormElement);
@@ -12,6 +14,8 @@ const soundStart = expectElement("management-sound-start", HTMLInputElement);
 const soundEnd = expectElement("management-sound-end", HTMLInputElement);
 const customBranch = expectElement("management-branch", HTMLInputElement);
 const closeButton = expectElement("management-dialog-close", HTMLButtonElement);
+const missingSoundCount = expectElement("management-missing-sound-count", HTMLSpanElement);
+const missingSoundList = expectElement("management-missing-sound-list", HTMLUListElement);
 
 let soundsChanged = false;
 const soundOffsets = structuredClone(offsetsData);
@@ -95,6 +99,18 @@ export function initializeManagementDialog(hash: Store<string>) {
         soundSelection.appendChild(
             buildHtml("option", { value: key, innerText: key.toUpperCase() }),
         );
+    }
+
+    const missingSyllableSounds = new Set(
+        wordsData.categories
+            .values()
+            .flatMap((category) => category.words.values())
+            .flatMap((word) => splitToSyllables(word.name)),
+    ).difference(new Set(Object.keys(offsetsData)));
+
+    missingSoundCount.innerText = missingSyllableSounds.size.toString();
+    for (const value of missingSyllableSounds) {
+        missingSoundList.appendChild(buildHtml("li", { innerText: value }));
     }
 
     soundSelection.addEventListener("change", handleSoundSelectionChange);
