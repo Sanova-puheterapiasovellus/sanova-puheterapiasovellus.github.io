@@ -35,7 +35,7 @@ body {
     padding-top: 110px;
 }
 
-.mainview-main > ul#category-selector-list {
+.mainview-main > section ul {
     display: grid;
     grid-template-columns: repeat(auto-fit, 170px);
     justify-content: center;

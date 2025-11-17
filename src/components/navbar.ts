@@ -30,8 +30,10 @@ function Navbar(hash: Store<string>): HTMLElement {
         for (const element of links) {
             const { hash } = new URL(element.href);
             if (hash === value) {
+                console.log("Here");
                 element.classList.add(styles.active);
             } else {
+                console.log("HERE");
                 element.classList.remove(styles.active);
             }
         }

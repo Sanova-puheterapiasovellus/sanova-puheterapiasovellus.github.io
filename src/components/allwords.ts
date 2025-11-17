@@ -7,7 +7,6 @@ import { setupSearchAndFilter } from "./searchAndFilter";
 import styles from "./styles/allWords.module.css";
 
 const dialog = expectElement("all-words-dialog", HTMLDialogElement);
-const closeBtn = expectElement("close-all-words", HTMLElement);
 const allWordsList = expectElement("all-words-list", HTMLUListElement);
 const filtersSection = expectElement("filters-section", HTMLElement);
 const searchContainer = expectElement("search-container", HTMLElement);
@@ -30,13 +29,11 @@ collapseCategories.addEventListener("click", function () {
     }
 });
 
-closeBtn.className = styles.closeButton;
-closeBtn.addEventListener("click", () => {
-    dialog.close();
-    window.location.hash = "#";
-});
 dialog.addEventListener("click", (e) => {
-    if (e.target === dialog) dialog.close();
+    if (e.target === dialog) {
+        dialog.close();
+        window.location.hash = "#";
+    }
 });
 
 function createImageEntry(word: Word, index: number): HTMLElement {
