@@ -2,8 +2,20 @@ import { buildHtml, expectElement, TemplatedElement } from "../common/dom";
 
 /** Component for notifications shown on the page. */
 class NotificationItem extends TemplatedElement {
-    static #componentTemplate = expectElement("notification-item", HTMLTemplateElement);
     static #lingerDuration = 10 * 1000;
+    static #componentTemplate = buildHtml(
+        "template",
+        {},
+        <li>
+            <details>
+                <summary>
+                    <slot name="header"></slot>
+                </summary>
+
+                <slot name="content"></slot>
+            </details>
+        </li>,
+    );
 
     #removeTimeout: number | undefined;
     #closeButton = buildHtml("button", { type: "button", innerText: "x" });
@@ -12,8 +24,13 @@ class NotificationItem extends TemplatedElement {
         super(NotificationItem.#componentTemplate);
 
         this.attachSlots({
-            header: buildHtml("p", { innerText: title }, this.#closeButton),
-            content: buildHtml("pre", { innerText: description ?? "" }),
+            header: (
+                <p>
+                    {title}
+                    {this.#closeButton}
+                </p>
+            ),
+            content: <pre>{description ?? ""}</pre>,
         });
     }
 
