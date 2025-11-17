@@ -157,6 +157,11 @@ async function formSyllableSound(
     );
 }
 
+/** Transition the context from a suspended state as needed. */
+function ensureReadyForPlayback(context: AudioContext): Promise<void> {
+    return context.state === "suspended" ? context.resume() : Promise.resolve();
+}
+
 /** Play back audio buffer and wait for it to finish. */
 async function waitFullPlayback(
     cancellation: AbortSignal,
@@ -182,9 +187,10 @@ export async function playSyllableSounds(
     separation: number,
     context: AudioContext = getGlobalAudioContext(),
 ): Promise<void> {
-    const segments = await Promise.all(
-        syllables.map((name) => formSyllableSound(cancellation, context, name)),
-    );
+    const [_, segments] = await Promise.all([
+        ensureReadyForPlayback(context),
+        Promise.all(syllables.map((name) => formSyllableSound(cancellation, context, name))),
+    ]);
 
     await waitFullPlayback(
         cancellation,
