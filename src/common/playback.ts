@@ -133,17 +133,27 @@ export function loadSoundClip(
     });
 }
 
-/** Build up a cached syllable sound out of configured segments of individual character sounds. */
-async function formSyllableSound(
+/** Load a syllable sound or constrtruct one from character sounds. */
+async function getSyllableSound(
     cancellation: AbortSignal,
     context: AudioContext,
-    value: string,
+    name: string,
 ): Promise<AudioBuffer> {
-    return loadCachedValue(snippetCache, value, async () =>
-        combineAudioBuffers(
+    return loadCachedValue(snippetCache, name, async () => {
+        if (name in offsetsData) {
+            const buffer = await loadSoundClip(cancellation, name, context);
+            const meta = offsetsData[name];
+            if (meta === undefined) {
+                return buffer;
+            }
+
+            return audioBufferSubset(context, buffer, meta);
+        }
+
+        return combineAudioBuffers(
             context,
             await Promise.all(
-                value.split("").map(async (character) => {
+                name.split("").map(async (character) => {
                     const buffer = await loadSoundClip(cancellation, character, context);
                     const meta = offsetsData[character];
                     if (meta === undefined) {
@@ -153,8 +163,13 @@ async function formSyllableSound(
                     return audioBufferSubset(context, buffer, meta);
                 }),
             ),
-        ),
-    );
+        );
+    });
+}
+
+/** Transition the context from a suspended state as needed. */
+function ensureReadyForPlayback(context: AudioContext): Promise<void> {
+    return context.state === "suspended" ? context.resume() : Promise.resolve();
 }
 
 /** Play back audio buffer and wait for it to finish. */
@@ -182,9 +197,10 @@ export async function playSyllableSounds(
     separation: number,
     context: AudioContext = getGlobalAudioContext(),
 ): Promise<void> {
-    const segments = await Promise.all(
-        syllables.map((name) => formSyllableSound(cancellation, context, name)),
-    );
+    const [_, segments] = await Promise.all([
+        ensureReadyForPlayback(context),
+        Promise.all(syllables.map((name) => getSyllableSound(cancellation, context, name))),
+    ]);
 
     await waitFullPlayback(
         cancellation,
