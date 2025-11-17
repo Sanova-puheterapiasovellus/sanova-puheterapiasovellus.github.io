@@ -1,4 +1,4 @@
-import { offsetsData } from "../data/offset-data-model";
+import { type AudioSegment, offsetsData } from "../data/offset-data-model";
 
 /** All previously loaded audio snippets as there's a reasonable finite amount of them. */
 const snippetCache = new Map<string, Promise<AudioBuffer>>();
@@ -86,11 +86,10 @@ function combineAudioBuffers(
 function audioBufferSubset(
     context: AudioContext,
     original: AudioBuffer,
-    start: number,
-    end: number,
+    offsets: AudioSegment,
 ): AudioBuffer {
-    const startSample = Math.floor(original.sampleRate * start);
-    const endSample = Math.floor(original.sampleRate * end);
+    const startSample = Math.floor(original.sampleRate * offsets.start);
+    const endSample = Math.floor(original.sampleRate * offsets.end);
 
     const output = context.createBuffer(
         original.numberOfChannels,
@@ -107,8 +106,8 @@ function audioBufferSubset(
     return output;
 }
 
-/** Load a sound clip. */
-function loadSoundClip(
+/** Cached load of an individual sound clip in it's raw form. */
+export function loadSoundClip(
     signal: AbortSignal,
     context: AudioContext,
     name: string,
@@ -121,15 +120,11 @@ function loadSoundClip(
             });
         }
 
-        const buffer = await context.decodeAudioData(await response.arrayBuffer());
-        const meta = offsetsData[name];
-        if (meta === undefined) return buffer;
-
-        return audioBufferSubset(context, buffer, meta.start, meta.end);
+        return context.decodeAudioData(await response.arrayBuffer());
     });
 }
 
-/** Build up a cached syllable sound out of individual character sounds. */
+/** Build up a cached syllable sound out of configured segments of individual character sounds. */
 async function formSyllableSound(
     cancellation: AbortSignal,
     context: AudioContext,
@@ -139,7 +134,15 @@ async function formSyllableSound(
         combineAudioBuffers(
             context,
             await Promise.all(
-                value.split("").map((character) => loadSoundClip(cancellation, context, character)),
+                value.split("").map(async (character) => {
+                    const buffer = await loadSoundClip(cancellation, context, character);
+                    const meta = offsetsData[character];
+                    if (meta === undefined) {
+                        return buffer;
+                    }
+
+                    return audioBufferSubset(context, buffer, meta);
+                }),
             ),
         ),
     );
