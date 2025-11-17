@@ -153,13 +153,27 @@ function handleWordsSelected(event: WordsSelectedEvent): void {
     gameSession.setWords(selections.map((s) => s.word));
 }
 
+/** Return true if mobile device, else false.
+ *  This is based on detecting touch points that mobile
+ *  devices have.
+ */
+function isMobile(): boolean {
+    const hasCoarsePointer = matchMedia("(pointer: coarse)").matches;
+    const maxTouchPoints = navigator.maxTouchPoints > 0;
+
+    return hasCoarsePointer && maxTouchPoints;
+}
+
 /** Renders the empty slots after answering or when initializing the first word */
 function setupWordInput(): void {
     const wordGuess = getGameSession().getCurrentWordGuess();
     wordGuess.render(letterSlots);
     hiddenInput.value = "";
-    hiddenInput.focus();
     letterSlots.addEventListener("click", () => hiddenInput.focus());
+    if (!isMobile()) {
+        // Only focus if not using mobile device
+        hiddenInput.focus();
+    }
 }
 
 /** Handle the typing events when using both physical keyboard and phone's keyboard */
@@ -231,6 +245,12 @@ function handleUseLetterHint(): void {
         // word completed with hints, move to next word
         handleAnswer(wordGuess);
     }
+    if (!isMobile()) {
+        // Focus back to input from the button. Do not do this
+        // if using mobile device since this will pop the
+        // keyboard.
+        hiddenInput.focus();
+    }
 }
 
 /** Set current word's text hint */
@@ -243,11 +263,24 @@ function handleUseTextHint(): void {
     const currentWord = gameSession.getCurrentWord();
 
     textHint.textContent = currentWord.hint;
+    if (!isMobile()) {
+        // Focus back to input from the button. Do not do this
+        // if using mobile device since this will pop the
+        // keyboard.
+        hiddenInput.focus();
+    }
 }
 
 function handleUseVocalHint(): void {
     if (!gameSession) return;
     gameSession.useVocalHint();
+    // Focus back to input from the button
+    if (!isMobile()) {
+        // Focus back to input from the button. Do not do this
+        // if using mobile device since this will pop the
+        // keyboard.
+        hiddenInput.focus();
+    }
 }
 
 /** Check if the user's answer is correct */
@@ -433,6 +466,31 @@ export function initializeGameContainer(): void {
         if (!gameSession) return;
         const wordGuess = gameSession.getCurrentWordGuess();
         handleAnswer(wordGuess);
+        // Focus back to input from the button
+        if (!isMobile()) {
+            // Focus back to input from the button. Do not do this
+            // if using mobile device since this will pop the
+            // keyboard.
+            hiddenInput.focus();
+        }
+    });
+
+    // No suggestions
+    hiddenInput.setAttribute("autocomplete", "off");
+    hiddenInput.setAttribute("autocorrect", "off");
+    hiddenInput.setAttribute("autocapitalize", "off");
+    hiddenInput.setAttribute("spellcheck", "false");
+    hiddenInput.setAttribute("name", "hidden-no-autocomplete");
+
+    // Use enter as "Answer button"
+    hiddenInput.addEventListener("keydown", (e: KeyboardEvent) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            if (!gameSession) return;
+
+            const wordGuess = gameSession.getCurrentWordGuess();
+            handleAnswer(wordGuess);
+        }
     });
 
     letterHintButton.addEventListener("click", handleUseLetterHint);
