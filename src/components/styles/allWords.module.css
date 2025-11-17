@@ -7,6 +7,10 @@
     border: none;
 }
 
+.dialog::backdrop {
+    background: transparent;
+}
+
 .list {
     background-color: #2165ed;
     display: grid;
