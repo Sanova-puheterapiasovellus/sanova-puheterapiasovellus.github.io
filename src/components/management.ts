@@ -16,13 +16,11 @@ const closeButton = expectElement("management-dialog-close", HTMLButtonElement);
 let soundsChanged = false;
 const soundOffsets = structuredClone(offsetsData);
 
-let metadataAudioContext: AudioContext | undefined;
 let loadMetadataCancellation: AbortController | undefined;
 
 /** Load appropriate properties for the selected sound. */
 async function handleSoundSelectionChange(_: Event): Promise<void> {
-    // Initialize audio context and reset cancellation state.
-    metadataAudioContext ??= new AudioContext();
+    // Reset cancellation state.
     loadMetadataCancellation?.abort("user didn't wait for previous audio clip to be loaded");
     loadMetadataCancellation = new AbortController();
 
@@ -31,11 +29,7 @@ async function handleSoundSelectionChange(_: Event): Promise<void> {
 
     try {
         // Fetch buffer for it's metadata.
-        const buffer = await loadSoundClip(
-            loadMetadataCancellation.signal,
-            metadataAudioContext,
-            soundSelection.value,
-        );
+        const buffer = await loadSoundClip(loadMetadataCancellation.signal, soundSelection.value);
 
         // Apply appropriate values and limits.
         soundStart.valueAsNumber = soundOffsets[soundSelection.value]?.start ?? 0;
