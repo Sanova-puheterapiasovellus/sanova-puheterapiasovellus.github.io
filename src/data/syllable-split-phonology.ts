@@ -72,4 +72,5 @@ export const TEST_EXAMPLES = {
     tietokone: ["tie", "to", "ko", "ne"], // diftongi + yhdyssana
     arkkitehti: ["ark", "ki", "teh", "ti"], // kaksoiskonsonantti + vierasperäinen johdin
     "t-paita": ["t", "pai", "ta"], // sanaan kuuluu valmis tavuviiva
+    "palaava auto": ["pa", "laa", "va", "au", "to"], // sanaan kuuluu valmis välilyönti
 };
