@@ -31,10 +31,17 @@ function openDatabase(
     name: string,
     version: number,
     signal: AbortSignal,
-    upgrade: (database: IDBDatabase) => void,
+    upgrade: (database: IDBDatabase, transaction: IDBTransaction) => void,
 ): Promise<IDBDatabase> {
     const request = window.indexedDB.open(name, version);
-    request.addEventListener("upgradeneeded", (_) => upgrade(request.result));
+    request.addEventListener("upgradeneeded", (_) => {
+        if (!request.transaction) {
+            throw new Error("object store upgrade should happen within transaction");
+        }
+
+        upgrade(request.result, request.transaction);
+    });
+
     return waitCompletion(request, signal);
 }
 
@@ -60,20 +67,52 @@ async function accessObjectStore<T>(
     return result;
 }
 
+/** Get or create a object store. */
+function getOrCreateStore(
+    database: IDBDatabase,
+    transaction: IDBTransaction,
+    name: string,
+    options?: IDBObjectStoreParameters,
+): IDBObjectStore {
+    if (database.objectStoreNames.contains(name)) {
+        return transaction.objectStore(name);
+    }
+
+    return database.createObjectStore(name, options);
+}
+
+/** Get or create a index. */
+function getOrCreateIndex(
+    store: IDBObjectStore,
+    name: string,
+    options?: IDBIndexParameters,
+): IDBIndex {
+    if (store.indexNames.contains(name)) {
+        return store.index(name);
+    }
+
+    return store.createIndex(name, name, options);
+}
+
 /** Return a store yielding a view of the persisted history state. */
 export function historyState(): Store<StoredResult[]> {
     return new Store(async (current, signal) => {
         // Begin by opening and possibly migrating the database.
-        const database = await openDatabase("sanova-history", 1, signal, (database) => {
-            const results = database.createObjectStore("results", {
-                keyPath: "id",
-                autoIncrement: true,
-            });
+        const database = await openDatabase(
+            "sanova-history",
+            1,
+            signal,
+            (database, transaction) => {
+                const results = getOrCreateStore(database, transaction, "results", {
+                    keyPath: "id",
+                    autoIncrement: true,
+                });
 
-            results.createIndex("date", "date", { unique: false });
-            results.createIndex("words", "words", { unique: false });
-            results.createIndex("correct", "correct", { unique: false });
-        });
+                getOrCreateIndex(results, "date", { unique: false });
+                getOrCreateIndex(results, "words", { unique: false });
+                getOrCreateIndex(results, "correct", { unique: false });
+            },
+        );
 
         // Get the existing results from the object store.
         const existing = await accessObjectStore(database, signal, "results", "readonly", (store) =>
