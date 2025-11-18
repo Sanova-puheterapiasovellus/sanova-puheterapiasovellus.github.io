@@ -102,12 +102,28 @@ function handleGameOver(event: GameOverEvent) {
     gameSession = null;
 }
 
+/** Show the image that should be guessed */
 function setImage(): void {
     if (!gameSession) return;
-    const word = gameSession.getCurrentWord();
 
-    wordImage.alt = word.name;
-    wordImage.src = getImagePath(word.image);
+    const word = gameSession.getCurrentWord();
+    const newSrc = getImagePath(word.image);
+
+    // Hide current image immediately
+    wordImage.style.opacity = "0";
+
+    const img = new Image();
+    img.src = newSrc;
+
+    img.onload = () => {
+        wordImage.src = newSrc;
+        wordImage.alt = word.name;
+
+        // Fade in smoothly
+        requestAnimationFrame(() => {
+            wordImage.style.opacity = "1";
+        });
+    };
 }
 
 function updateGameProgressCounter(): void {
