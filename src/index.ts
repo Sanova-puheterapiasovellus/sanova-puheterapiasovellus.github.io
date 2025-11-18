@@ -25,11 +25,4 @@ initializeImageCreditsDialog();
 
 dispatchInternalNotification(document.body, "Testi-ilmoitus", "Lisätietoja");
 
-history.subscribe((entries) => {
-    const pretty = entries.map(({ date, ...result }) => ({
-        date: new Date(date * 1000),
-        ...result,
-    }));
-
-    console.table(pretty);
-});
+history.subscribe((entries) => console.table(entries));

@@ -1,12 +1,11 @@
+import type { GameResults } from "./events";
 import { Store } from "./reactive";
 
 /** Persisted result of playing a game. */
 export type StoredResult = {
-    id: number;
-    date: number;
-    words: number;
-    correct: number;
-};
+    entryId: number;
+    dateFinished: Date;
+} & GameResults;
 
 /** Wait for a request to complete. */
 function waitCompletion<T>(request: IDBRequest<T>, signal: AbortSignal): Promise<T> {
@@ -81,17 +80,11 @@ function getOrCreateStore(
     return database.createObjectStore(name, options);
 }
 
-/** Get or create a index. */
-function getOrCreateIndex(
-    store: IDBObjectStore,
-    name: string,
-    options?: IDBIndexParameters,
-): IDBIndex {
-    if (store.indexNames.contains(name)) {
-        return store.index(name);
+/** Create missing indices as non-unique.  */
+function ensureIndicesExist(store: IDBObjectStore, names: Iterable<string>) {
+    for (const key of new Set(names).difference(new Set(store.indexNames))) {
+        store.createIndex(key, key, { unique: false });
     }
-
-    return store.createIndex(name, name, options);
 }
 
 /** Return a store yielding a view of the persisted history state. */
@@ -104,19 +97,31 @@ export function historyState(): Store<StoredResult[]> {
             signal,
             (database, transaction) => {
                 const results = getOrCreateStore(database, transaction, "results", {
-                    keyPath: "id",
+                    keyPath: "entryId",
                     autoIncrement: true,
                 });
 
-                getOrCreateIndex(results, "date", { unique: false });
-                getOrCreateIndex(results, "words", { unique: false });
-                getOrCreateIndex(results, "correct", { unique: false });
+                ensureIndicesExist(results, [
+                    "dateFinished",
+                    "correctAnswers",
+                    "incorrectAnswers",
+                    "skippedWords",
+                    "wordsSolvedUsingHints",
+                    "totalWords",
+                    "totalVocalHintsUsed",
+                    "totalTextHintsUsed",
+                    "totalLetterHintsUsed",
+                ]);
             },
         );
 
         // Get the existing results from the object store.
-        const existing = await accessObjectStore(database, signal, "results", "readonly", (store) =>
-            store.getAll(),
+        const existing: StoredResult[] = await accessObjectStore(
+            database,
+            signal,
+            "results",
+            "readonly",
+            (store) => store.getAll(),
         );
 
         // Show the now known values.
@@ -125,17 +130,12 @@ export function historyState(): Store<StoredResult[]> {
         // Receive new values from the rest of the application.
         window.addEventListener(
             "show-results",
-            async ({
-                detail: {
-                    gameResults: { correctAnswers, totalWords },
-                },
-            }) => {
+            async ({ detail: { gameResults } }) => {
                 // Capture data from event.
                 const additional = {
-                    date: Math.floor(Date.now() / 1000),
-                    words: totalWords,
-                    correct: correctAnswers,
-                } satisfies Omit<StoredResult, "id">;
+                    dateFinished: new Date(),
+                    ...gameResults,
+                } satisfies Omit<StoredResult, "entryId">;
 
                 // Wait for the item to be added.
                 const key = await accessObjectStore(
@@ -147,7 +147,7 @@ export function historyState(): Store<StoredResult[]> {
                 );
 
                 // Update the store's state.
-                existing.push({ ...additional, id: key as number });
+                existing.push({ ...additional, entryId: key as number });
                 current.set(existing);
             },
             { signal },
