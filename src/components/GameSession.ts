@@ -133,7 +133,8 @@ export class GameSession {
             const hintUsed = wg.getHintsUsed();
             const eventuallyCorrect =
                 wg.getStatus() !== WordGuessStatus.NOT_GUESSED &&
-                wg.getStatus() !== WordGuessStatus.SKIPPED;
+                wg.getStatus() !== WordGuessStatus.SKIPPED &&
+                wg.getStatus() !== WordGuessStatus.GUESS_INCORRECT;
             return hintUsed && eventuallyCorrect;
         }).length;
     }
