@@ -52,7 +52,10 @@ function handleDialogClose(_: Event): void {
 
 /** Trigger the mobile keyboard */
 function focusHiddenInput(): void {
-    hiddenInput.focus();
+    if (!isMobile()) {
+        // Only focus if not using mobile device
+        hiddenInput.focus();
+    }
 }
 
 /** Handle the game starting with the selected category. */
@@ -186,10 +189,7 @@ function setupWordInput(): void {
     wordGuess.render(letterSlots);
     hiddenInput.value = "";
     letterSlots.addEventListener("click", () => hiddenInput.focus());
-    if (!isMobile()) {
-        // Only focus if not using mobile device
-        hiddenInput.focus();
-    }
+    focusHiddenInput();
 }
 
 /** Handle the typing events when using both physical keyboard and phone's keyboard */
@@ -261,12 +261,7 @@ function handleUseLetterHint(): void {
         // word completed with hints, move to next word
         handleAnswer(wordGuess);
     }
-    if (!isMobile()) {
-        // Focus back to input from the button. Do not do this
-        // if using mobile device since this will pop the
-        // keyboard.
-        hiddenInput.focus();
-    }
+    focusHiddenInput();
 }
 
 /** Set current word's text hint */
@@ -279,24 +274,14 @@ function handleUseTextHint(): void {
     const currentWord = gameSession.getCurrentWord();
 
     textHint.textContent = currentWord.hint;
-    if (!isMobile()) {
-        // Focus back to input from the button. Do not do this
-        // if using mobile device since this will pop the
-        // keyboard.
-        hiddenInput.focus();
-    }
+    focusHiddenInput();
 }
 
 function handleUseVocalHint(): void {
     if (!gameSession) return;
     gameSession.useVocalHint();
     // Focus back to input from the button
-    if (!isMobile()) {
-        // Focus back to input from the button. Do not do this
-        // if using mobile device since this will pop the
-        // keyboard.
-        hiddenInput.focus();
-    }
+    focusHiddenInput();
 }
 
 /** Check if the user's answer is correct */
@@ -484,12 +469,7 @@ export function initializeGameContainer(): void {
         const wordGuess = gameSession.getCurrentWordGuess();
         handleAnswer(wordGuess);
         // Focus back to input from the button
-        if (!isMobile()) {
-            // Focus back to input from the button. Do not do this
-            // if using mobile device since this will pop the
-            // keyboard.
-            hiddenInput.focus();
-        }
+        focusHiddenInput();
     });
 
     // No suggestions
