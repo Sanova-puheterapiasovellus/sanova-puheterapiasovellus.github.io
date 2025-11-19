@@ -55,7 +55,6 @@ function focusHiddenInput(): void {
     if (!isMobile()) {
         // Only focus if not using mobile device
         hiddenInput.focus();
-        console.log("FOCUSED!");
     }
 }
 
@@ -460,7 +459,12 @@ function moveCursorToEnd(input: HTMLInputElement) {
 /** Set focus on the hidden input field if the
  * user clicks inside the game dialog */
 function handleClickGameDialog(event: PointerEvent): void {
-    event.preventDefault();
+    // On mobile we cannot prevent the default behaviour, as the
+    // mobile keyboard will then remain popped all the time.
+    // On PC we can as we want the input to be active all the time.
+    if (!isMobile()) {
+        event.preventDefault();
+    }
 
     // Get the clicked element
     const target = event.target as HTMLElement;
