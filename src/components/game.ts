@@ -50,11 +50,12 @@ function handleDialogClose(_: Event): void {
     guessDialog.close();
 }
 
-/** Trigger the mobile keyboard */
+/** Focus on the input, user can write to the input after calling this */
 function focusHiddenInput(): void {
     if (!isMobile()) {
         // Only focus if not using mobile device
         hiddenInput.focus();
+        console.log("FOCUSED!");
     }
 }
 
@@ -456,6 +457,26 @@ function moveCursorToEnd(input: HTMLInputElement) {
     input.setSelectionRange(length, length);
 }
 
+/** Set focus on the hidden input field if the
+ * user clicks inside the game dialog */
+function handleClickGameDialog(event: PointerEvent): void {
+    event.preventDefault();
+
+    // Get the clicked element
+    const target = event.target as HTMLElement;
+
+    // Elements that were clicked and should be ignored
+    const interactiveSelector = ["button", "summary", "details", "input", "a"].join(",");
+
+    // If the clicked element is any of the ones in the list, skip
+    if (target.closest(interactiveSelector)) {
+        return;
+    }
+
+    // Otherwise, focus on the input
+    focusHiddenInput();
+}
+
 /** Wire up events to react to the game being started. */
 export function initializeGameContainer(): void {
     window.addEventListener("category-selected", handleGameStart);
@@ -463,6 +484,9 @@ export function initializeGameContainer(): void {
     window.addEventListener("words-selected", handleWordsSelected);
     window.addEventListener("show-results", handleGameOver);
     closeButton.addEventListener("click", handleDialogClose);
+
+    // Focus on the input field if the dialog is clicked
+    guessCard.addEventListener("pointerdown", handleClickGameDialog);
 
     answerButton.addEventListener("click", () => {
         if (!gameSession) return;
