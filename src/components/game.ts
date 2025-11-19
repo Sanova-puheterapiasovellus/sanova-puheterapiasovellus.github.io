@@ -351,7 +351,18 @@ async function handleSkipWord(): Promise<void> {
     if (!gameSession) return;
     const isGameOver: boolean = gameSession.isGameOver();
     gameSession.markCurrentSkipped();
-    //const currentWordGuess = gameSession.getCurrentWordGuess();
+
+    // Style the card to indicate skipping
+    guessCard.classList.add("skip");
+    // Short delay when skipping a word
+    setButtonsEnabled(false);
+    setDetailsEnabled(false);
+    await delay(1000);
+    setButtonsEnabled(true);
+    setDetailsEnabled(true);
+    // Remove the skip style
+    guessCard.classList.remove("skip");
+
     if (isGameOver) {
         let showResults: boolean = gameSession.getTotalWordCount() > 1;
         const isReplay: boolean = gameSession.getIsReplay();
@@ -363,16 +374,6 @@ async function handleSkipWord(): Promise<void> {
         dispatchGameOver(window, showResults, getGameResults(gameSession));
         return;
     }
-    // Style the card to indicate skipping
-    guessCard.classList.add("skip");
-    // Short delay when skipping a word
-    setButtonsEnabled(false);
-    setDetailsEnabled(false);
-    await delay(1000);
-    setButtonsEnabled(true);
-    setDetailsEnabled(true);
-    // Remove the skip style
-    guessCard.classList.remove("skip");
 
     const nextWord: Word = gameSession.getNextWord();
     textHint.textContent = "";
