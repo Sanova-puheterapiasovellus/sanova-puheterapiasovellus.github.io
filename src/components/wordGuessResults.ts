@@ -3,6 +3,7 @@ import type { GameSession } from "./GameSession";
 import "./styles/word-guess-results.css";
 import { unlockPageScroll } from "../common/preventScroll.ts";
 import type { Word } from "../data/word-data-model.ts";
+import { WordGuessStatus } from "./wordStatus.ts";
 
 const resultsDialog = expectElement("word-guess-results-dialog", HTMLDialogElement);
 
@@ -29,6 +30,14 @@ function expectScopedElement<T extends Element>(
         throw new Error(`Expected ${selector} to be ${type.name}`);
     }
     return el;
+}
+
+function updateReplayButtonState() {
+    const anyChecked = Array.from(
+        resultsDialog.querySelectorAll("input[name='replay-option']"),
+    ).some((input) => (input as HTMLInputElement).checked);
+
+    replayButton.disabled = !anyChecked;
 }
 
 function setupDialogElements(dialog: HTMLDialogElement): void {
@@ -61,25 +70,20 @@ function getUniqueWords(words: Word[]): Word[] {
 
 // Handler here to get access to the gameSession
 function handleReplay(gameSession: GameSession): void {
-    const option = (
-        document.querySelector("input[name='replay-option']:checked") as HTMLInputElement | null
-    )?.value;
-    if (!option) return;
+    const checkedCheckboxes = document.querySelector(
+        "input[name='replay-option']:checked",
+    ) as HTMLInputElement | null;
+    if (!checkedCheckboxes) return;
 
-    let words: Word[];
-    switch (option) {
-        case "skipped":
-            words = gameSession.getSkippedWords();
-            break;
-        case "hints":
-            words = gameSession.getHintedWords();
-            break;
-        case "incorrect":
-            words = gameSession.getUnsuccessfullyGuessedWords();
-            break;
-        default:
-            return;
-    }
+    const wordsPerStatus = gameSession.getWordsPerStatus();
+    const wordsIncorrect = wordsPerStatus[WordGuessStatus.GUESS_INCORRECT] ?? [];
+    const wordsUsedWithHints = wordsPerStatus[WordGuessStatus.USED_HINT] ?? [];
+    const wordsSkipped = wordsPerStatus[WordGuessStatus.SKIPPED] ?? [];
+
+    const words: Word[] = [];
+    if (checkboxHints.checked) words.push(...wordsUsedWithHints);
+    if (checkboxSkipped.checked) words.push(...wordsSkipped);
+    if (checkboxIncorrect.checked) words.push(...wordsIncorrect);
     if (words.length === 0) return;
 
     // Remove duplicates
@@ -130,16 +134,16 @@ function buildDialogContent(): void {
             <fieldset id="replay-options">
                 <legend>Valitse kerrattavaksi:</legend>
                 <label>
-                    <input type="radio" name="replay-option" value="skipped" id="replay-skipped">
+                    <input type="checkbox" name="replay-option" value="skipped" id="replay-skipped">
                     Ohitetut sanat
                 </label>
                 <label>
-                    <input type="radio" name="replay-option" value="hints" id="replay-hints">
-                    Sanat, joissa käytetty vihjeitä
+                    <input type="checkbox" name="replay-option" value="incorrect" id="replay-incorrect">
+                    Väärin menneet sanat
                 </label>
                 <label>
-                    <input type="radio" name="replay-option" value="incorrect" id="replay-incorrect">
-                    Väärin menneet sanat (ohitetut + vihjeet + väärin kirjoitetut)
+                    <input type="checkbox" name="replay-option" value="hints" id="replay-hints">
+                    Sanat, jotka saatu oikein vihjeiden avulla
                 </label>
             </fieldset>
             <button id="word-guess-replay" type="button">Pelaa uudelleen</button>
@@ -152,9 +156,7 @@ function buildDialogContent(): void {
 
     // Enable replay button when any option is selected
     resultsDialog.querySelectorAll("input[name='replay-option']").forEach((input) => {
-        input.addEventListener("change", () => {
-            replayButton.disabled = false;
-        });
+        input.addEventListener("change", updateReplayButtonState);
     });
 }
 
@@ -166,31 +168,32 @@ export function showWordGuessResults(gameSession: GameSession): void {
     checkboxSkipped.checked = false;
     checkboxHints.checked = false;
     checkboxIncorrect.checked = false;
+    updateReplayButtonState();
 
     // Update UI stats
-    const correctCount = gameSession.getCorrectAnswerCount();
-    const correctWithHintsCount = gameSession.getCorrectWithHintsCount();
+    const wordsPerStatus = gameSession.getWordsPerStatus();
+    const wordsSkippedCount = wordsPerStatus[WordGuessStatus.SKIPPED]?.length ?? 0;
+    const wordsIncorrectCount = wordsPerStatus[WordGuessStatus.GUESS_INCORRECT]?.length ?? 0;
+    const correctAnswerCount = wordsPerStatus[WordGuessStatus.GUESS_CORRECT]?.length ?? 0;
+    const correctAnswerCountHintsUsed = wordsPerStatus[WordGuessStatus.USED_HINT]?.length ?? 0;
     const totalCount = gameSession.getTotalWordCount();
-    correctAnswerP.textContent = `Oikeita vastauksia: ${correctCount} / ${totalCount}`;
-    if (correctWithHintsCount > 0) {
-        correctWithHintsP.textContent = `Oikeita vastauksia vihjeitä käyttäen: ${correctWithHintsCount + correctCount} / ${totalCount}`;
+
+    correctAnswerP.textContent = `Oikeita vastauksia: ${correctAnswerCount} / ${totalCount}`;
+    if (correctAnswerCountHintsUsed > 0) {
+        correctWithHintsP.textContent = `Vihjeiden avulla oikein vastatut sanat: ${correctAnswerCountHintsUsed} / ${totalCount}`;
         correctWithHintsP.style.display = "block";
     } else {
         correctWithHintsP.style.display = "none";
     }
-    skippedAnswerP.textContent = `Ohitettuja sanoja: ${gameSession.getSkippedWords().length ?? 0}`;
-    letterHintsP.textContent = `Käytettyja kirjainvihjeitä: ${gameSession.getLetterHintsUsed()}`;
-    vocalHintsP.textContent = `Käytettyja tavuvihjeitä: ${gameSession.getVocalHintsUsed()}`;
-    textHintsP.textContent = `Käytettyja kuvailevia vihjeitä: ${gameSession.getTextHintsUsed()}`;
-    skippedAnswerP.textContent = `Ohitettuja sanoja: ${gameSession.getSkippedWords().length ?? 0}`;
+    skippedAnswerP.textContent = `Ohitettuja sanoja: ${wordsSkippedCount}`;
     letterHintsP.textContent = `Käytettyja kirjainvihjeitä: ${gameSession.getLetterHintsUsed()}`;
     vocalHintsP.textContent = `Käytettyja tavuvihjeitä: ${gameSession.getVocalHintsUsed()}`;
     textHintsP.textContent = `Käytettyja kuvailevia vihjeitä: ${gameSession.getTextHintsUsed()}`;
 
     // Show/Hide checkbox replay-options
-    const hasSkipped = gameSession.getSkippedWords().length > 0;
-    const hasHints = gameSession.getHintedWords().length > 0;
-    const hasIncorrect = gameSession.getUnsuccessfullyGuessedWords().length > 0;
+    const hasSkipped = wordsSkippedCount > 0;
+    const hasHints = correctAnswerCountHintsUsed > 0;
+    const hasIncorrect = wordsIncorrectCount > 0;
 
     checkboxSkipped.parentElement?.classList.toggle("hidden", !hasSkipped);
     checkboxHints.parentElement?.classList.toggle("hidden", !hasHints);

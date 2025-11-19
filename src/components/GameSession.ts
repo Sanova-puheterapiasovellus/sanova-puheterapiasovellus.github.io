@@ -125,6 +125,42 @@ export class GameSession {
         return correctCount;
     }
 
+    getWordGuessesPerStatus(): Partial<Record<WordGuessStatus, WordGuess[]>> {
+        return Object.groupBy(this.wordGuessList, (wg) => wg.getStatus());
+    }
+
+    /**
+     * Groups all guessed words by their WordGuessStatus.
+     *
+     * @returns {Partial<Record<WordGuessStatus, Word[]>>}
+     * An object whose keys are WordGuessStatus values,
+     * and whose values are arrays of Word objects.
+     *
+     * Example return value:
+     * {
+     *   [WordGuessStatus.GUESS_CORRECT]: [
+     *     { name: "apple", image: "apple.png", hint: "A fruit", ... },
+     *     { name: "cat", image: "cat.png", hint: "An animal", ... }
+     *   ],
+     *   [WordGuessStatus.USED_HINT]: [
+     *     { name: "banana", image: "banana.png", hint: "Yellow", ... }
+     *   ],
+     *   (...)
+     * }
+     */
+    getWordsPerStatus(): Partial<Record<WordGuessStatus, Word[]>> {
+        const groups: Partial<Record<WordGuessStatus, Word[]>> = {};
+        for (const wg of this.wordGuessList) {
+            const status = wg.getStatus();
+            const word = wg.getWordObject();
+            if (!groups[status]) {
+                groups[status] = [];
+            }
+            groups[status].push(word);
+        }
+        return groups;
+    }
+
     /**
      * @returns {number} The count of words that were guessed correctly after using any hints
      */
@@ -159,38 +195,6 @@ export class GameSession {
 
     markHintUsed(): void {
         this.currentWordGuess?.updateStatus(WordGuessStatus.USED_HINT);
-    }
-
-    getUnsuccessfullyGuessedWords(): Word[] {
-        const wordList: Word[] = [];
-        // Count as incorrect:
-        //  - Words where the user used any hint
-        //  - Words that were actually incorrect
-        //  - words that were skipped
-        for (const wordGuess of this.wordGuessList) {
-            if (wordGuess.getStatus() !== WordGuessStatus.GUESS_CORRECT) {
-                wordList.push(wordGuess.getWordObject());
-            }
-        }
-        return wordList;
-    }
-
-    getIncorrectlyGuessedWords(): Word[] {
-        return this.wordGuessList
-            .filter((wg) => wg.getStatus() === WordGuessStatus.GUESS_INCORRECT)
-            .map((wg) => wg.getWordObject());
-    }
-
-    getHintedWords(): Word[] {
-        return this.wordGuessList
-            .filter((wg) => wg.getStatus() === WordGuessStatus.USED_HINT || wg.getHintsUsed())
-            .map((wg) => wg.getWordObject());
-    }
-
-    getSkippedWords(): Word[] {
-        return this.wordGuessList
-            .filter((wg) => wg.getStatus() === WordGuessStatus.SKIPPED)
-            .map((wg) => wg.getWordObject());
     }
 
     /** Mark the current word as guessed so it won't be shown again */
