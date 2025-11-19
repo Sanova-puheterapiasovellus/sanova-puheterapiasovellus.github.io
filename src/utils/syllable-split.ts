@@ -29,6 +29,14 @@ export function* splitToSyllables(word: string): Generator<string> {
         const nextChar = word.charAt(i + 1);
         const secondNextChar = word.charAt(i + 2);
 
+        // Some words already have syllable separators in them
+        // Examples: t-paita
+        if (currentChar === "-" || currentChar === " ") {
+            yield word.substring(currentStart, i);
+            currentStart = ++i;
+            continue;
+        }
+
         // Consonant rule
         // Split if one or more consonants follow vowels of current syllable.
         // Examples: o-me-na, kär-pä-nen

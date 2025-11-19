@@ -25,28 +25,29 @@
 
         <dialog id="word-guess-dialog" closedby="any">
             <div id="word-guess-card">
-                <button id="word-guess-close" type="button">
+                <button id="word-guess-close" type="button" class="dialog-close-button">
                     <img src="/assets/icons/close_36dp.svg">
                 </button>
-                <div id="prev-btn-container">
-                    <button id="prev-btn">
-                        <img src="/assets/icons/arrow_back_20dp.svg" alt="arrow back">
-                    </button>
-                </div>
                 <div id="word-guess-card-content">
                     <h3>Sanaharjoittelu</h3>
                     <div id="word-guess-progress-counter"></div>
+                    <button
+                        id="word-guess-image-credits-button"
+                        type="button"
+                        class="word-guess-image-credits-button"
+                    >
+                        <span> Tekijänoikeustiedot </span>
+                    </button>
                     <img id="word-guess-image" src="placeholder.png" alt="placeholder">
                     <!--<div id="word-guess-slots"></div>-->
                     <div id="word-guess-slots"></div>
                     <input id="hidden-input" type="text" style="opacity:0;">
                     <!--style="position:absolute; opacity:0; width:1px; height:1px;"-->
-                    <div id="text-hint"></div>
-                    <button id="word-guess-submit" type="button">
+                    <button id="word-guess-submit" type="button" class="word-guess-button">
                         <img src="/assets/icons/reply_24dp.svg" alt="Vastaa" class="icon">
                         <span>Vastaa</span>
                     </button>
-                    <button id="word-guess-letter-hint" type="button">
+                    <button id="word-guess-letter-hint" type="button" class="word-guess-button">
                         <img
                             src="/assets/icons/text_rotation_none_22dp.svg"
                             alt="Kirjainvihje"
@@ -54,16 +55,23 @@
                         >
                         <span>Kirjainvihje</span>
                     </button>
-                    <button id="word-guess-text-hint" type="button">
-                        <img src="/assets/icons/book_5_22dp.svg" alt="Kuvaileva vihje" class="icon">
-                        <span>Kuvaileva vihje</span>
-                    </button>
-                    <button id="word-guess-syllable-hint" type="button">
+                    <button id="word-guess-syllable-hint" type="button" class="word-guess-button">
                         <img src="/assets/icons/ear_sound_22dp.svg" alt="Tavuvihje" class="icon">
                         <span>Tavuvihje</span>
                     </button>
+                    <details id="word-guess-text-hint">
+                        <summary>
+                            <img
+                                src="/assets/icons/book_5_22dp.svg"
+                                alt="Kuvaileva vihje"
+                                class="icon"
+                            >
+                            <span>Kuvaileva vihje</span>
+                        </summary>
+                        <div id="text-hint"></div>
+                    </details>
                 </div>
-                <div id="prev-btn-container">
+                <div id="next-btn-container">
                     <button id="next-btn">
                         <img src="/assets/icons/arrow_forward_20dp.svg">
                     </button>
@@ -71,7 +79,8 @@
             </div>
         </dialog>
 
-        <dialog id="word-guess-results-dialog" closedby="any">
+        <dialog id="word-guess-results-dialog" closedby="any"></dialog>
+        <!--<dialog id="word-guess-results-dialog" closedby="any">
             <h3>Tulokset</h3>
             <p id="correct-answers" class="results-line"></p>
             <p id="letter-hints-used" class="result-line"></p>
@@ -79,6 +88,18 @@
             <p id="text-hints-used" class="result-line"></p>
             <button id="word-guess-results-close" type="button">Sulje</button>
             <button id="word-guess-replay" type="button">Pelaa väärin menneet uudelleen</button>
+        </dialog>-->
+
+        <dialog id="image-credits" closedby="any">
+            <button id="image-credits-close" type="button" class="dialog-close-button">
+                <img src="/assets/icons/close_36dp.svg">
+            </button>
+            <article>
+                <header class="image-credits-header">
+                    <h2>Kuvan tekijänoikeustiedot</h2>
+                </header>
+                <div id="image-credits-text"></div>
+            </article>
         </dialog>
 
         <template id="notification-item">
@@ -92,5 +113,62 @@
                 </details>
             </li>
         </template>
+
+        <dialog id="management-dialog" closedby="any">
+            <form id="management-form">
+                <fieldset>
+                    <legend>Kirjautuminen</legend>
+
+                    <label>
+                        GitHub Personal Access Token
+                        <input id="management-auth-token" type="password" required>
+                    </label>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Äänivihjeet</legend>
+
+                    <label>
+                        Äännetiedosto muokattavaksi
+                        <select id="management-sound-selection" required></select>
+                    </label>
+
+                    <label>
+                        Äänteen alkukohta sekunneissa
+                        <input
+                            id="management-sound-start"
+                            type="number"
+                            min="0"
+                            step="0.001"
+                            required
+                        >
+                    </label>
+
+                    <label>
+                        Äänteen loppukohta sekunneissa
+                        <input
+                            id="management-sound-end"
+                            type="number"
+                            min="0"
+                            step="0.001"
+                            required
+                        >
+                    </label>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Varmistus</legend>
+
+                    <label>
+                        Haaran nimi
+                        <input id="management-branch" type="text">
+                    </label>
+
+                    <button id="management-finish" type="submit">Tee muutokset</button>
+                </fieldset>
+            </form>
+
+            <button id="management-dialog-close" type="button">Sulje</button>
+        </dialog>
     </body>
 </html>
