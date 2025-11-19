@@ -153,11 +153,55 @@
 }
 
 #word-guess-slots span.letter-slot {
-    display: inline-block;
+    display: inline-flex;
+    justify-content: center; /* center letter */
+    align-items: center; /* vertically center */
     flex-shrink: 1;
     text-align: center;
     min-width: 0;
+    position: relative; /* so caret positions inside */
 }
+
+.letter-slot.active::after {
+    content: "";
+    position: absolute;
+    left: 50%; /* center horizontally */
+    transform: translateX(-50%); /* perfect center align */
+    width: 2px;
+    height: 70%; /* caret size */
+    background: var(--bg-card-btns); /* Caret color */
+    animation: blinkCaret 1s steps(1) infinite;
+}
+
+@keyframes blinkCaret {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* -- Caret particle effects -- */
+.caret-particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: var(--bg-card-btns); /* Particle color */
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 1;
+    animation: particleFly 800ms ease-out forwards; /* 800ms long particle animation */
+}
+
+@keyframes particleFly {
+    from {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    to {
+        transform: translate(var(--dx), var(--dy)) scale(0.1);
+        opacity: 0;
+    }
+}
+/* -- -- */
 
 #hidden-input {
     border: 2px solid red;

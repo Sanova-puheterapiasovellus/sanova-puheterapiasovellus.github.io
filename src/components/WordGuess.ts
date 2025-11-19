@@ -5,6 +5,7 @@ import { WordGuessStatus } from "./wordStatus";
 export class WordGuess {
     private word: string = ""; // The current word as a string
     private currentGuess: string[] = []; // The current guess as an individual letters
+    private previousGuess: string[] = [];
     private locked: boolean[]; // Locked letters, using a letter hint locks a correct letter in place
     private status: WordGuessStatus = WordGuessStatus.NOT_GUESSED; // Default status
     private anyHintsUsed: boolean = false;
@@ -153,6 +154,31 @@ export class WordGuess {
         return this.locked.every((locked) => locked);
     }
 
+    createCaretParticles(parent: HTMLElement) {
+        const PARTICLE_COUNT = 6;
+        const MIN_DIST = 25;
+
+        // Create particles
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+            const particle = document.createElement("div");
+            particle.classList.add("caret-particle");
+
+            // random direction
+            const angle = Math.random() * Math.PI * 2;
+            const distance = MIN_DIST + Math.random() * 10; // px
+
+            particle.style.setProperty("--dx", `${Math.cos(angle) * distance}px`);
+            particle.style.setProperty("--dy", `${Math.sin(angle) * distance}px`);
+
+            parent.appendChild(particle);
+
+            // Remove after animation
+            particle.addEventListener("animationend", () => {
+                particle.remove();
+            });
+        }
+    }
+
     /**
      * Render the word as individual letters.
      * @param container: Element that holds all the spans containing the letters
@@ -160,28 +186,47 @@ export class WordGuess {
     render(container: HTMLElement): void {
         container.style.setProperty("--letters", this.word.length.toString());
         container.innerHTML = "";
+
+        // Get the index where the caret should be blinking
+        const caretIndex = this.currentGuess.length;
+
         for (let i = 0; i < this.word.length; i++) {
             const span = document.createElement("span");
-            span.classList.add("letter-slot"); // Set style class for the element to later use css styling
-            // Set the text to the guessed letter or to _ if not typed yet
-            span.textContent = this.currentGuess[i] ?? "_";
+            span.classList.add("letter-slot");
 
-            // If the current letter is obtained from a letter hint, it is locked.
+            const newChar = this.currentGuess[i] ?? "_";
+            const oldChar = this.previousGuess[i] ?? "_";
+
+            // Set the letter or _ for this slot
+            span.textContent = newChar;
+
+            // Style the locked letters if any
             if (this.locked[i]) {
-                // Style hint letters differently with class: .letter-slot.locked
                 span.classList.add("locked");
-                // Some styles for debugging, should be removed later
-                span.style.color = "green"; // TODO: css file for styling
+                span.style.color = "green";
             }
 
+            // Add the caret class
+            if (i === caretIndex) {
+                span.classList.add("active");
+            }
+
+            // Generate particles if the user typed something
+            if (newChar !== oldChar) {
+                this.createCaretParticles(span);
+            }
+
+            // Focus on the hidden input if any of the slots are clicked
             span.addEventListener("click", () => {
                 const input = document.getElementById("hidden-input") as HTMLInputElement;
-                if (input) {
-                    input.focus();
-                }
+                if (input) input.focus();
             });
 
             container.appendChild(span);
         }
+
+        // Store the current guess to determine particle effects
+        // when the next letter is typed / current one is deleted
+        this.previousGuess = [...this.currentGuess];
     }
 }
