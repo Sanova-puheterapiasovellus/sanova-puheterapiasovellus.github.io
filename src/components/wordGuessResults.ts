@@ -64,10 +64,6 @@ function handleDialogClose(_: Event): void {
     unlockPageScroll();
 }
 
-function getUniqueWords(words: Word[]): Word[] {
-    return Array.from(new Map(words.map((w) => [w.name, w])).values());
-}
-
 // Handler here to get access to the gameSession
 function handleReplay(wordsPerStatus: Partial<Record<WordGuessStatus, Word[]>>): void {
     const checkedCheckboxes = document.querySelector(
@@ -85,9 +81,6 @@ function handleReplay(wordsPerStatus: Partial<Record<WordGuessStatus, Word[]>>):
     if (checkboxIncorrect.checked) words.push(...wordsIncorrect);
     if (words.length === 0) return;
 
-    // Remove duplicates
-    const uniqueWords = getUniqueWords(words);
-
     // Remove result dialog immediately
     // when starting a new game
     //handleDialogClose(new Event("click"));
@@ -97,7 +90,7 @@ function handleReplay(wordsPerStatus: Partial<Record<WordGuessStatus, Word[]>>):
         new CustomEvent("words-selected", {
             bubbles: true,
             detail: {
-                selections: uniqueWords.map((w, idx) => ({ word: w, index: idx })),
+                selections: words.map((w, idx) => ({ word: w, index: idx })),
                 category: null,
                 isReplay: true,
             },
