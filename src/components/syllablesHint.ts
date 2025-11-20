@@ -22,7 +22,7 @@ async function handlePlayback(_: Event): Promise<void> {
         return;
     }
     const syllablesToPlayCount = Math.min(
-        gameSession.getVocalHintsUsedForWord(),
+        gameSession.getVocalHintsUsedForCurrentWord(),
         determinedSyllables.length,
     );
 
