@@ -371,6 +371,15 @@ async function handleSkipWord(): Promise<void> {
     setupWordInput();
 }
 
+function generateParticles(gameSession: GameSession, color: string): void {
+    //const container = document.getElementById("word-guess-slots")!;
+    const spans = letterSlots.querySelectorAll(".letter-slot");
+
+    spans.forEach((span) => {
+        gameSession.getCurrentWordGuess().createCaretParticles(span as HTMLElement, color);
+    });
+}
+
 /** Handle the user's guess when the answer btn is pressed */
 async function handleAnswer(wordGuess: WordGuess) {
     const gameSession: GameSession = getGameSession();
@@ -401,9 +410,11 @@ async function handleAnswer(wordGuess: WordGuess) {
             gameSession.markCurrentCorrect();
         }
         guessCard.classList.add("correct");
+        generateParticles(gameSession, "limegreen");
     } else {
         gameSession.markIncorrectlyGuessed();
         guessCard.classList.add("wrong");
+        generateParticles(gameSession, "red");
     }
 
     // Set buttons disabled during the delay

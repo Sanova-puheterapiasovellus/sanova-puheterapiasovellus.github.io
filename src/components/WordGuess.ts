@@ -1,4 +1,5 @@
 import type { Word } from "../data/word-data-model";
+import { splitWord } from "../utils/wordSplitUtils.ts";
 import { WordGuessStatus } from "./wordStatus";
 
 /** Keeps track of the guessed letters of a single word, renders the typed letters*/
@@ -10,6 +11,7 @@ export class WordGuess {
     private status: WordGuessStatus = WordGuessStatus.NOT_GUESSED; // Default status
     private anyHintsUsed: boolean = false;
     private wordObject: Word;
+    private splitWord: [string, boolean][] = [];
 
     /** Initialize a WordGuess object with current guess being
      * empty, i.e. no letter written. No letter hints used, so
@@ -20,6 +22,7 @@ export class WordGuess {
         this.currentGuess = [];
         this.locked = new Array(this.word.length).fill(false);
         this.wordObject = wordObj;
+        this.splitWord = splitWord(this.wordObject);
     }
 
     setHintsUsed(): void {
@@ -154,7 +157,7 @@ export class WordGuess {
         return this.locked.every((locked) => locked);
     }
 
-    createCaretParticles(parent: HTMLElement) {
+    createCaretParticles(parent: HTMLElement, color?: string) {
         const PARTICLE_COUNT = 6;
         const MIN_DIST = 25;
 
@@ -162,6 +165,10 @@ export class WordGuess {
         for (let i = 0; i < PARTICLE_COUNT; i++) {
             const particle = document.createElement("div");
             particle.classList.add("caret-particle");
+
+            if (color) {
+                particle.style.background = color;
+            }
 
             // random direction
             const angle = Math.random() * Math.PI * 2;
@@ -194,11 +201,28 @@ export class WordGuess {
             const span = document.createElement("span");
             span.classList.add("letter-slot");
 
-            const newChar = this.currentGuess[i] ?? "_";
-            const oldChar = this.previousGuess[i] ?? "_";
+            const [currentChar, isLetter] = this.splitWord[i]!;
+            console.log("CURRENT CHAR, IS LETTER:", currentChar, isLetter);
 
-            // Set the letter or _ for this slot
-            span.textContent = newChar;
+            // If the current character is a normal letter, then we will render
+            // either the letter or _, if the letter has not been written.
+            if (isLetter) {
+                const newChar = this.currentGuess[i] ?? "_";
+                const oldChar = this.previousGuess[i] ?? "_";
+
+                span.textContent = newChar;
+
+                // Typing particle effect only for real letters
+                if (newChar !== oldChar) {
+                    this.createCaretParticles(span);
+                }
+            }
+            // If the character is not a letter, then it is a special character
+            // that should always be visible and not affected by the user input.
+            else {
+                span.textContent = currentChar;
+                span.classList.add("special-char");
+            }
 
             // Style the locked letters if any
             if (this.locked[i]) {
@@ -212,9 +236,9 @@ export class WordGuess {
             }
 
             // Generate particles if the user typed something
-            if (newChar !== oldChar) {
-                this.createCaretParticles(span);
-            }
+            // if (newChar !== oldChar) {
+            //     this.createCaretParticles(span);
+            // }
 
             // Focus on the hidden input if any of the slots are clicked
             span.addEventListener("click", () => {
