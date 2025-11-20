@@ -7,9 +7,10 @@ export class GameSession {
     private category: Category | null = null; // Will be used to fetch a word from the correct category
     private currentWord: Word | null;
 
-    private vocalHintsCounter: number = 0;
     private textHintsCounter: number = 0;
     private textHintUsedForCurrentWord = false;
+    private vocalHintsCounter: number = 0;
+    private vocalHintsUsedForCurrentWord: number = 0;
     private letterHintsCounter: number = 0;
 
     private gameModeRandom: boolean = false;
@@ -80,10 +81,15 @@ export class GameSession {
     useVocalHint(): void {
         this.vocalHintsCounter++;
         this.currentWordGuess?.setHintsUsed();
+        this.vocalHintsUsedForCurrentWord++;
+    }
+
+    getVocalHintsUsedForCurrentWord(): number {
+        return this.vocalHintsUsedForCurrentWord;
     }
 
     resetVocalHints(): void {
-        this.vocalHintsCounter = 0;
+        this.vocalHintsUsedForCurrentWord = 0;
     }
 
     getTextHintsUsed(): number {
