@@ -134,16 +134,16 @@ function buildDialogContent(): void {
             <fieldset id="replay-options">
                 <legend>Valitse kerrattavaksi:</legend>
                 <label>
+                    <input type="checkbox" name="replay-option" value="hints" id="replay-hints">
+                    Sanat, jotka saatu oikein vihjeiden avulla
+                </label>
+                <label>
                     <input type="checkbox" name="replay-option" value="skipped" id="replay-skipped">
                     Ohitetut sanat
                 </label>
                 <label>
                     <input type="checkbox" name="replay-option" value="incorrect" id="replay-incorrect">
                     Väärin menneet sanat
-                </label>
-                <label>
-                    <input type="checkbox" name="replay-option" value="hints" id="replay-hints">
-                    Sanat, jotka saatu oikein vihjeiden avulla
                 </label>
             </fieldset>
             <button id="word-guess-replay" type="button">Pelaa uudelleen</button>
