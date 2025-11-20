@@ -11,6 +11,7 @@ export class GameSession {
     private textHintsCounter: number = 0;
     private textHintUsedForCurrentWord = false;
     private letterHintsCounter: number = 0;
+    private vocalHintsUsedForWord: number = 0;
 
     private gameModeRandom: boolean = false;
     private outOfWords: boolean = false;
@@ -80,10 +81,15 @@ export class GameSession {
     useVocalHint(): void {
         this.vocalHintsCounter++;
         this.currentWordGuess?.setHintsUsed();
+        this.vocalHintsUsedForWord++;
+    }
+
+    getVocalHintsUsedForWord(): number {
+        return this.vocalHintsUsedForWord;
     }
 
     resetVocalHints(): void {
-        this.vocalHintsCounter = 0;
+        this.vocalHintsUsedForWord = 0;
     }
 
     getTextHintsUsed(): number {
