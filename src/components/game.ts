@@ -310,10 +310,10 @@ function setDetailsEnabled(enabled: boolean): void {
 
 function getGameResults(gameSession: GameSession): GameResults {
     const gameResults: GameResults = {
-        correctAnswers: gameSession.getCountByStatus(WordGuessStatus.GUESS_CORRECT),
-        incorrectAnswers: gameSession.getCountByStatus(WordGuessStatus.GUESS_INCORRECT),
+        correctAnswers: gameSession.getCountByStatus(WordGuessStatus.CORRECT),
+        incorrectAnswers: gameSession.getCountByStatus(WordGuessStatus.INCORRECT),
         skippedWords: gameSession.getCountByStatus(WordGuessStatus.SKIPPED),
-        wordsSolvedUsingHints: gameSession.getCountByStatus(WordGuessStatus.USED_HINT),
+        wordsSolvedUsingHints: gameSession.getCountByStatus(WordGuessStatus.CORRECT_USED_HINT),
         totalWords: gameSession.getTotalWordCount(),
         totalVocalHintsUsed: gameSession.getVocalHintsUsed(),
         totalTextHintsUsed: gameSession.getTextHintsUsed(),

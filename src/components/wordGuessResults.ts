@@ -76,8 +76,8 @@ function handleReplay(gameSession: GameSession): void {
     if (!checkedCheckboxes) return;
 
     const wordsPerStatus = gameSession.getWordsPerStatus();
-    const wordsIncorrect = wordsPerStatus[WordGuessStatus.GUESS_INCORRECT] ?? [];
-    const wordsUsedWithHints = wordsPerStatus[WordGuessStatus.USED_HINT] ?? [];
+    const wordsIncorrect = wordsPerStatus[WordGuessStatus.INCORRECT] ?? [];
+    const wordsUsedWithHints = wordsPerStatus[WordGuessStatus.CORRECT_USED_HINT] ?? [];
     const wordsSkipped = wordsPerStatus[WordGuessStatus.SKIPPED] ?? [];
 
     const words: Word[] = [];
@@ -173,9 +173,10 @@ export function showWordGuessResults(gameSession: GameSession): void {
     // Update UI stats
     const wordsPerStatus = gameSession.getWordsPerStatus();
     const wordsSkippedCount = wordsPerStatus[WordGuessStatus.SKIPPED]?.length ?? 0;
-    const wordsIncorrectCount = wordsPerStatus[WordGuessStatus.GUESS_INCORRECT]?.length ?? 0;
-    const correctAnswerCount = wordsPerStatus[WordGuessStatus.GUESS_CORRECT]?.length ?? 0;
-    const correctAnswerCountHintsUsed = wordsPerStatus[WordGuessStatus.USED_HINT]?.length ?? 0;
+    const wordsIncorrectCount = wordsPerStatus[WordGuessStatus.INCORRECT]?.length ?? 0;
+    const correctAnswerCount = wordsPerStatus[WordGuessStatus.CORRECT]?.length ?? 0;
+    const correctAnswerCountHintsUsed =
+        wordsPerStatus[WordGuessStatus.CORRECT_USED_HINT]?.length ?? 0;
     const totalCount = gameSession.getTotalWordCount();
 
     correctAnswerP.textContent = `Oikeita vastauksia: ${correctAnswerCount} / ${totalCount}`;

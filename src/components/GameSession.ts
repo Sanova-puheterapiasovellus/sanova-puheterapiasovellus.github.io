@@ -118,7 +118,7 @@ export class GameSession {
     getCorrectAnswerCount(): number {
         let correctCount: number = 0;
         for (const wordGuess of this.wordGuessList) {
-            if (wordGuess.getStatus() === WordGuessStatus.GUESS_CORRECT) {
+            if (wordGuess.getStatus() === WordGuessStatus.CORRECT) {
                 correctCount++;
             }
         }
@@ -138,11 +138,11 @@ export class GameSession {
      *
      * Example return value:
      * {
-     *   [WordGuessStatus.GUESS_CORRECT]: [
+     *   [WordGuessStatus.CORRECT]: [
      *     { name: "apple", image: "apple.png", hint: "A fruit", ... },
      *     { name: "cat", image: "cat.png", hint: "An animal", ... }
      *   ],
-     *   [WordGuessStatus.USED_HINT]: [
+     *   [WordGuessStatus.CORRECT_USED_HINT]: [
      *     { name: "banana", image: "banana.png", hint: "Yellow", ... }
      *   ],
      *   (...)
@@ -170,7 +170,7 @@ export class GameSession {
             const eventuallyCorrect =
                 wg.getStatus() !== WordGuessStatus.NOT_GUESSED &&
                 wg.getStatus() !== WordGuessStatus.SKIPPED &&
-                wg.getStatus() !== WordGuessStatus.GUESS_INCORRECT;
+                wg.getStatus() !== WordGuessStatus.INCORRECT;
             return hintUsed && eventuallyCorrect;
         }).length;
     }
@@ -190,16 +190,16 @@ export class GameSession {
     }
 
     markIncorrectlyGuessed(): void {
-        this.currentWordGuess?.updateStatus(WordGuessStatus.GUESS_INCORRECT);
+        this.currentWordGuess?.updateStatus(WordGuessStatus.INCORRECT);
     }
 
     markHintUsed(): void {
-        this.currentWordGuess?.updateStatus(WordGuessStatus.USED_HINT);
+        this.currentWordGuess?.updateStatus(WordGuessStatus.CORRECT_USED_HINT);
     }
 
     /** Mark the current word as guessed so it won't be shown again */
     markCurrentCorrect(): void {
-        this.currentWordGuess?.updateStatus(WordGuessStatus.GUESS_CORRECT);
+        this.currentWordGuess?.updateStatus(WordGuessStatus.CORRECT);
     }
 
     markCurrentSkipped(): void {

@@ -1,8 +1,8 @@
 export const WordGuessStatus = {
     NOT_GUESSED: 0,
-    GUESS_CORRECT: 1,
-    GUESS_INCORRECT: 2,
-    USED_HINT: 3, // same as: GUESS_CORRECT_USED_HINT
+    CORRECT: 1,
+    INCORRECT: 2,
+    CORRECT_USED_HINT: 3,
     SKIPPED: 4,
 } as const;
 
