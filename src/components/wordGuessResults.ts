@@ -69,13 +69,12 @@ function getUniqueWords(words: Word[]): Word[] {
 }
 
 // Handler here to get access to the gameSession
-function handleReplay(gameSession: GameSession): void {
+function handleReplay(wordsPerStatus: Partial<Record<WordGuessStatus, Word[]>>): void {
     const checkedCheckboxes = document.querySelector(
         "input[name='replay-option']:checked",
     ) as HTMLInputElement | null;
     if (!checkedCheckboxes) return;
 
-    const wordsPerStatus = gameSession.getWordsPerStatus();
     const wordsIncorrect = wordsPerStatus[WordGuessStatus.INCORRECT] ?? [];
     const wordsUsedWithHints = wordsPerStatus[WordGuessStatus.CORRECT_USED_HINT] ?? [];
     const wordsSkipped = wordsPerStatus[WordGuessStatus.SKIPPED] ?? [];
@@ -162,7 +161,9 @@ function buildDialogContent(): void {
 
 export function showWordGuessResults(gameSession: GameSession): void {
     buildDialogContent();
-    replayButton.onclick = () => handleReplay(gameSession);
+
+    const wordsPerStatus = gameSession.getWordsPerStatus();
+    replayButton.onclick = () => handleReplay(wordsPerStatus);
 
     // Reset checkboxes
     checkboxSkipped.checked = false;
@@ -171,7 +172,6 @@ export function showWordGuessResults(gameSession: GameSession): void {
     updateReplayButtonState();
 
     // Update UI stats
-    const wordsPerStatus = gameSession.getWordsPerStatus();
     const wordsSkippedCount = wordsPerStatus[WordGuessStatus.SKIPPED]?.length ?? 0;
     const wordsIncorrectCount = wordsPerStatus[WordGuessStatus.INCORRECT]?.length ?? 0;
     const correctAnswerCount = wordsPerStatus[WordGuessStatus.CORRECT]?.length ?? 0;
