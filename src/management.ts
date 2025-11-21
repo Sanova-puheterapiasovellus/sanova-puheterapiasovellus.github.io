@@ -1,17 +1,14 @@
-import { buildHtml, expectElement } from "../common/dom";
-import { addOrUpdateFile, createBranch, createPullRequest } from "../common/github";
-import { loadSoundClip } from "../common/playback";
-import type { Store } from "../common/reactive";
-import { type AudioSegment, offsetsData } from "../data/offset-data-model";
+import { buildHtml, expectElement } from "./common/dom";
+import { addOrUpdateFile, createBranch, createPullRequest } from "./common/github";
+import { loadSoundClip } from "./common/playback";
+import { type AudioSegment, offsetsData } from "./data/offset-data-model";
 
-const rootDialog = expectElement("management-dialog", HTMLDialogElement);
-const managementForm = expectElement("management-form", HTMLFormElement);
-const authToken = expectElement("management-auth-token", HTMLInputElement);
-const soundSelection = expectElement("management-sound-selection", HTMLSelectElement);
-const soundStart = expectElement("management-sound-start", HTMLInputElement);
-const soundEnd = expectElement("management-sound-end", HTMLInputElement);
-const customBranch = expectElement("management-branch", HTMLInputElement);
-const closeButton = expectElement("management-dialog-close", HTMLButtonElement);
+const managementForm = expectElement("form", HTMLFormElement, document.body);
+const authToken = expectElement("#auth-token", HTMLInputElement, managementForm);
+const soundSelection = expectElement("#sound-selection", HTMLSelectElement, managementForm);
+const soundStart = expectElement("#sound-start", HTMLInputElement, managementForm);
+const soundEnd = expectElement("#sound-end", HTMLInputElement, managementForm);
+const customBranch = expectElement("#branch-name", HTMLInputElement, managementForm);
 
 let soundsChanged = false;
 const soundOffsets = structuredClone(offsetsData);
@@ -93,9 +90,12 @@ async function handleFormSubmit(event: SubmitEvent): Promise<void> {
     }
 }
 
-/** Build up dynamic state and connect events for using the management dialog. */
-export function initializeManagementDialog(hash: Store<string>) {
-    hash.filter((value) => value === "#management").subscribe((_) => rootDialog.showModal());
+/** Build up dynamic state and connect events for using the management page. */
+function initializeState() {
+    soundSelection.addEventListener("change", handleSoundSelectionChange);
+    soundStart.addEventListener("change", handleSoundOffsetChange);
+    soundEnd.addEventListener("change", handleSoundOffsetChange);
+    managementForm.addEventListener("submit", handleFormSubmit);
 
     for (const key in offsetsData) {
         soundSelection.appendChild(
@@ -103,13 +103,10 @@ export function initializeManagementDialog(hash: Store<string>) {
         );
     }
 
-    soundSelection.addEventListener("change", handleSoundSelectionChange);
-    soundStart.addEventListener("change", handleSoundOffsetChange);
-    soundEnd.addEventListener("change", handleSoundOffsetChange);
-    managementForm.addEventListener("submit", handleFormSubmit);
-    closeButton.addEventListener("click", (_) => {
-        rootDialog.close();
-        window.location.hash = "#";
+    // Make a deferred selection to ensure our event listener gets invoked.
+    queueMicrotask(() => {
+        soundSelection.selectedIndex = 0;
     });
-    soundSelection.selectedIndex = 0;
 }
+
+initializeState();
