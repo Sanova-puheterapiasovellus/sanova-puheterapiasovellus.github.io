@@ -172,10 +172,14 @@ export function showWordGuessResults(gameSession: GameSession): void {
         wordsPerStatus[WordGuessStatus.CORRECT_USED_HINT]?.length ?? 0;
     const totalCount = gameSession.getTotalWordCount();
 
-    correctAnswerP.textContent = `Oikeita vastauksia: ${correctAnswerCount} / ${totalCount}`;
-    if (correctAnswerCountHintsUsed > 0) {
-        correctWithHintsP.textContent = `Vihjeiden avulla oikein vastatut sanat: ${correctAnswerCountHintsUsed} / ${totalCount}`;
-        correctWithHintsP.style.display = "block";
+    const totalCorrect = correctAnswerCount + correctAnswerCountHintsUsed;
+    correctAnswerP.textContent = `Oikeita vastauksia: ${correctAnswerCount + correctAnswerCountHintsUsed} / ${totalCount}`;
+    if (totalCorrect > 1 && correctAnswerCountHintsUsed > 0) {
+        correctWithHintsP.textContent = `— joista ${correctAnswerCountHintsUsed} saatiin ratkaistua vihjeiden avulla`;
+        correctWithHintsP.style.display = "inline";
+    } else if (totalCorrect === 1 && correctAnswerCountHintsUsed === 1) {
+        correctWithHintsP.textContent = `— ja tämä vastaus saatiin vihjeiden avulla`;
+        correctWithHintsP.style.display = "inline";
     } else {
         correctWithHintsP.style.display = "none";
     }
