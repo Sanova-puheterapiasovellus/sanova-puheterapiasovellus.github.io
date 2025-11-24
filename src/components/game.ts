@@ -98,6 +98,8 @@ function handleGameOver(event: GameOverEvent) {
         if (gameSession) {
             showWordGuessResults(gameSession);
         }
+    } else {
+        unlockPageScroll();
     }
     gameSession = null;
 }
@@ -431,9 +433,6 @@ async function handleAnswer(wordGuess: WordGuess) {
     guessCard.classList.remove("correct", "wrong");
 
     if (isGameOver) {
-        if (gameSession.getTotalWordCount() === 1) {
-            unlockPageScroll();
-        }
         let showResults: boolean = gameSession.getTotalWordCount() > 1;
         const isReplay: boolean = gameSession.getIsReplay();
         if (isReplay) {
