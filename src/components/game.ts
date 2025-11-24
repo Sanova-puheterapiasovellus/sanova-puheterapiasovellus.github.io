@@ -314,6 +314,8 @@ function setButtonsEnabled(enabled: boolean): void {
     letterHintButton.disabled = !enabled;
     syllableHintButton.disabled = !enabled;
     skipButton.disabled = !enabled;
+
+    setDetailsEnabled(enabled);
 }
 let detailsEnabled = true;
 function setDetailsEnabled(enabled: boolean): void {
@@ -369,10 +371,8 @@ async function handleSkipWord(): Promise<void> {
     guessCard.classList.add("skip");
     // Short delay when skipping a word
     setButtonsEnabled(false);
-    setDetailsEnabled(false);
     await delay(1000);
     setButtonsEnabled(true);
-    setDetailsEnabled(true);
     // Remove the skip style
     guessCard.classList.remove("skip");
 
@@ -424,10 +424,8 @@ async function handleAnswer(wordGuess: WordGuess) {
 
     // Set buttons disabled during the delay
     setButtonsEnabled(false);
-    setDetailsEnabled(false);
     await delay(1000);
     setButtonsEnabled(true);
-    setDetailsEnabled(true);
 
     // Remove the indication of correct/wrong answer before moving to the next card
     guessCard.classList.remove("correct", "wrong");
