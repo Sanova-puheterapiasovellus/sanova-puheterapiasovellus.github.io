@@ -367,15 +367,7 @@ async function handleSkipWord(): Promise<void> {
         return;
     }
 
-    const nextWord: Word = gameSession.getNextWord();
-    textHint.textContent = "";
-    resetTextHint();
-    gameSession.resetVocalHints();
-    updateGameProgressCounter();
-    setSyllableHintWord(nextWord.name);
-    setImage();
-
-    setupWordInput();
+    handleNextWordLogic(gameSession);
 }
 
 /** Handle the user's guess when the answer btn is pressed */
@@ -420,15 +412,7 @@ async function handleAnswer(wordGuess: WordGuess) {
         return;
     }
 
-    const nextWord = gameSession.getNextWord();
-    textHint.textContent = "";
-    gameSession.resetVocalHints();
-    updateGameProgressCounter();
-    resetTextHint();
-    setSyllableHintWord(nextWord.name);
-    setImage();
-
-    setupWordInput();
+    handleNextWordLogic(gameSession);
 }
 
 async function delayBeforeNextWord(): Promise<void> {
@@ -450,6 +434,23 @@ function processGameOver(gameSession: GameSession) {
         showResults = true;
     }
     dispatchGameOver(window, showResults, getGameResults(gameSession));
+}
+
+/**
+ * Make the necessary changes/resets before changing to the next word
+ *
+ * @param gameSession current gameSession
+ */
+function handleNextWordLogic(gameSession: GameSession) {
+    const nextWord: Word = gameSession.getNextWord();
+    textHint.textContent = "";
+    gameSession.resetVocalHints();
+    updateGameProgressCounter();
+    resetTextHint();
+    setSyllableHintWord(nextWord.name);
+    setImage();
+
+    setupWordInput();
 }
 
 function handleImageCredits(): void {
