@@ -354,7 +354,6 @@ function resetTextHint() {
 
 async function handleSkipWord(): Promise<void> {
     if (!gameSession) return;
-    const isGameOver: boolean = gameSession.isGameOver();
     gameSession.markCurrentSkipped();
 
     // Style the card to indicate skipping
@@ -362,6 +361,7 @@ async function handleSkipWord(): Promise<void> {
 
     await delayBeforeNextWord();
 
+    const isGameOver: boolean = gameSession.isGameOver();
     if (isGameOver) {
         processGameOver(gameSession);
         return;
@@ -372,11 +372,34 @@ async function handleSkipWord(): Promise<void> {
 
 /** Handle the user's guess when the answer btn is pressed */
 async function handleAnswer(wordGuess: WordGuess) {
-    const gameSession: GameSession = getGameSession();
-
     const answer = wordGuess.getGuess().toLowerCase();
     const correctAnswer: string = wordImage.alt;
+    if (isAnswerInvalid(answer, correctAnswer)) return;
 
+    const gameSession: GameSession = getGameSession();
+    const isCorrect: boolean = isCorrectAnswer(correctAnswer, answer);
+    markAnswerResult(gameSession, isCorrect);
+
+    await delayBeforeNextWord();
+
+    const isGameOver: boolean = gameSession.isGameOver();
+    if (isGameOver) {
+        processGameOver(gameSession);
+        return;
+    }
+
+    handleNextWordLogic(gameSession);
+}
+
+/**
+ * Check if answer is invalid and indicate the user about invalid answer.
+ * Answer is invalid if the answer length is shorter than correctAnswer.
+ *
+ * @param answer user's answer
+ * @param correctAnswer correct answer
+ * @returns if the answer length was invalid
+ */
+function isAnswerInvalid(answer: string, correctAnswer: string): boolean {
     // Check if the answer is the correct length (cannot submit empty word for example)
     if (answer.length < correctAnswer.length) {
         // Indicate the user about invalid answer. The user can answer
@@ -386,12 +409,19 @@ async function handleAnswer(wordGuess: WordGuess) {
         setTimeout(() => {
             guessCard.classList.remove("shake");
         }, 400);
-        return;
+        return true;
     }
+    return false;
+}
 
-    const isCorrect: boolean = isCorrectAnswer(correctAnswer, answer);
-    const isGameOver: boolean = gameSession.isGameOver();
-
+/**
+ * Mark if the answer was correct or incorrect. If hints were used with correct answer,
+ * mark the answer result as hints used.
+ *
+ * @param gameSession current gameSession
+ * @param isCorrect whether the answer is correct
+ */
+function markAnswerResult(gameSession: GameSession, isCorrect: boolean) {
     if (isCorrect) {
         const usedAnyHints: boolean = gameSession.getCurrentWordGuess().getHintsUsed();
         if (usedAnyHints) {
@@ -404,17 +434,12 @@ async function handleAnswer(wordGuess: WordGuess) {
         gameSession.markIncorrectlyGuessed();
         guessCard.classList.add("wrong");
     }
-
-    await delayBeforeNextWord();
-
-    if (isGameOver) {
-        processGameOver(gameSession);
-        return;
-    }
-
-    handleNextWordLogic(gameSession);
 }
 
+/**
+ * Keep the current style for some time before next word.
+ * Disable buttons when this time is running.
+ */
 async function delayBeforeNextWord(): Promise<void> {
     // Set buttons disabled during the delay
     setButtonsEnabled(false);
@@ -425,6 +450,12 @@ async function delayBeforeNextWord(): Promise<void> {
     guessCard.classList.remove("correct", "wrong", "skip");
 }
 
+/**
+ * Process game over situation. Check if the words will be replayed
+ * and dispatch gameOver event.
+ *
+ * @param gameSession current gameSession
+ */
 function processGameOver(gameSession: GameSession) {
     let showResults: boolean = gameSession.getTotalWordCount() > 1;
     const isReplay: boolean = gameSession.getIsReplay();
