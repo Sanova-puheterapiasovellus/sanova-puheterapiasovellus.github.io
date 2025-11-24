@@ -14,6 +14,10 @@
                 Tällä sivulla pystyt muokkaamaan sovelluksen käyttämiä tiedostoja GitHub
                 lähdevarastossa.
             </p>
+
+            <a id="auth-link" href="https://github.com/login/oauth/authorize" hidden>
+                Kirjaudu automaattisesti GitHubin avulla
+            </a>
         </header>
 
         <main>
@@ -22,8 +26,8 @@
                     <legend>Kirjautuminen</legend>
 
                     <label>
-                        GitHub Personal Access Token
-                        <input id="auth-token" type="password" required>
+                        GitHub Access Token
+                        <input id="auth-token" type="password" autocomplete="off" required>
                     </label>
                 </fieldset>
 
@@ -67,6 +71,12 @@
                 </fieldset>
 
                 <fieldset>
+                    <legend>Sanalista</legend>
+
+                    <ul id="category-list"></ul>
+                </fieldset>
+
+                <fieldset>
                     <legend>Varmistus</legend>
 
                     <label>
@@ -78,5 +88,36 @@
                 </fieldset>
             </form>
         </main>
+
+        <dialog id="edit-category" closedby="none">
+            <h2>Muokkaa kategoriaa</h2>
+
+            <form>
+                <input id="category-index" type="hidden">
+
+                <label>
+                    Nimi
+                    <input id="category-name" type="text" required>
+                </label>
+
+                <button type="submit">Valmis</button>
+            </form>
+        </dialog>
+
+        <dialog id="edit-word" closedby="none">
+            <h2>Muokkaa sanaa</h2>
+
+            <form>
+                <input id="word-index" type="hidden">
+                <input id="word-category" type="hidden">
+
+                <label>
+                    Nimi
+                    <input id="word-name" type="text" required>
+                </label>
+
+                <button type="submit">Valmis</button>
+            </form>
+        </dialog>
     </body>
 </html>

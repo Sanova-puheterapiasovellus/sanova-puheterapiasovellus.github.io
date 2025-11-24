@@ -1,0 +1,46 @@
+/* Center the contents to achieve reasonable width on larger screens. */
+html {
+    display: grid;
+    place-items: center;
+}
+
+/* Adapt word list styling to be more reasonable. */
+ul {
+    /* Don't treat the outer list as so list like. */
+    list-style: none;
+    padding: 0%;
+
+    /* Allow showing multiple category items. */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(25ch, 1fr));
+    gap: 1rem;
+
+    /* Let child contents participate in the grid. */
+    li {
+        display: contents;
+    }
+
+    /* Reset nested lists to a reasonable style. */
+    ul {
+        list-style: circle;
+        padding-inline-start: 5ch;
+    }
+
+    /* Make open section take full width. */
+    details[open] {
+        grid-column: 1 / -1;
+        border: thin solid;
+    }
+}
+
+/* Don't try and shove form fields in single line. */
+label,
+input,
+select {
+    display: block;
+}
+
+/* Mark deleted items by overlining text. */
+.removed > * {
+    text-decoration: line-through;
+}

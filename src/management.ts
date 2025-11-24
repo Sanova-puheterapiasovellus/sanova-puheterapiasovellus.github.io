@@ -1,10 +1,22 @@
+import "./management.css";
 import { buildHtml, expectElement } from "./common/dom";
-import { addOrUpdateFile, createBranch, createPullRequest } from "./common/github";
+import {
+    addOrUpdateFile,
+    attemptPreExistingToken,
+    createBranch,
+    createPullRequest,
+    handleAuthorizationRedirect,
+    initiateAuthorizationFlow,
+} from "./common/github";
 import { loadSoundClip } from "./common/playback";
 import { type AudioSegment, offsetsData } from "./data/offset-data-model";
-import { wordsData } from "./data/word-data-model";
+import { type Category, type Data, type Word, wordsData } from "./data/word-data-model";
 import { splitToSyllables } from "./utils/syllable-split";
 
+/** Item that has a known array position. */
+type Entry<T> = { value: T; index: number };
+
+const authLink = expectElement("#auth-link", HTMLAnchorElement, document.body);
 const managementForm = expectElement("form", HTMLFormElement, document.body);
 const authToken = expectElement("#auth-token", HTMLInputElement, managementForm);
 const soundSelection = expectElement("#sound-selection", HTMLSelectElement, managementForm);
@@ -12,10 +24,24 @@ const soundStart = expectElement("#sound-start", HTMLInputElement, managementFor
 const soundEnd = expectElement("#sound-end", HTMLInputElement, managementForm);
 const missingSoundCount = expectElement("#missing-sound-count", HTMLSpanElement, managementForm);
 const missingSoundList = expectElement("#missing-sound-list", HTMLUListElement, managementForm);
+const categoryList = expectElement("#category-list", HTMLUListElement, managementForm);
 const customBranch = expectElement("#branch-name", HTMLInputElement, managementForm);
+const wordDialog = expectElement("#edit-word", HTMLDialogElement, document.body);
+const wordForm = expectElement("form", HTMLFormElement, wordDialog);
+const wordIndex = expectElement("#word-index", HTMLInputElement, wordForm);
+const wordCategory = expectElement("#word-category", HTMLInputElement, wordForm);
+const wordName = expectElement("#word-name", HTMLInputElement, wordForm);
+const categoryDialog = expectElement("#edit-category", HTMLDialogElement, document.body);
+const categoryForm = expectElement("form", HTMLFormElement, categoryDialog);
+const categoryIndex = expectElement("#category-index", HTMLInputElement, categoryForm);
+const categoryName = expectElement("#category-name", HTMLInputElement, categoryForm);
 
 let soundsChanged = false;
 const soundOffsets = structuredClone(offsetsData);
+
+let wordsChanged = false;
+const wordList = structuredClone(wordsData.categories);
+const removedWords = new Set<[number, number | undefined]>();
 
 let loadMetadataCancellation: AbortController | undefined;
 
@@ -46,7 +72,7 @@ async function handleSoundSelectionChange(_: Event): Promise<void> {
 /** Hacky way to attempt floating point equality. */
 function audioSegmentsRoughlyEqual(first: AudioSegment, second?: AudioSegment): boolean {
     return (
-        Math.fround(first.start) === Math.fround(second?.start ?? 0) ||
+        Math.fround(first.start) === Math.fround(second?.start ?? 0) &&
         Math.fround(first.end) === Math.fround(second?.end ?? 0)
     );
 }
@@ -83,17 +109,223 @@ async function handleFormSubmit(event: SubmitEvent): Promise<void> {
         );
     }
 
+    if (wordsChanged || removedWords.size !== 0) {
+        const categories = wordList
+            .values()
+            .filter((_, category) => !removedWords.has([category, undefined]))
+            .map(({ words, ...rest }, category) => ({
+                words: words
+                    .values()
+                    .filter((_, word) => !removedWords.has([category, word]))
+                    .toArray(),
+                ...rest,
+            }))
+            .toArray();
+
+        await addOrUpdateFile(
+            "word data refinement",
+            "src/data/word-data.json",
+            JSON.stringify({ categories } satisfies Data, undefined, 4),
+            authToken.value,
+            branchName,
+        );
+    }
+
     if (branchName !== undefined) {
         await createPullRequest("requested changes", branchName, authToken.value);
     }
 }
 
+/** Handle authorization flow or prepare for allowing it. */
+async function authorizationFlow(): Promise<string | undefined> {
+    const existing = await attemptPreExistingToken();
+    if (existing !== undefined) {
+        return existing;
+    }
+
+    const search = new URLSearchParams(location.search);
+    if (search.size !== 0) {
+        return handleAuthorizationRedirect(search);
+    }
+
+    const parameters = await initiateAuthorizationFlow();
+    authLink.href += `?${parameters.toString()}`;
+    authLink.hidden = false;
+    return;
+}
+
+/** Open word editing dialog. */
+function selectWord(category: Entry<Category>, current: Partial<Word>, existing?: number): void {
+    wordDialog.showModal();
+    wordIndex.value = (existing ?? -1).toString(10);
+    wordCategory.value = category.index.toString(10);
+    wordName.value = current.name ?? "";
+    wordName.disabled = existing !== undefined;
+}
+
+/** Open category editing dialog. */
+function selectCategory(current: Partial<Category>, existing?: number): void {
+    categoryDialog.showModal();
+    categoryIndex.value = (existing ?? -1).toString(10);
+    categoryName.value = current.name ?? "";
+    categoryName.disabled = existing !== undefined;
+}
+
+/** Build a word entry. */
+function buildWord(category: Entry<Category>, word: Entry<Word>): HTMLLIElement {
+    const updateWord = buildHtml("button", { type: "button" }, "Muokkaa sanaa");
+    const deleteWord = buildHtml("button", { type: "button" }, "Poista sana");
+    const wordItem = buildHtml(
+        "li",
+        {},
+        word.value.name,
+        buildHtml("section", {}, updateWord, deleteWord),
+    );
+
+    updateWord.addEventListener("click", (_) => selectWord(category, word.value, word.index));
+    deleteWord.addEventListener("click", (_) => {
+        wordItem.classList.add("removed");
+        for (const element of wordItem.querySelectorAll("button")) {
+            element.disabled = true;
+        }
+
+        removedWords.add([category.index, word.index]);
+    });
+
+    return wordItem;
+}
+
+/** Build a category entry. */
+function buildCategory(category: Entry<Category>): HTMLLIElement {
+    const createWord = buildHtml("button", { type: "button" }, "Lisää sana");
+    const updateCategory = buildHtml("button", { type: "button" }, "Muokkaa kategoriaa");
+    const deleteCategory = buildHtml("button", { type: "button" }, "Poista kategoria");
+
+    createWord.addEventListener("click", (_) => selectWord(category, {}));
+    updateCategory.addEventListener("click", (_) => selectCategory(category.value, category.index));
+
+    const categoryItem = buildHtml(
+        "li",
+        {},
+        buildHtml(
+            "details",
+            { name: "category" },
+            buildHtml(
+                "summary",
+                {},
+                category.value.name,
+                buildHtml("section", {}, createWord, updateCategory, deleteCategory),
+            ),
+            buildHtml(
+                "ul",
+                {},
+                ...category.value.words.map((value, index) =>
+                    buildWord(category, { index, value }),
+                ),
+            ),
+        ),
+    );
+
+    deleteCategory.addEventListener("click", (_) => {
+        categoryItem.classList.add("removed");
+        for (const element of categoryItem.querySelectorAll("button")) {
+            element.disabled = true;
+        }
+
+        removedWords.add([category.index, undefined]);
+    });
+
+    return categoryItem;
+}
+
+/** Handle a word being created or updated. */
+function wordChanged(event: SubmitEvent): void {
+    event.preventDefault();
+    wordDialog.requestClose();
+
+    const index = Number.parseInt(wordIndex.value, 10);
+    const category = Number.parseInt(wordCategory.value, 10);
+
+    const parent = wordList[category];
+    if (parent === undefined) {
+        throw new Error("invalid category selection");
+    }
+
+    if (index === -1) {
+        const index = parent.words.length;
+        const value: Word = {
+            name: wordName.value,
+            image: "",
+            image_credit: "",
+            hint: "",
+        };
+
+        parent.words.push(value);
+        categoryList.children
+            .item(category)
+            ?.querySelector("ul")
+            ?.appendChild(buildWord({ index: category, value: parent }, { index, value }));
+
+        wordsChanged = true;
+        return;
+    }
+
+    const entry = parent.words[index];
+    if (entry === undefined) {
+        throw new Error("invalid word selection");
+    }
+
+    if (entry.name === wordName.value) {
+        return;
+    }
+
+    wordsChanged = true;
+    entry.name = wordName.value;
+}
+
+/** Handle a category being created or updated. */
+function categoryChanged(event: SubmitEvent): void {
+    event.preventDefault();
+    categoryDialog.requestClose();
+
+    const index = Number.parseInt(categoryIndex.value, 10);
+    if (index === -1) {
+        const index = wordList.length;
+        const value: Category = {
+            name: categoryName.value,
+            image: "",
+            image_credit: "",
+            words: [],
+        };
+
+        wordList.push(value);
+        categoryList.appendChild(buildCategory({ value, index }));
+
+        wordsChanged = true;
+        return;
+    }
+
+    const entry = wordList[index];
+    if (entry === undefined) {
+        throw new Error("invalid category selection");
+    }
+
+    if (entry.name === categoryName.value) {
+        return;
+    }
+
+    wordsChanged = true;
+    entry.name = categoryName.value;
+}
+
 /** Build up dynamic state and connect events for using the management page. */
-function initializeState() {
+async function initializeState(): Promise<void> {
     soundSelection.addEventListener("change", handleSoundSelectionChange);
     soundStart.addEventListener("change", handleSoundOffsetChange);
     soundEnd.addEventListener("change", handleSoundOffsetChange);
     managementForm.addEventListener("submit", handleFormSubmit);
+    wordForm.addEventListener("submit", wordChanged);
+    categoryForm.addEventListener("submit", categoryChanged);
 
     for (const key in offsetsData) {
         soundSelection.appendChild(
@@ -113,10 +345,24 @@ function initializeState() {
         missingSoundList.appendChild(buildHtml("li", { innerText: value }));
     }
 
+    for (const [index, value] of wordsData.categories.entries()) {
+        categoryList.appendChild(buildCategory({ value, index }));
+    }
+
+    const addCategory = buildHtml("button", { type: "button" }, "Lisää kategoria");
+    addCategory.addEventListener("click", () => selectCategory({}));
+    categoryList.parentNode?.appendChild(addCategory);
+
     // Make a deferred selection to ensure our event listener gets invoked.
     queueMicrotask(() => {
-        soundSelection.selectedIndex = 0;
+        soundSelection.selectedIndex = -1;
     });
+
+    const token = await authorizationFlow();
+    if (token !== undefined) {
+        authToken.value = token;
+        authLink.hidden = true;
+    }
 }
 
 initializeState();
