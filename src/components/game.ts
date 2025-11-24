@@ -359,12 +359,8 @@ async function handleSkipWord(): Promise<void> {
 
     // Style the card to indicate skipping
     guessCard.classList.add("skip");
-    // Short delay when skipping a word
-    setButtonsEnabled(false);
-    await delay(1000);
-    setButtonsEnabled(true);
-    // Remove the skip style
-    guessCard.classList.remove("skip");
+
+    await delayBeforeNextWord();
 
     if (isGameOver) {
         processGameOver(gameSession);
@@ -417,13 +413,7 @@ async function handleAnswer(wordGuess: WordGuess) {
         guessCard.classList.add("wrong");
     }
 
-    // Set buttons disabled during the delay
-    setButtonsEnabled(false);
-    await delay(1000);
-    setButtonsEnabled(true);
-
-    // Remove the indication of correct/wrong answer before moving to the next card
-    guessCard.classList.remove("correct", "wrong");
+    await delayBeforeNextWord();
 
     if (isGameOver) {
         processGameOver(gameSession);
@@ -439,6 +429,16 @@ async function handleAnswer(wordGuess: WordGuess) {
     setImage();
 
     setupWordInput();
+}
+
+async function delayBeforeNextWord(): Promise<void> {
+    // Set buttons disabled during the delay
+    setButtonsEnabled(false);
+    await delay(1000);
+    setButtonsEnabled(true);
+
+    // Remove the indication of correct/wrong/skipped answer before moving to the next card
+    guessCard.classList.remove("correct", "wrong", "skip");
 }
 
 function processGameOver(gameSession: GameSession) {
