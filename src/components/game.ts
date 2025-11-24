@@ -317,6 +317,7 @@ function setButtonsEnabled(enabled: boolean): void {
 
     setDetailsEnabled(enabled);
 }
+
 let detailsEnabled = true;
 function setDetailsEnabled(enabled: boolean): void {
     detailsEnabled = enabled;
@@ -357,14 +358,7 @@ async function handleSkipWord(): Promise<void> {
     gameSession.markCurrentSkipped();
     //const currentWordGuess = gameSession.getCurrentWordGuess();
     if (isGameOver) {
-        let showResults: boolean = gameSession.getTotalWordCount() > 1;
-        const isReplay: boolean = gameSession.getIsReplay();
-        if (isReplay) {
-            // Always show results if the user is replaying correct words,
-            // even if there was only one word replayed
-            showResults = true;
-        }
-        dispatchGameOver(window, showResults, getGameResults(gameSession));
+        processGameOver(gameSession);
         return;
     }
     // Style the card to indicate skipping
@@ -431,15 +425,7 @@ async function handleAnswer(wordGuess: WordGuess) {
     guessCard.classList.remove("correct", "wrong");
 
     if (isGameOver) {
-        let showResults: boolean = gameSession.getTotalWordCount() > 1;
-        const isReplay: boolean = gameSession.getIsReplay();
-        if (isReplay) {
-            // Always show results if the user is replaying correct words,
-            // even if there was only one word replayed
-            showResults = true;
-        }
-
-        dispatchGameOver(window, showResults, getGameResults(gameSession));
+        processGameOver(gameSession);
         return;
     }
 
@@ -452,6 +438,17 @@ async function handleAnswer(wordGuess: WordGuess) {
     setImage();
 
     setupWordInput();
+}
+
+function processGameOver(gameSession: GameSession) {
+    let showResults: boolean = gameSession.getTotalWordCount() > 1;
+    const isReplay: boolean = gameSession.getIsReplay();
+    if (isReplay) {
+        // Always show results if the user is replaying correct words,
+        // even if there was only one word replayed
+        showResults = true;
+    }
+    dispatchGameOver(window, showResults, getGameResults(gameSession));
 }
 
 function handleImageCredits(): void {
