@@ -39,6 +39,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, 170px);
     justify-content: center;
+    justify-items: center;
     column-gap: 55px;
     row-gap: 75px;
     max-width: 955px /*845px*/;
@@ -63,7 +64,7 @@ ul#notification-list {
     gap: var(--notification-padding);
 }
 
-@media (max-width: 456px) {
+@media (max-width: 480px) {
     .mainview-main {
         padding-top: 10%;
     }
@@ -72,5 +73,15 @@ ul#notification-list {
         grid-template-columns: repeat(2, 1fr);
         column-gap: 20px;
         row-gap: 20px;
+    }
+    .mainview-header {
+        /*Note: Uncommenting these lines will push the navbar down
+        ----------------------------------------------------------
+        position: fixed;
+        bottom: 0;
+        inset-inline: 0;
+        z-index: 1;*/
+        padding-inline: 10px;
+        height: 100px;
     }
 }
