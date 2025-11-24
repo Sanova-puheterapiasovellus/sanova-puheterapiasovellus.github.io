@@ -16,7 +16,7 @@ function Navbar(hash: Store<string>): HTMLElement {
         <img src="/assets/icons/search1_35.svg" alt="Kaikki sanat -sivun ikoni">
         <span>KAIKKI SANAT</span>
       </a>
-      <a href="#search" id="about-link">
+      <a href="#about" id="about-link">
         <img src="/assets/icons/info_35dp.svg" alt="Tietoa sovelluksesta -ikoni">
         <span>TIETOA</span>
       </a>
