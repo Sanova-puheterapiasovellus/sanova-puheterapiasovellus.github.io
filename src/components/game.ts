@@ -356,11 +356,7 @@ async function handleSkipWord(): Promise<void> {
     if (!gameSession) return;
     const isGameOver: boolean = gameSession.isGameOver();
     gameSession.markCurrentSkipped();
-    //const currentWordGuess = gameSession.getCurrentWordGuess();
-    if (isGameOver) {
-        processGameOver(gameSession);
-        return;
-    }
+
     // Style the card to indicate skipping
     guessCard.classList.add("skip");
     // Short delay when skipping a word
@@ -369,6 +365,11 @@ async function handleSkipWord(): Promise<void> {
     setButtonsEnabled(true);
     // Remove the skip style
     guessCard.classList.remove("skip");
+
+    if (isGameOver) {
+        processGameOver(gameSession);
+        return;
+    }
 
     const nextWord: Word = gameSession.getNextWord();
     textHint.textContent = "";
