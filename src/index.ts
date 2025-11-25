@@ -1,6 +1,7 @@
 import "./index.css";
 import { reactiveHash } from "./common/dom.ts";
 import { dispatchInternalNotification } from "./common/events.ts";
+import { initializeAboutPage } from "./components/aboutpage.ts";
 import { initializeAllWords } from "./components/allwords.ts";
 import { initializeCategorySelector } from "./components/categories.ts";
 import { initializeGameContainer } from "./components/game.ts";
@@ -15,6 +16,7 @@ initializeHeader(route);
 initializeCategorySelector();
 initializeGameContainer();
 initializeAllWords(route);
+initializeAboutPage(route);
 initializeNotificationSystem();
 initializeImageCreditsDialog();
 initializeGameInstructionsDialog();
