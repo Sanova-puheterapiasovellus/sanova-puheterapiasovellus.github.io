@@ -1,7 +1,6 @@
 .page {
     display: flex;
     flex-direction: column;
-    width: 100%;
     min-height: 100vh;
     overflow-y: auto;
     background: var(--bg-dark); /* or white or whatever your app uses */
@@ -14,20 +13,14 @@
 
 .list {
     background-color: var(--bg-dark);
-    display: grid;
-    grid-template-columns: repeat(auto-fit, 170px);
-    justify-content: center;
-    column-gap: 20px;
-    row-gap: 20px;
-    max-width: 100% /*955px*/ /*845px*/;
-    margin: 0 auto;
-    padding: 20px;
-    list-style-type: none;
+    margin-left: 278.5px;
+    margin-right: 278.5px;
 }
 
 .filters {
     background-color: var(--bg-light);
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 10px;
     padding: 20px;
@@ -35,8 +28,7 @@
 
 .searchContainer {
     display: flex;
-    min-width: 50%;
-    max-width: 100%;
+    flex: 1 1 300px;
     padding: 2.5%;
 }
 
@@ -123,7 +115,7 @@
     box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.25);
 }
 
-.card img {
+.card > img {
     width: 100%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
