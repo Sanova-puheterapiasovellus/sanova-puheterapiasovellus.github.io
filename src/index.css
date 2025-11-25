@@ -41,7 +41,7 @@ body {
     justify-content: center;
     justify-items: center;
     column-gap: 55px;
-    row-gap: 75px;
+    row-gap: 55px;
     max-width: 955px /*845px*/;
     margin: 0 auto;
     padding: 0 30px;
