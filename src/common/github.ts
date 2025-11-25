@@ -7,6 +7,7 @@ const defaultClientId = "Iv23li2mrVytdGLl2X8W";
 const defaultRedirectUri = "https://sanova-puheterapiasovellus.github.io/management/";
 const ghApiVersion = "2022-11-28";
 const ghJsonContentType = "application/vnd.github+json";
+const ghRawFileJsonContentType = `application/vnd.github.raw+json`;
 const ghRepoApiBase = "https://api.github.com/repos";
 const jsonContentType = "application/json";
 const projectRepository = "sanova-puheterapiasovellus/sanova-puheterapiasovellus.github.io";
@@ -80,6 +81,71 @@ export async function addOrUpdateFile(
             branch,
             message: `sanova-management: ${reason}`,
             content: btoa(content),
+        }),
+    });
+
+    if (!response.ok) {
+        throw new Error("unsuccessful api response", { cause: response });
+    }
+}
+
+/** Get the current file hash that deleting files needs for some reason. */
+async function getFileHash(
+    path: string,
+    token: string,
+    branch: string = defaultBranch,
+    repository: string = projectRepository,
+): Promise<string | undefined> {
+    const response = await fetch(
+        `${ghRepoApiBase}/${repository}/contents/${path}?ref=${branch})}`,
+        {
+            method: "get",
+            headers: {
+                "content-type": jsonContentType,
+                accept: ghRawFileJsonContentType,
+                authorization: `Bearer ${token}`,
+                version: ghApiVersion,
+            },
+        },
+    );
+
+    if (response.status === 404) {
+        return undefined;
+    }
+
+    if (!response.ok) {
+        throw new Error("unsuccessful api response", { cause: response });
+    }
+
+    const { sha } = await response.json();
+    return sha;
+}
+
+/** Delete a file from the repository. */
+export async function ensureFileDeleted(
+    reason: string,
+    path: string,
+    token: string,
+    branch: string = defaultBranch,
+    repository: string = projectRepository,
+): Promise<void> {
+    const sha = await getFileHash(path, token, branch, repository);
+    if (sha === undefined) {
+        return;
+    }
+
+    const response = await fetch(`${ghRepoApiBase}/${repository}/contents/${path}`, {
+        method: "delete",
+        headers: {
+            "content-type": jsonContentType,
+            accept: ghJsonContentType,
+            authorization: `Bearer ${token}`,
+            version: ghApiVersion,
+        },
+        body: JSON.stringify({
+            sha,
+            branch,
+            message: `sanova-management: ${reason}`,
         }),
     });
 

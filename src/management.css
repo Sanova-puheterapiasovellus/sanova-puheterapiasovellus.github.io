@@ -36,7 +36,8 @@ ul {
 /* Don't try and shove form fields in single line. */
 label,
 input,
-select {
+select,
+textarea {
     display: block;
 }
 

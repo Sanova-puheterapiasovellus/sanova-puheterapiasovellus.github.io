@@ -5,6 +5,7 @@ import {
     attemptPreExistingToken,
     createBranch,
     createPullRequest,
+    ensureFileDeleted,
     handleAuthorizationRedirect,
     initiateAuthorizationFlow,
 } from "./common/github";
@@ -31,10 +32,15 @@ const wordForm = expectElement("form", HTMLFormElement, wordDialog);
 const wordIndex = expectElement("#word-index", HTMLInputElement, wordForm);
 const wordCategory = expectElement("#word-category", HTMLInputElement, wordForm);
 const wordName = expectElement("#word-name", HTMLInputElement, wordForm);
+const wordHint = expectElement("#word-hint", HTMLTextAreaElement, wordForm);
+const wordImage = expectElement("#word-image", HTMLInputElement, wordForm);
+const wordCredit = expectElement("#word-credit", HTMLTextAreaElement, wordForm);
 const categoryDialog = expectElement("#edit-category", HTMLDialogElement, document.body);
 const categoryForm = expectElement("form", HTMLFormElement, categoryDialog);
 const categoryIndex = expectElement("#category-index", HTMLInputElement, categoryForm);
 const categoryName = expectElement("#category-name", HTMLInputElement, categoryForm);
+const categoryImage = expectElement("#category-image", HTMLInputElement, categoryForm);
+const categoryCredit = expectElement("#category-credit", HTMLTextAreaElement, categoryForm);
 
 let soundsChanged = false;
 const soundOffsets = structuredClone(offsetsData);
@@ -42,6 +48,7 @@ const soundOffsets = structuredClone(offsetsData);
 let wordsChanged = false;
 const wordList = structuredClone(wordsData.categories);
 const removedWords = new Set<[number, number | undefined]>();
+const addedImages = new Map<string, File>();
 
 let loadMetadataCancellation: AbortController | undefined;
 
@@ -109,14 +116,43 @@ async function handleFormSubmit(event: SubmitEvent): Promise<void> {
         );
     }
 
+    await Promise.all(
+        addedImages.entries().map(async ([name, file]) => {
+            const data = await file.bytes();
+
+            await addOrUpdateFile(
+                "image asset change",
+                `public/assets/images/${name}`,
+                String.fromCharCode(...data),
+                authToken.value,
+                branchName,
+            );
+        }),
+    );
+
     if (wordsChanged || removedWords.size !== 0) {
+        const unneededImages = new Set<string>();
         const categories = wordList
             .values()
-            .filter((_, category) => !removedWords.has([category, undefined]))
+            .filter(({ image }, category) => {
+                if (!removedWords.has([category, undefined])) {
+                    return true;
+                }
+
+                unneededImages.add(image);
+                return false;
+            })
             .map(({ words, ...rest }, category) => ({
                 words: words
                     .values()
-                    .filter((_, word) => !removedWords.has([category, word]))
+                    .filter(({ image }, word) => {
+                        if (!removedWords.has([category, word])) {
+                            return true;
+                        }
+
+                        unneededImages.add(image);
+                        return false;
+                    })
                     .toArray(),
                 ...rest,
             }))
@@ -128,6 +164,20 @@ async function handleFormSubmit(event: SubmitEvent): Promise<void> {
             JSON.stringify({ categories } satisfies Data, undefined, 4),
             authToken.value,
             branchName,
+        );
+
+        await Promise.all(
+            unneededImages
+                .values()
+                .filter(Boolean)
+                .map((name) =>
+                    ensureFileDeleted(
+                        "unneeded image asset",
+                        `src/assets/images/${name}`,
+                        authToken.value,
+                        branchName,
+                    ),
+                ),
         );
     }
 
@@ -161,6 +211,9 @@ function selectWord(category: Entry<Category>, current: Partial<Word>, existing?
     wordCategory.value = category.index.toString(10);
     wordName.value = current.name ?? "";
     wordName.disabled = existing !== undefined;
+    wordHint.value = current.hint ?? "";
+    wordImage.required = !current.image;
+    wordCredit.value = current.image_credit ?? "";
 }
 
 /** Open category editing dialog. */
@@ -169,6 +222,8 @@ function selectCategory(current: Partial<Category>, existing?: number): void {
     categoryIndex.value = (existing ?? -1).toString(10);
     categoryName.value = current.name ?? "";
     categoryName.disabled = existing !== undefined;
+    categoryImage.required = !current.image;
+    categoryCredit.value = current.image_credit ?? "";
 }
 
 /** Build a word entry. */
@@ -255,9 +310,9 @@ function wordChanged(event: SubmitEvent): void {
         const index = parent.words.length;
         const value: Word = {
             name: wordName.value,
-            image: "",
-            image_credit: "",
-            hint: "",
+            image: `${wordName.value}.png`,
+            image_credit: wordCredit.value,
+            hint: wordHint.value,
         };
 
         parent.words.push(value);
@@ -293,8 +348,8 @@ function categoryChanged(event: SubmitEvent): void {
         const index = wordList.length;
         const value: Category = {
             name: categoryName.value,
-            image: "",
-            image_credit: "",
+            image: `${categoryName.value}.png`,
+            image_credit: categoryCredit.value,
             words: [],
         };
 

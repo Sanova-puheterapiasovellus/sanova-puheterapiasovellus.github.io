@@ -90,14 +90,22 @@
         </main>
 
         <dialog id="edit-category" closedby="none">
-            <h2>Muokkaa kategoriaa</h2>
-
             <form>
                 <input id="category-index" type="hidden">
 
                 <label>
-                    Nimi
+                    Kategorian nimi
                     <input id="category-name" type="text" required>
+                </label>
+
+                <label>
+                    Uusi kuvatiedosto
+                    <input id="category-image" type="file" accept="image/png">
+                </label>
+
+                <label>
+                    Kuvan lähde
+                    <textarea id="category-credit" type="text" required></textarea>
                 </label>
 
                 <button type="submit">Valmis</button>
@@ -105,15 +113,28 @@
         </dialog>
 
         <dialog id="edit-word" closedby="none">
-            <h2>Muokkaa sanaa</h2>
-
             <form>
                 <input id="word-index" type="hidden">
                 <input id="word-category" type="hidden">
 
                 <label>
-                    Nimi
+                    Sanan nimi
                     <input id="word-name" type="text" required>
+                </label>
+
+                <label>
+                    Kuvaileva vihje
+                    <textarea id="word-hint" required></textarea>
+                </label>
+
+                <label>
+                    Uusi kuvatiedosto
+                    <input id="word-image" type="file" accept="image/png">
+                </label>
+
+                <label>
+                    Kuvan lähde
+                    <textarea id="word-credit" type="text" required></textarea>
                 </label>
 
                 <button type="submit">Valmis</button>
