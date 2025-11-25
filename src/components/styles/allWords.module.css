@@ -1,6 +1,4 @@
 .page {
-    display: flex;
-    flex-direction: column;
     min-height: 100vh;
     overflow-y: auto;
     background: var(--bg-dark); /* or white or whatever your app uses */
@@ -13,8 +11,6 @@
 
 .list {
     background-color: var(--bg-dark);
-    margin-left: 278.5px;
-    margin-right: 278.5px;
 }
 
 .filters {
@@ -28,8 +24,8 @@
 
 .searchContainer {
     display: flex;
-    flex: 1 1 300px;
-    padding: 2.5%;
+    width: 50%;
+    max-width: 100%;
 }
 
 .searchInput {
@@ -46,7 +42,6 @@
     border-color: #000000;
     cursor: pointer;
     padding: 18px;
-    /*width: 100%;*/
     font-size: 14px;
     border-radius: 6px;
 }
@@ -69,6 +64,7 @@
 
 .categoryFilters {
     display: flex;
+    flex: 2;
     flex-wrap: wrap;
     justify-content: center;
     padding: 0 18px;
@@ -95,6 +91,7 @@
 .categoryCheckbox {
     cursor: pointer;
 }
+
 .card {
     min-height: 50px;
     padding: 14px 14px 20px 14px;
@@ -116,12 +113,18 @@
 }
 
 .card > img {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
+    width: 142px;
+    height: 142px;
 }
 
-.card > span {
-    padding-top: 20px;
-    font-size: 16px;
+@media (max-width: 456px) {
+    .card {
+        min-height: 100%;
+    }
+
+    .card > img {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1 / 1;
+    }
 }
