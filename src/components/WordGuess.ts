@@ -70,6 +70,13 @@ export class WordGuess {
         return this.currentGuess.join("");
     }
 
+    /** Get the split word array that contains
+     *  the special characters
+     */
+    getSplitWord(): [string, boolean][] {
+        return this.splitWord;
+    }
+
     /** Add new letter to the current guess */
     addLetter(letter: string): void {
         const nextIndex = this.currentGuess.length;
@@ -195,7 +202,18 @@ export class WordGuess {
         container.innerHTML = "";
 
         // Get the index where the caret should be blinking
-        const caretIndex = this.currentGuess.length;
+        //const caretIndex = this.currentGuess.length;
+        let caretIndex = -1;
+        for (let i = 0; i < this.word.length; i++) {
+            const [, isLetter] = this.splitWord[i]!;
+            if (!isLetter) continue; // skip special characters entirely
+            const current = this.currentGuess[i];
+
+            if (current == null || current === "_") {
+                caretIndex = i;
+                break;
+            }
+        }
 
         for (let i = 0; i < this.word.length; i++) {
             const span = document.createElement("span");

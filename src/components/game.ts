@@ -197,45 +197,58 @@ function handleInputEvent(): void {
     if (!gameSession) return;
 
     const wordGuess = gameSession.getCurrentWordGuess();
-    const currentWord = gameSession.getCurrentWord();
     const locked = wordGuess.getLockedLettersArray();
 
     let typed = hiddenInput.value.toUpperCase();
 
-    // Restrict the length of the input word to the length of the word being guessed
-    if (typed.length > currentWord.name.length) {
-        typed = typed.slice(0, currentWord.name.length);
+    // FULL splitWord (letters + special chars)
+    const fullSplit = wordGuess.getSplitWord();
+
+    // LETTERS ONLY (for input length)
+    const lettersOnly = fullSplit.filter(([_, isLetter]) => isLetter);
+    const maxTypedLength = lettersOnly.length;
+
+    // Restrict typed input to number of letters
+    if (typed.length > maxTypedLength) {
+        typed = typed.slice(0, maxTypedLength);
         hiddenInput.value = typed;
     }
 
-    const oldGuess = wordGuess.getGuess();
+    // --- BUILD NEW GUESS USING THE FULL WORD ---
+    const newGuess: string[] = [];
+    let typedIndex = 0;
 
-    if (typed.length < oldGuess.length) {
-        // Protect locked (hint) letters
-        const oldLetters = oldGuess.split("");
-        const newLetters: string[] = [];
+    for (let i = 0; i < fullSplit.length; i++) {
+        const [char, isLetter] = fullSplit[i]!;
 
-        for (let i = 0; i < oldLetters.length; i++) {
-            if (locked[i]) {
-                newLetters.push(oldLetters[i]!);
-            } else {
-                if (newLetters.length < typed.length) {
-                    newLetters.push(typed[newLetters.length]!);
-                }
-            }
+        if (!isLetter) {
+            // Special char stays visible
+            newGuess[i] = char;
+            continue;
         }
 
-        wordGuess.setGuessFromString(newLetters.join(""));
-        hiddenInput.value = newLetters.join("");
+        if (locked[i]) {
+            // Keep locked letter
+            newGuess[i] = wordGuess.getGuess()[i]!;
+            continue;
+        }
 
-        // Set the mobile cursor to the end of the text after backspace
-        setTimeout(() => {
-            hiddenInput.setSelectionRange(hiddenInput.value.length, hiddenInput.value.length);
-        }, 0);
-    } else {
-        wordGuess.setGuessFromString(typed);
+        // Use next typed letter or blank
+        newGuess[i] = typed[typedIndex] ?? "_";
+        typedIndex++;
     }
 
+    // Save guess
+    wordGuess.setGuessFromString(newGuess.join(""));
+
+    // Hidden input always = letters only
+    hiddenInput.value = typed;
+
+    setTimeout(() => {
+        hiddenInput.setSelectionRange(hiddenInput.value.length, hiddenInput.value.length);
+    }, 0);
+
+    // Render
     wordGuess.render(letterSlots);
 }
 
