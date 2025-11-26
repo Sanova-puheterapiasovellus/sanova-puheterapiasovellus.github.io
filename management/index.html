@@ -14,10 +14,6 @@
                 Tällä sivulla pystyt muokkaamaan sovelluksen käyttämiä tiedostoja GitHub
                 lähdevarastossa.
             </p>
-
-            <a id="auth-link" href="https://github.com/login/oauth/authorize" hidden>
-                Kirjaudu automaattisesti GitHubin avulla
-            </a>
         </header>
 
         <main>
@@ -29,6 +25,12 @@
                         GitHub Access Token
                         <input id="auth-token" type="password" autocomplete="off" required>
                     </label>
+
+                    <aside>
+                        <a id="auth-link" href="https://github.com/login/oauth/authorize" hidden>
+                            Kirjaudu automaattisesti GitHubin avulla
+                        </a>
+                    </aside>
                 </fieldset>
 
                 <fieldset>
@@ -77,7 +79,7 @@
                 </fieldset>
 
                 <fieldset>
-                    <legend>Varmistus</legend>
+                    <legend>Muutokset</legend>
 
                     <label>
                         Haaran nimi
@@ -85,6 +87,10 @@
                     </label>
 
                     <button type="submit">Tee muutokset</button>
+
+                    <aside>
+                        <a id="pull-request" hidden>Luodut muutokset GitHubissa</a>
+                    </aside>
                 </fieldset>
             </form>
         </main>

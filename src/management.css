@@ -1,35 +1,61 @@
+/* Define general layout details. */
+:root {
+    --general-spacing: 0.5rem;
+    --entry-size: 25ch;
+}
+
 /* Center the contents to achieve reasonable width on larger screens. */
 html {
     display: grid;
     place-items: center;
 }
 
-/* Adapt word list styling to be more reasonable. */
+/* Make form section padding similar to other values. */
+fieldset {
+    padding: var(--general-spacing);
+
+    > * {
+        padding-block-start: calc(var(--general-spacing) / 2);
+        padding-block-end: calc(var(--general-spacing) / 2);
+    }
+}
+
+/* Define word list layout. */
 ul {
-    /* Don't treat the outer list as so list like. */
+    /* Reset typical list styling. */
     list-style: none;
     padding: 0%;
 
-    /* Allow showing multiple category items. */
+    /* Allow entries to fit side by side. */
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(25ch, 1fr));
-    gap: 1rem;
+    gap: var(--general-spacing);
+    grid-template-columns: repeat(auto-fit, minmax(var(--entry-size), 1fr));
 
     /* Let child contents participate in the grid. */
     li {
         display: contents;
     }
 
-    /* Reset nested lists to a reasonable style. */
-    ul {
-        list-style: circle;
-        padding-inline-start: 5ch;
-    }
-
-    /* Make open section take full width. */
+    /* Make open category section take full width. */
     details[open] {
         grid-column: 1 / -1;
-        border: thin solid;
+
+        /* Ensure gap before starting category content. */
+        summary {
+            padding-block-end: var(--general-spacing);
+        }
+    }
+}
+
+/* Lay out buttons evenly and with enough space. */
+section {
+    gap: var(--general-spacing);
+    display: flex;
+    padding-block-start: var(--general-spacing);
+
+    /* Expand to fit space. */
+    button {
+        flex: 1 1 auto;
     }
 }
 
@@ -42,6 +68,6 @@ textarea {
 }
 
 /* Mark deleted items by overlining text. */
-.removed > * {
+.removed span {
     text-decoration: line-through;
 }

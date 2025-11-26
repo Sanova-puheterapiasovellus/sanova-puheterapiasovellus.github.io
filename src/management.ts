@@ -27,6 +27,7 @@ const missingSoundCount = expectElement("#missing-sound-count", HTMLSpanElement,
 const missingSoundList = expectElement("#missing-sound-list", HTMLUListElement, managementForm);
 const categoryList = expectElement("#category-list", HTMLUListElement, managementForm);
 const customBranch = expectElement("#branch-name", HTMLInputElement, managementForm);
+const pullRequest = expectElement("#pull-request", HTMLAnchorElement, managementForm);
 const wordDialog = expectElement("#edit-word", HTMLDialogElement, document.body);
 const wordForm = expectElement("form", HTMLFormElement, wordDialog);
 const wordIndex = expectElement("#word-index", HTMLInputElement, wordForm);
@@ -182,7 +183,9 @@ async function handleFormSubmit(event: SubmitEvent): Promise<void> {
     }
 
     if (branchName !== undefined) {
-        await createPullRequest("requested changes", branchName, authToken.value);
+        const url = await createPullRequest("requested changes", branchName, authToken.value);
+        pullRequest.href = url;
+        pullRequest.hidden = false;
     }
 }
 
@@ -233,8 +236,12 @@ function buildWord(category: Entry<Category>, word: Entry<Word>): HTMLLIElement 
     const wordItem = buildHtml(
         "li",
         {},
-        word.value.name,
-        buildHtml("section", {}, updateWord, deleteWord),
+        buildHtml(
+            "div",
+            {},
+            buildHtml("span", {}, word.value.name),
+            buildHtml("section", {}, updateWord, deleteWord),
+        ),
     );
 
     updateWord.addEventListener("click", (_) => selectWord(category, word.value, word.index));
@@ -265,12 +272,7 @@ function buildCategory(category: Entry<Category>): HTMLLIElement {
         buildHtml(
             "details",
             { name: "category" },
-            buildHtml(
-                "summary",
-                {},
-                category.value.name,
-                buildHtml("section", {}, createWord, updateCategory, deleteCategory),
-            ),
+            buildHtml("summary", {}, buildHtml("span", {}, category.value.name)),
             buildHtml(
                 "ul",
                 {},
@@ -278,6 +280,7 @@ function buildCategory(category: Entry<Category>): HTMLLIElement {
                     buildWord(category, { index, value }),
                 ),
             ),
+            buildHtml("section", {}, createWord, updateCategory, deleteCategory),
         ),
     );
 
