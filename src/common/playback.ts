@@ -122,7 +122,7 @@ export function loadSoundClip(
     context: AudioContext = getGlobalAudioContext(),
 ): Promise<AudioBuffer> {
     return loadCachedValue(snippetCache, name, async () => {
-        const response = await fetch(`sounds/${name}.mp3`, { signal });
+        const response = await fetch(`/sounds/${name}.mp3`, { signal });
         if (!response.ok) {
             throw new Error(`failed to fetch sound clip for ${name}`, {
                 cause: response,

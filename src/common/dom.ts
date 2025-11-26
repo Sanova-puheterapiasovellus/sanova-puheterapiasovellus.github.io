@@ -7,14 +7,32 @@ import { Store } from "./reactive";
 export function expectElement<T extends HTMLElement>(
     id: string,
     kind: new (...args: unknown[]) => T,
+): T;
+
+/**
+ * Query for a fundamentally required element with the given selector,
+ * throwing an exception if nothing is found or the type doesn't match.
+ */
+export function expectElement<T extends Element>(
+    selector: string,
+    kind: new (...args: unknown[]) => T,
+    parent: ParentNode,
+): T;
+
+export function expectElement<T>(
+    what: string,
+    kind: new (...args: unknown[]) => T,
+    parent?: ParentNode,
 ): T {
-    const element = document.getElementById(id);
+    const element =
+        parent === undefined ? document.getElementById(what) : parent.querySelector(what);
+
     if (element === null) {
-        throw new Error(`couldn't find element ${id}`);
+        throw new Error(`couldn't find element ${what}`);
     }
 
     if (!(element instanceof kind)) {
-        throw new Error(`element ${id} is of an unexpected type ${element.nodeName}`);
+        throw new Error(`element ${what} is of an unexpected type ${element.nodeName}`);
     }
 
     return element;
