@@ -15,7 +15,9 @@ import { type Category, getImagePath, type Word, wordsData } from "../data/word-
 import { GameSession } from "./GameSession";
 import "./styles/game.css";
 import { lockPageScroll, unlockPageScroll } from "../common/preventScroll.ts";
+import { splitToSyllables } from "../utils/syllable-split.ts";
 import { showCreditsModal } from "./imageCredits.ts";
+import { playWord } from "./syllablePlayer.ts";
 import { setSyllableHintWord } from "./syllablesHint.ts";
 import type { WordGuess } from "./WordGuess";
 import { showWordGuessResults } from "./wordGuessResults.ts";
@@ -290,6 +292,13 @@ function handleUseTextHint(): void {
 function handleUseVocalHint(): void {
     if (!gameSession) return;
     gameSession.useVocalHint();
+    const word: string = gameSession.getCurrentWord().name;
+    const syllables: string[] = Array.from(splitToSyllables(word));
+    if (gameSession.getLastHintWord() !== word) {
+        gameSession.setLastHintWord(word);
+        gameSession.setPlayedFullSyllablesOnce(false);
+    }
+    playWord(syllables);
     // Focus back to input from the button
     if (!isMobile()) {
         // Focus back to input from the button. Do not do this

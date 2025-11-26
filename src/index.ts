@@ -8,14 +8,15 @@ import { initializeImageCreditsDialog } from "./components/imageCredits.ts";
 import { initializeManagementDialog } from "./components/management.ts";
 import { initializeHeader } from "./components/navbar.ts";
 import { initializeNotificationSystem } from "./components/notifications.ts";
-import { initializeSyllableHintPlayer } from "./components/syllablesHint.ts";
+
+//import { initializeSyllableHintPlayer } from "./components/syllablesHint.ts";
 
 const route = reactiveHash();
 
 initializeHeader(route);
 initializeCategorySelector();
 initializeGameContainer();
-initializeSyllableHintPlayer();
+//initializeSyllableHintPlayer();
 initializeAllWords(route);
 initializeNotificationSystem();
 initializeManagementDialog(route);

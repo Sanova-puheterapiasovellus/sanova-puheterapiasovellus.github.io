@@ -21,6 +21,9 @@ export class GameSession {
     private wordGuessList: WordGuess[] = [];
     private wordGuessIndex: number = 0;
 
+    private playedFullSyllablesOnce: boolean = false;
+    private lastHintWord: string = "";
+
     /** Set a word to be guessed and create a new word guess object based on that */
     constructor(category: Category | null) {
         this.category = category;
@@ -299,5 +302,19 @@ export class GameSession {
         this.currentWordGuess = randomWordGuess;
         this.currentWord = this.currentWordGuess.getWordObject();
         return this.currentWord;
+    }
+
+    getPlayedFullSyllablesOnce(): boolean {
+        return this.playedFullSyllablesOnce;
+    }
+    setPlayedFullSyllablesOnce(value: boolean) {
+        this.playedFullSyllablesOnce = value;
+    }
+
+    getLastHintWord(): string {
+        return this.lastHintWord;
+    }
+    setLastHintWord(word: string) {
+        this.lastHintWord = word;
     }
 }
