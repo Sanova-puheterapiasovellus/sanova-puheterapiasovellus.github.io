@@ -200,8 +200,8 @@
             "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
             "words": [
                 {
-                    "name": "sateinen",
-                    "image": "sateinen.png",
+                    "name": "vesisade",
+                    "image": "vesisade.png",
                     "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
                     "hint": "Kostea ja märkä säätila"
                 },
@@ -567,7 +567,7 @@
                     "name": "katsoa televisiota",
                     "image": "katsoa.png",
                     "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
-                    "hint": "Suunnata katse johonkin, esim. televisioon ja nähdä se"
+                    "hint": "Suunnata katse laitteeseen, josta voi katsoa esim. ohjelmia ja uutisia"
                 },
                 {
                     "name": "nauraa",
