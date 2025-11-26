@@ -3,6 +3,8 @@ import { addOrUpdateFile, createBranch, createPullRequest } from "../common/gith
 import { loadSoundClip } from "../common/playback";
 import type { Store } from "../common/reactive";
 import { type AudioSegment, offsetsData } from "../data/offset-data-model";
+import { wordsData } from "../data/word-data-model";
+import { splitToSyllables } from "../utils/syllable-split";
 
 const rootDialog = expectElement("management-dialog", HTMLDialogElement);
 const managementForm = expectElement("management-form", HTMLFormElement);
@@ -12,17 +14,17 @@ const soundStart = expectElement("management-sound-start", HTMLInputElement);
 const soundEnd = expectElement("management-sound-end", HTMLInputElement);
 const customBranch = expectElement("management-branch", HTMLInputElement);
 const closeButton = expectElement("management-dialog-close", HTMLButtonElement);
+const missingSoundCount = expectElement("management-missing-sound-count", HTMLSpanElement);
+const missingSoundList = expectElement("management-missing-sound-list", HTMLUListElement);
 
 let soundsChanged = false;
 const soundOffsets = structuredClone(offsetsData);
 
-let metadataAudioContext: AudioContext | undefined;
 let loadMetadataCancellation: AbortController | undefined;
 
 /** Load appropriate properties for the selected sound. */
 async function handleSoundSelectionChange(_: Event): Promise<void> {
-    // Initialize audio context and reset cancellation state.
-    metadataAudioContext ??= new AudioContext();
+    // Reset cancellation state.
     loadMetadataCancellation?.abort("user didn't wait for previous audio clip to be loaded");
     loadMetadataCancellation = new AbortController();
 
@@ -31,11 +33,7 @@ async function handleSoundSelectionChange(_: Event): Promise<void> {
 
     try {
         // Fetch buffer for it's metadata.
-        const buffer = await loadSoundClip(
-            loadMetadataCancellation.signal,
-            metadataAudioContext,
-            soundSelection.value,
-        );
+        const buffer = await loadSoundClip(loadMetadataCancellation.signal, soundSelection.value);
 
         // Apply appropriate values and limits.
         soundStart.valueAsNumber = soundOffsets[soundSelection.value]?.start ?? 0;
@@ -101,6 +99,18 @@ export function initializeManagementDialog(hash: Store<string>) {
         soundSelection.appendChild(
             buildHtml("option", { value: key, innerText: key.toUpperCase() }),
         );
+    }
+
+    const missingSyllableSounds = new Set(
+        wordsData.categories
+            .values()
+            .flatMap((category) => category.words.values())
+            .flatMap((word) => splitToSyllables(word.name)),
+    ).difference(new Set(Object.keys(offsetsData)));
+
+    missingSoundCount.innerText = missingSyllableSounds.size.toString();
+    for (const value of missingSyllableSounds) {
+        missingSoundList.appendChild(buildHtml("li", { innerText: value }));
     }
 
     soundSelection.addEventListener("change", handleSoundSelectionChange);
