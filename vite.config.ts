@@ -32,6 +32,8 @@ export default {
             usePolling: true,
             interval: 200,
         },
+        host: true,
+        port: 5173,
         /*allowedHosts: ["treasonous-improbably-bobby.ngrok-free.dev"],
         host: true,*/
         /*host: "0.0.0.0",
