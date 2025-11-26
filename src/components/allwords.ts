@@ -15,7 +15,6 @@ const allWordsList = expectElement("all-words-list", HTMLUListElement);
 const filtersSection = expectElement("filters-section", HTMLElement);
 const searchContainer = expectElement("search-container", HTMLElement);
 const categoriesContainer = expectElement("category-filters", HTMLElement);
-const collapseCategories = expectElement("collapse-categories", HTMLElement);
 
 allWordsPage.className = styles.page;
 allWordsList.className = styles.list;
@@ -23,16 +22,6 @@ allWordsHeader.className = styles.header;
 filtersSection.className = styles.filters;
 categoriesContainer.className = styles.categoryFilters;
 searchContainer.className = styles.searchContainer;
-collapseCategories.className = styles.collapseCategories;
-collapseCategories.addEventListener("click", function () {
-    this.classList.toggle(styles.active);
-
-    if (categoriesContainer.style.maxHeight) {
-        categoriesContainer.style.maxHeight = "";
-    } else {
-        categoriesContainer.style.maxHeight = `100%`;
-    }
-});
 
 function createImageEntry(word: Word, index: number): HTMLElement {
     const img = buildHtml("img", { src: getImagePath(word.image), alt: word.name });

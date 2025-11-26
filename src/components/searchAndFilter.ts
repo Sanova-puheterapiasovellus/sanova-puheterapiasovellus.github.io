@@ -1,4 +1,5 @@
 import { buildHtml } from "../common/dom";
+import { capitalizeFirstLetter } from "../utils/stringUtils.ts";
 import styles from "./styles/allWords.module.css";
 
 export interface FilterOptions {
@@ -18,7 +19,7 @@ export function setupSearchAndFilter(
     categoriesContainer.innerHTML = "";
     const searchInput = buildHtml("input", {
         type: "text",
-        placeholder: "Etsi sana...",
+        placeholder: "Etsi sanoja...",
         className: styles.searchInput,
     });
 
@@ -27,17 +28,18 @@ export function setupSearchAndFilter(
 
     categories.forEach((category) => {
         const label = buildHtml("label", { className: styles.categoryLabel });
+        const capitalizedName = capitalizeFirstLetter(category.name);
         const checkbox = buildHtml("input", {
             type: "checkbox",
-            value: category.name,
+            value: capitalizedName,
             className: styles.categoryCheckbox,
         });
         const img = buildHtml("img", {
             src: category.imagePath,
-            alt: category.name,
+            alt: capitalizedName,
             className: styles.categoryImage,
         });
-        label.append(img, checkbox, document.createTextNode(category.name));
+        label.append(img, checkbox, document.createTextNode(capitalizedName));
         categoriesContainer.appendChild(label);
     });
 
