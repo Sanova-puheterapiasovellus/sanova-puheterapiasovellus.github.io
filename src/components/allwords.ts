@@ -1,5 +1,5 @@
 import { buildHtml, expectElement } from "../common/dom";
-import { dispatchWordSelection } from "../common/events";
+import { dispatchCustomEvent } from "../common/events";
 import type { Store } from "../common/reactive.ts";
 import { getImagePath, type Word, wordsData } from "../data/word-data-model.ts";
 import type { FilterOptions } from "./searchAndFilter";
@@ -32,7 +32,7 @@ function createImageEntry(word: Word, index: number): HTMLElement {
         display: "block",
     });
     img.addEventListener("click", () => {
-        dispatchWordSelection(img, word, index);
+        dispatchCustomEvent("word-selected", { word, index }, img);
     });
     return buildHtml("li", { className: styles.card }, img);
 }
@@ -49,7 +49,11 @@ function createRandomEntry(filters: FilterOptions): HTMLElement {
     img.addEventListener("click", () => {
         const randomWord = getRandomFilteredWord(filters);
         if (randomWord) {
-            dispatchWordSelection(img, randomWord, randomWord.index);
+            dispatchCustomEvent(
+                "word-selected",
+                { word: randomWord, index: randomWord.index },
+                img,
+            );
         } else {
             alert("Ei sanoja nykyisillä filttereillä");
         }

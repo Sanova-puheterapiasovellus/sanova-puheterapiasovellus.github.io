@@ -1,5 +1,5 @@
 import { expectElement } from "../common/dom";
-import { dispatchCategorySelection } from "../common/events";
+import { dispatchCustomEvent } from "../common/events";
 import { type Category, getImagePath, wordsData } from "../data/word-data-model.ts";
 import { capitalizeFirstLetter } from "../utils/stringUtils.ts";
 import styles from "./styles/categories.module.css";
@@ -25,7 +25,9 @@ function createCategoryEntry(category: Category): HTMLElement {
         </button>
     `;
     const button = li.querySelector("button");
-    button?.addEventListener("click", () => dispatchCategorySelection(button, category));
+    button?.addEventListener("click", () =>
+        dispatchCustomEvent("category-selected", { category }, button),
+    );
     return li;
 }
 /** Create a random category entry that triggers a selection change on click. */
@@ -40,7 +42,7 @@ function createRandomCategoryEntry(): HTMLElement {
 
     const button = li.querySelector("button");
     button?.addEventListener("click", () => {
-        dispatchCategorySelection(button, randomCategory);
+        dispatchCustomEvent("category-selected", { category: randomCategory }, button);
     });
     return li;
 }
