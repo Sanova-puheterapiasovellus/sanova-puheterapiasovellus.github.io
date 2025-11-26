@@ -85,10 +85,3 @@ ul#notification-list {
         height: 100px;
     }
 }
-
-ul#management-missing-sound-list {
-    display: grid;
-    grid-gap: 1ch;
-    grid-template-columns: repeat(auto-fit, minmax(5ch, 1fr));
-    list-style: none;
-}

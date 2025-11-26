@@ -1,7 +1,8 @@
 /* Define general layout details. */
 :root {
     --general-spacing: 0.5rem;
-    --entry-size: 25ch;
+    --category-size: 25ch;
+    --sound-size: 5ch;
 }
 
 /* Center the contents to achieve reasonable width on larger screens. */
@@ -20,16 +21,18 @@ fieldset {
     }
 }
 
-/* Define word list layout. */
+/* Reset typical list styling. */
 ul {
-    /* Reset typical list styling. */
     list-style: none;
     padding: 0%;
+}
 
+/* Define word list layout. */
+ul.words {
     /* Allow entries to fit side by side. */
     display: grid;
     gap: var(--general-spacing);
-    grid-template-columns: repeat(auto-fit, minmax(var(--entry-size), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(var(--category-size), 1fr));
 
     /* Let child contents participate in the grid. */
     li {
@@ -45,6 +48,13 @@ ul {
             padding-block-end: var(--general-spacing);
         }
     }
+}
+
+/* Display missing syllable sounds list as grid. */
+ul.sounds {
+    display: grid;
+    gap: var(--general-spacing);
+    grid-template-columns: repeat(auto-fit, minmax(var(--sound-size), 1fr));
 }
 
 /* Lay out buttons evenly and with enough space. */
