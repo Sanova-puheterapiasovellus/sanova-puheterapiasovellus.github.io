@@ -6,11 +6,7 @@ import type {
     WordSelectedEvent,
     WordsSelectedEvent,
 } from "../common/events";
-import {
-    dispatchGameOver,
-    dispatchWordSelection,
-    dispatchWordsSelection,
-} from "../common/events.ts";
+import { dispatchCustomEvent } from "../common/events.ts";
 import { type Category, getImagePath, type Word, wordsData } from "../data/word-data-model.ts";
 import { GameSession } from "./GameSession";
 import "./styles/game.css";
@@ -73,19 +69,17 @@ function handleGameStart(event: CategorySelectedEvent): void {
 
     gameSession = new GameSession(categoryForSession);
     // Set the words to the game session object through the WordsSelected event
-    dispatchWordsSelection(
-        window,
+    dispatchCustomEvent("words-selected", {
         selections,
-        currentCategory.name === "random" ? null : currentCategory,
-        false,
-    );
+        category: currentCategory.name === "random" ? null : currentCategory,
+        isReplay: false,
+    });
 
     gameSession.setGameModeRandom(); // Show words in random order
     const word = gameSession.getNextWord();
     textHint.textContent = "";
     setSyllableHintWord(word.name);
-
-    dispatchWordSelection(window, word, 0);
+    dispatchCustomEvent("word-selected", { word, index: 0 });
 }
 /** Helper function to pick random words */
 function pickRandom<T>(array: T[], count: number): T[] {
@@ -360,7 +354,10 @@ async function handleSkipWord(): Promise<void> {
             // even if there was only one word replayed
             showResults = true;
         }
-        dispatchGameOver(window, showResults, getGameResults(gameSession));
+        dispatchCustomEvent("show-results", {
+            showResults,
+            gameResults: getGameResults(gameSession),
+        });
         return;
     }
     // Style the card to indicate skipping
@@ -442,7 +439,10 @@ async function handleAnswer(wordGuess: WordGuess) {
             showResults = true;
         }
 
-        dispatchGameOver(window, showResults, getGameResults(gameSession));
+        dispatchCustomEvent("show-results", {
+            showResults,
+            gameResults: getGameResults(gameSession),
+        });
         return;
     }
 
