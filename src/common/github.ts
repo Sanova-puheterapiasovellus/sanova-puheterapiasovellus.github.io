@@ -236,12 +236,12 @@ async function handleTokenEndpointResponse(response: Response): Promise<string> 
 
     await Promise.all([
         cookieStore.set({
-            name: data.cookieAccessToken,
+            name: cookieAccessToken,
             value: data.access_token,
             expires: data.expires_in,
         }),
         cookieStore.set({
-            name: data.cookieRefreshToken,
+            name: cookieRefreshToken,
             value: data.refresh_token,
             expires: data.refresh_token_expires_in,
         }),
