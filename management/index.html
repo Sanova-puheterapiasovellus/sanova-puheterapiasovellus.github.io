@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fi">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sanova - Hallintapaneeli</title>
+        <script type="module" src="../src/management.ts"></script>
+    </head>
+    <body>
+        <header>
+            <h1>Hallintapaneeli</h1>
+
+            <p>
+                Tällä sivulla pystyt muokkaamaan sovelluksen käyttämiä tiedostoja GitHub
+                lähdevarastossa.
+            </p>
+        </header>
+
+        <main>
+            <form>
+                <fieldset>
+                    <legend>Kirjautuminen</legend>
+
+                    <label>
+                        GitHub Personal Access Token
+                        <input id="auth-token" type="password" required>
+                    </label>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Äänivihjeet</legend>
+
+                    <label>
+                        Äännetiedosto muokattavaksi
+                        <select id="sound-selection" required></select>
+                    </label>
+
+                    <label>
+                        Äänteen alkukohta sekunneissa
+                        <input id="sound-start" type="number" min="0" step="0.001" required>
+                    </label>
+
+                    <label>
+                        Äänteen loppukohta sekunneissa
+                        <input id="sound-end" type="number" min="0" step="0.001" required>
+                    </label>
+
+                    <aside>
+                        <details>
+                            <summary>
+                                <p>
+                                    <span id="missing-sound-count"></span>
+                                    puuttuvaa tavuääntä.
+                                </p>
+
+                                <p>
+                                    <small>
+                                        Puuttuvat äänet luodaan koneellisesti äännetiedostoilla ja
+                                        ne kuulostavat epäluonnollisilta.
+                                    </small>
+                                </p>
+                            </summary>
+
+                            <ul id="missing-sound-list"></ul>
+                        </details>
+                    </aside>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Varmistus</legend>
+
+                    <label>
+                        Haaran nimi
+                        <input id="branch-name" type="text">
+                    </label>
+
+                    <button type="submit">Tee muutokset</button>
+                </fieldset>
+            </form>
+        </main>
+    </body>
+</html>
