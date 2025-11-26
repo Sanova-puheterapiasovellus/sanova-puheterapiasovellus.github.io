@@ -34,28 +34,7 @@
     border: 1px solid;
     font-size: 14px;
     border-radius: 6px;
-}
-
-.collapseCategories {
-    background-color: #ffffff;
-    color: #000000;
-    border-color: #000000;
-    cursor: pointer;
-    padding: 18px;
-    font-size: 14px;
-    border-radius: 6px;
-}
-
-.active,
-.collapseCategories:hover {
-    background-color: #eee;
-}
-
-.collapseCategories:after {
-    content: "\002B";
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    margin-left: 5px;
+    padding: 10px;
 }
 
 .active:after {
@@ -68,7 +47,7 @@
     flex-wrap: wrap;
     justify-content: center;
     padding: 0 18px;
-    max-height: 0;
+    max-height: 100%;
     overflow: hidden;
     transition: max-height 0.3s ease out;
 }
@@ -118,6 +97,10 @@
 }
 
 @media (max-width: 456px) {
+    .filters {
+        flex-direction: column;
+    }
+
     .card {
         min-height: 100%;
     }
