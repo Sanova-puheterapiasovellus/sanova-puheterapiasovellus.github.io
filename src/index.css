@@ -9,6 +9,7 @@
     --bg: hsl(0, 0, 95%);
     --bg-light: hsl(0, 0, 100%);
     --bg-card-btns: hsl(0, 0%, 17%);
+    --bg-card-btns-hover: hsl(0, 0%, 25%);
     --text: hsl(222, 77%, 5%);
     --text-muted: hsl(0, 0, 30%);
     --border: hsl(0, 0, 70%);
@@ -25,7 +26,7 @@ body {
 
 .mainview-header {
     background-color: var(--bg);
-    height: 80px;
+    height: 90px;
     border: 2px solid var(--border);
     padding: 16px 26px;
 }
@@ -34,15 +35,16 @@ body {
     padding-top: 110px;
 }
 
-.mainview-main > ul {
+.mainview-main > ul#category-selector-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, 170px);
     justify-content: center;
+    justify-items: center;
     column-gap: 55px;
     row-gap: 75px;
     max-width: 955px /*845px*/;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 30px;
     list-style-type: none;
 }
 
@@ -60,4 +62,24 @@ ul#notification-list {
     display: flex;
     flex-direction: column-reverse;
     gap: var(--notification-padding);
+}
+
+@media (max-width: 480px) {
+    .mainview-main {
+        padding-top: 10%;
+    }
+
+    .mainview-main > ul#category-selector-list {
+        grid-template-columns: repeat(2, 1fr);
+        column-gap: 20px;
+        row-gap: 20px;
+    }
+    .mainview-header {
+        position: fixed;
+        bottom: 0;
+        inset-inline: 0;
+        z-index: 1;
+        padding-inline: 10px;
+        height: 100px;
+    }
 }

@@ -1,3 +1,4 @@
+import { resolve } from "node:path";
 import type { UserConfig } from "rolldown-vite";
 
 export default {
@@ -11,6 +12,13 @@ export default {
         format: "es",
     },
     build: {
+        rolldownOptions: {
+            // Specify our multi page setup.
+            input: {
+                main: resolve(import.meta.dirname, "index.html"),
+                management: resolve(import.meta.dirname, "management", "index.html"),
+            },
+        },
         modulePreload: {
             // No point in polyfilling when there's browser support in current versions.
             polyfill: false,

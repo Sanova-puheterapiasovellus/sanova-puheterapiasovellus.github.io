@@ -7,7 +7,6 @@ import { gameSession } from "./game.ts";
 const playButton = expectElement("word-guess-syllable-hint", HTMLButtonElement);
 
 let determinedSyllables: string[] | undefined;
-let playbackContext: AudioContext | undefined;
 let playbackCancellation: AbortController | undefined;
 
 /** Set the played syllable hint word. */
@@ -22,13 +21,11 @@ async function handlePlayback(_: Event): Promise<void> {
         return;
     }
     const syllablesToPlayCount = Math.min(
-        gameSession.getVocalHintsUsed(),
+        gameSession.getVocalHintsUsedForCurrentWord(),
         determinedSyllables.length,
     );
 
     const syllablesToPlay = determinedSyllables.slice(0, syllablesToPlayCount);
-    // Audio contexts can only be initialized while handling user input.
-    playbackContext ??= new AudioContext();
 
     try {
         // Set up cancellation possibility and ensure the button can't be pressed early.
@@ -38,7 +35,6 @@ async function handlePlayback(_: Event): Promise<void> {
         // Wait for the syllable sounds to be loaded and played to the end.
         await playSyllableSounds(
             playbackCancellation.signal,
-            playbackContext,
             syllablesToPlay,
             syllableSeparationSeconds,
         );
