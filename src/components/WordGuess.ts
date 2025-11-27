@@ -142,7 +142,10 @@ export class WordGuess {
 
         // Starting from the left, lock every correct letter
         for (let i = 0; i < correctLettersLength; i++) {
-            this.locked[i] = true;
+            // Only lock the letter if it is not a special one.
+            if (this.splitWord[i]![1]) {
+                this.locked[i] = true;
+            }
             this.currentGuess[i] = this.word[i]!;
         }
 
@@ -150,9 +153,11 @@ export class WordGuess {
         // in the example this would be 3, so the letter O
         let nextIndex = correctLettersLength;
 
-        // Check if the next hint letter is a special character
+        // Check if the next hint letter is a special character,
+        // skip that character and give the next character as hint
+        // after that.
         if (nextIndex < this.word.length && this.splitWord[nextIndex]![1] === false) {
-            this.locked[nextIndex] = true;
+            //this.locked[nextIndex] = true;
             nextIndex++;
         }
 
@@ -166,8 +171,9 @@ export class WordGuess {
         // Remove all the letters after the given hint letter
         this.currentGuess = this.currentGuess.slice(0, nextIndex + 1);
 
-        // Return true if the word has been guessed using letter hints
-        return this.locked.every((locked) => locked);
+        // Return true if the word has been guessed using letter hints,
+        // ignore the special letters while evaluating this
+        return this.splitWord.every(([_, isLetter], i) => !isLetter || this.locked[i]);
     }
 
     createCaretParticles(parent: HTMLElement, color?: string) {
