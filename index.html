@@ -9,19 +9,20 @@
     <body>
         <header class="mainview-header"></header>
 
-        <main class="mainview-main">
-            <ul id="category-selector-list"></ul>
-            <ul id="notification-list"></ul>
+        <main id="mainview" class="mainview-main">
+            <section id="categories-page">
+                <ul id="category-selector-list"></ul>
+                <ul id="notification-list"></ul>
+            </section>
+            <section id="all-words-page">
+                <div id="filters-section">
+                    <div id="search-container"></div>
+                    <div id="category-filters"></div>
+                </div>
+                <header id="all-words-header"></header>
+                <ul id="all-words-list"></ul>
+            </section>
         </main>
-
-        <dialog id="all-words-dialog">
-            <button id="close-all-words">&times;</button>
-            <div id="filters-section">
-                <div id="search-container"></div>
-                <div id="category-filters"></div>
-            </div>
-            <ul id="all-words-list"></ul>
-        </dialog>
 
         <dialog id="word-guess-dialog" closedby="any">
             <div id="word-guess-card">

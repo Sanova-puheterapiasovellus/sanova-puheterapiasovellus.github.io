@@ -1,24 +1,31 @@
-.dialog {
-    top: 80px;
-    width: 100vw;
-    height: calc(100vh - 80px);
+.page {
+    min-height: 100vh;
+    overflow-y: auto;
+    background: var(--bg-dark); /* or white or whatever your app uses */
+    box-sizing: border-box;
+}
+
+.header {
+    padding-top: 110px;
 }
 
 .list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 12px;
-    list-style: none;
+    background-color: var(--bg-dark);
 }
 
 .filters {
+    background-color: var(--bg-light);
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
 }
 
 .searchContainer {
     display: flex;
-    max-width: calc(50%);
+    width: 50%;
+    max-width: 100%;
 }
 
 .searchInput {
@@ -26,6 +33,23 @@
     height: 32px;
     border: 1px solid;
     font-size: 14px;
+    border-radius: 6px;
+    padding: 10px;
+}
+
+.active:after {
+    content: "\2212";
+}
+
+.categoryFilters {
+    display: flex;
+    flex: 2;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0 18px;
+    max-height: 100%;
+    overflow: hidden;
+    transition: max-height 0.3s ease out;
 }
 
 .categoryLabel {
@@ -46,14 +70,17 @@
 .categoryCheckbox {
     cursor: pointer;
 }
+
 .card {
+    min-height: 50px;
+    padding: 14px 14px 20px 14px;
+    background-color: var(--bg-light);
     border: 1px solid var(--border);
     border-radius: 6px;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
     cursor: pointer;
     display: flex;
     flex-direction: column;
-    align-items: center;
     transition:
         transform 0.1s ease,
         box-shadow 0.1s ease;
@@ -64,18 +91,23 @@
     box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.25);
 }
 
-.card img {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
+.card > img {
+    width: 142px;
+    height: 142px;
 }
 
-.closeButton {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 30px;
-    cursor: pointer;
+@media (max-width: 456px) {
+    .filters {
+        flex-direction: column;
+    }
+
+    .card {
+        min-height: 100%;
+    }
+
+    .card > img {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1 / 1;
+    }
 }
