@@ -148,7 +148,13 @@ export class WordGuess {
 
         // The index of the hint letter that should be given,
         // in the example this would be 3, so the letter O
-        const nextIndex = correctLettersLength;
+        let nextIndex = correctLettersLength;
+
+        // Check if the next hint letter is a special character
+        if (this.splitWord[nextIndex]![1] === false) {
+            this.locked[nextIndex] = true;
+            nextIndex++;
+        }
 
         // If there are still more letters in the word, give the next letter
         // and lock it (example O)
@@ -220,7 +226,7 @@ export class WordGuess {
             span.classList.add("letter-slot");
 
             const [currentChar, isLetter] = this.splitWord[i]!;
-            console.log("CURRENT CHAR, IS LETTER:", currentChar, isLetter);
+            //console.log("CURRENT CHAR, IS LETTER:", currentChar, isLetter);
 
             // If the current character is a normal letter, then we will render
             // either the letter or _, if the letter has not been written.

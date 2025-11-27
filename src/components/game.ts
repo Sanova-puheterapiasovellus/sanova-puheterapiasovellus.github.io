@@ -201,10 +201,10 @@ function handleInputEvent(): void {
 
     let typed = hiddenInput.value.toUpperCase();
 
-    // FULL splitWord (letters + special chars)
+    console.log("TYPED TEXT:", typed);
+
     const fullSplit = wordGuess.getSplitWord();
 
-    // LETTERS ONLY (for input length)
     const lettersOnly = fullSplit.filter(([_, isLetter]) => isLetter);
     const maxTypedLength = lettersOnly.length;
 
@@ -214,7 +214,6 @@ function handleInputEvent(): void {
         hiddenInput.value = typed;
     }
 
-    // --- BUILD NEW GUESS USING THE FULL WORD ---
     const newGuess: string[] = [];
     let typedIndex = 0;
 
@@ -267,7 +266,8 @@ function handleUseLetterHint(): void {
     const wordGuess = gameSession.getCurrentWordGuess();
     const done = wordGuess.useLetterHint();
 
-    hiddenInput.value = wordGuess.getGuess();
+    //hiddenInput.value = wordGuess.getGuess();
+    hiddenInput.value = "";
     wordGuess.render(letterSlots);
 
     if (done) {
