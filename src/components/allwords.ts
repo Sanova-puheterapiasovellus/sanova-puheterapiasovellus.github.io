@@ -56,8 +56,6 @@ function createRandomEntry(filters: FilterOptions): HTMLElement {
     });
     return buildHtml("li", { className: styles.card }, img);
 }
-const separator = buildHtml("hr");
-filtersSection.after(separator);
 
 function getRandomFilteredWord(filters: FilterOptions) {
     const filteredWords = wordsData.categories.flatMap((category) => {
