@@ -31,12 +31,12 @@ export function setupSearchAndFilter(
         const capitalizedName = capitalizeFirstLetter(category.name);
         const checkbox = buildHtml("input", {
             type: "checkbox",
-            value: capitalizedName,
+            value: category.name,
             className: styles.categoryCheckbox,
         });
         const img = buildHtml("img", {
             src: category.imagePath,
-            alt: capitalizedName,
+            alt: category.name,
             className: styles.categoryImage,
         });
         label.append(img, checkbox, document.createTextNode(capitalizedName));
