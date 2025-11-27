@@ -151,7 +151,7 @@ export class WordGuess {
         let nextIndex = correctLettersLength;
 
         // Check if the next hint letter is a special character
-        if (this.splitWord[nextIndex]![1] === false) {
+        if (nextIndex < this.word.length && this.splitWord[nextIndex]![1] === false) {
             this.locked[nextIndex] = true;
             nextIndex++;
         }

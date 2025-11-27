@@ -206,7 +206,11 @@ function handleInputEvent(): void {
     const fullSplit = wordGuess.getSplitWord();
 
     const lettersOnly = fullSplit.filter(([_, isLetter]) => isLetter);
-    const maxTypedLength = lettersOnly.length;
+    // Max number of letters is lettersOnly.length - lockedCount,
+    // as hint (locked) letters are not in the hidden input
+    // field anymore
+    const lockedCount = locked.filter((v) => v).length;
+    const maxTypedLength = lettersOnly.length - lockedCount;
 
     // Restrict typed input to number of letters
     if (typed.length > maxTypedLength) {
