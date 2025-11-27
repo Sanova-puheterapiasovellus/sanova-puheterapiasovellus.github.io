@@ -226,7 +226,6 @@ export class WordGuess {
             span.classList.add("letter-slot");
 
             const [currentChar, isLetter] = this.splitWord[i]!;
-            //console.log("CURRENT CHAR, IS LETTER:", currentChar, isLetter);
 
             // If the current character is a normal letter, then we will render
             // either the letter or _, if the letter has not been written.

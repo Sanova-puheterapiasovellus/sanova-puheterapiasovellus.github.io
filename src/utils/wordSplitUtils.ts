@@ -15,7 +15,8 @@ export function splitWord(word: Word): [string, boolean][] {
 
     const result: [string, boolean][] = [];
 
-    // Regex definition A-Z, a-z, ÅÄÖ, åäö
+    // Regex definition A-Z, a-z, ÅÄÖ, åäö, everything
+    // else is considered special
     const isLetter = (char: string) => /[A-Za-zÅÄÖåäö]/.test(char);
 
     for (const char of text) {
@@ -23,6 +24,5 @@ export function splitWord(word: Word): [string, boolean][] {
         result.push([char, charIsLetter]);
     }
 
-    console.log("SPLIT WORD RESULT:", result);
     return result;
 }
