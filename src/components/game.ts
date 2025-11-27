@@ -201,8 +201,6 @@ function handleInputEvent(): void {
 
     let typed = hiddenInput.value.toUpperCase();
 
-    console.log("TYPED TEXT:", typed);
-
     const fullSplit = wordGuess.getSplitWord();
 
     const lettersOnly = fullSplit.filter(([_, isLetter]) => isLetter);
