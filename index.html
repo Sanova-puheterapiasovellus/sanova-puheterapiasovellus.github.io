@@ -45,9 +45,13 @@
                     <div id="word-guess-slots"></div>
                     <input id="hidden-input" type="text" style="opacity:0;">
                     <!--style="position:absolute; opacity:0; width:1px; height:1px;"-->
-                    <button id="word-guess-submit" type="button" class="word-guess-button">
+                    <button id="word-guess-submit" type="button" class="word-submit-button">
                         <img src="/assets/icons/reply_24dp.svg" alt="Vastaa" class="icon">
                         <span>Vastaa</span>
+                    </button>
+                    <button id="skip-word" type="button" class="word-submit-button">
+                        <img src="/assets/icons/skip_word_22dp.svg" alt="Ohita sana" class="icon">
+                        <span>Ohita sana</span>
                     </button>
                     <button id="word-guess-letter-hint" type="button" class="word-guess-button">
                         <img
@@ -72,11 +76,6 @@
                         </summary>
                         <div id="text-hint"></div>
                     </details>
-                </div>
-                <div id="next-btn-container">
-                    <button id="next-btn">
-                        <img src="/assets/icons/arrow_forward_20dp.svg">
-                    </button>
                 </div>
             </div>
         </dialog>

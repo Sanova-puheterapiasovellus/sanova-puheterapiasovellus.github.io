@@ -34,7 +34,7 @@ const hiddenInput = document.getElementById("hidden-input") as HTMLInputElement;
 const textHint = expectElement("text-hint", HTMLDivElement);
 const guessProgressCounter = expectElement("word-guess-progress-counter", HTMLDivElement);
 const imageCreditsButton = expectElement("word-guess-image-credits-button", HTMLElement);
-const skipButton = expectElement("next-btn", HTMLButtonElement);
+const skipButton = expectElement("skip-word", HTMLButtonElement);
 
 // Keep track of the game progress, initially null
 export let gameSession: GameSession | null = null;
