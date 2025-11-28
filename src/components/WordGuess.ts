@@ -198,12 +198,15 @@ export class WordGuess {
         return this.splitWord.every(([_, isLetter], i) => !isLetter || this.locked[i]);
     }
 
-    createCaretParticles(parent: HTMLElement, color?: string) {
-        const PARTICLE_COUNT = 6;
-        const MIN_DIST = 25;
-
+    createCaretParticles(
+        parent: HTMLElement,
+        color: string = "#2b2b2b",
+        durationMs: number = 800,
+        particleCount: number = 6,
+        minDist: number = 25,
+    ) {
         // Create particles
-        for (let i = 0; i < PARTICLE_COUNT; i++) {
+        for (let i = 0; i < particleCount; i++) {
             const particle = document.createElement("div");
             particle.classList.add("caret-particle");
 
@@ -213,10 +216,12 @@ export class WordGuess {
 
             // random direction
             const angle = Math.random() * Math.PI * 2;
-            const distance = MIN_DIST + Math.random() * 10; // px
+            const distance = minDist + Math.random() * 10; // px
 
             particle.style.setProperty("--dx", `${Math.cos(angle) * distance}px`);
             particle.style.setProperty("--dy", `${Math.sin(angle) * distance}px`);
+
+            particle.style.animationDuration = durationMs + "ms";
 
             parent.appendChild(particle);
 
@@ -264,8 +269,12 @@ export class WordGuess {
                 span.textContent = newChar;
 
                 // Typing particle effect only for real letters
-                if (newChar !== oldChar) {
-                    this.createCaretParticles(span);
+                if (newChar !== oldChar && newChar !== "_") {
+                    // Less particles for a new letter
+                    this.createCaretParticles(span, "#2b2b2b", 1000, 5);
+                } else if (newChar !== oldChar && newChar === "_") {
+                    // More particles when erasing a letter
+                    this.createCaretParticles(span, "#2b2b2b", 1000, 20, 10);
                 }
             }
             // If the character is not a letter, then it is a special character

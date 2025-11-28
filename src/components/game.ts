@@ -380,7 +380,9 @@ function generateParticles(gameSession: GameSession, color: string): void {
     const spans = letterSlots.querySelectorAll(".letter-slot");
 
     spans.forEach((span) => {
-        gameSession.getCurrentWordGuess().createCaretParticles(span as HTMLElement, color);
+        gameSession
+            .getCurrentWordGuess()
+            .createCaretParticles(span as HTMLElement, color, 1000, 25, 50);
     });
 }
 
@@ -444,11 +446,11 @@ function markAnswerResult(gameSession: GameSession, isCorrect: boolean) {
             gameSession.markCurrentCorrect();
         }
         guessCard.classList.add("correct");
+        // Generate green particles for a correct guess
         generateParticles(gameSession, "limegreen");
     } else {
         gameSession.markIncorrectlyGuessed();
         guessCard.classList.add("wrong");
-        generateParticles(gameSession, "red");
     }
 }
 
