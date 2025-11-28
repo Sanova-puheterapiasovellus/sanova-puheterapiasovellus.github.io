@@ -587,4 +587,14 @@ export function initializeGameContainer(): void {
     hiddenInput.addEventListener("focus", () => moveCursorToEnd(hiddenInput));
     hiddenInput.addEventListener("click", () => moveCursorToEnd(hiddenInput));
     hiddenInput.addEventListener("keyup", () => moveCursorToEnd(hiddenInput));
+
+    // Enable the caret blink when the input is focused
+    hiddenInput.addEventListener("focus", () => {
+        letterSlots.classList.add("caret-enabled");
+    });
+
+    // Disable the blink when the focus is lost
+    hiddenInput.addEventListener("blur", () => {
+        letterSlots.classList.remove("caret-enabled");
+    });
 }

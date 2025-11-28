@@ -165,13 +165,17 @@
 }
 
 .letter-slot.active::after {
+    content: none;
+}
+
+.caret-enabled .letter-slot.active::after {
     content: "";
     position: absolute;
     left: 50%; /* center horizontally */
-    transform: translateX(-50%); /* perfect center align */
+    transform: translateX(-50%);
     width: 2px;
-    height: 70%; /* caret size */
-    background: var(--bg-card-btns); /* Caret color */
+    height: 70%;
+    background: var(--bg-card-btns);
     animation: blinkCaret 1s steps(1) infinite;
 }
 
