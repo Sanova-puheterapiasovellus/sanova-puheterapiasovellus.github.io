@@ -61,8 +61,8 @@
 .categoryLabel {
     display: inline-flex;
     align-items: center;
-    gap: 12px;
-    margin-right: 10px;
+    gap: 6px;
+    margin-right: 12px;
     cursor: pointer;
     user-select: none;
 }
