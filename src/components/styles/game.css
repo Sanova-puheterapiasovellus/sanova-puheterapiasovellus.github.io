@@ -207,7 +207,7 @@
 
 /* Skip word, yellow flash */
 #word-guess-dialog #word-guess-card.skip {
-    background-color: #f5e7a1;
+    background-color: #f0ecc0;
     transition: background-color 0.3s ease;
 }
 
