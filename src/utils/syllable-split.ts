@@ -31,7 +31,8 @@ export function* splitToSyllables(word: string): Generator<string> {
 
         // Some words already have syllable separators in them
         // Examples: t-paita
-        if (currentChar === "-" || currentChar === " ") {
+        const isLetter = /[A-Za-zÅÄÖåäö]/.test(currentChar);
+        if (!isLetter) {
             yield word.substring(currentStart, i);
             currentStart = ++i;
             continue;
