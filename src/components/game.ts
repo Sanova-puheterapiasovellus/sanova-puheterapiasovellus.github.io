@@ -50,9 +50,12 @@ function handleDialogClose(_: Event): void {
     guessDialog.close();
 }
 
-/** Trigger the mobile keyboard */
+/** Focus on the input, user can write to the input after calling this */
 function focusHiddenInput(): void {
-    hiddenInput.focus();
+    if (!isMobile()) {
+        // Only focus if not using mobile device
+        hiddenInput.focus();
+    }
 }
 
 /** Handle the game starting with the selected category. */
@@ -188,10 +191,7 @@ function setupWordInput(): void {
     wordGuess.render(letterSlots);
     hiddenInput.value = "";
     letterSlots.addEventListener("click", () => hiddenInput.focus());
-    if (!isMobile()) {
-        // Only focus if not using mobile device
-        hiddenInput.focus();
-    }
+    focusHiddenInput();
 }
 
 /** Handle the typing events when using both physical keyboard and phone's keyboard */
@@ -199,45 +199,64 @@ function handleInputEvent(): void {
     if (!gameSession) return;
 
     const wordGuess = gameSession.getCurrentWordGuess();
-    const currentWord = gameSession.getCurrentWord();
     const locked = wordGuess.getLockedLettersArray();
 
     let typed = hiddenInput.value.toUpperCase();
 
-    // Restrict the length of the input word to the length of the word being guessed
-    if (typed.length > currentWord.name.length) {
-        typed = typed.slice(0, currentWord.name.length);
+    const fullSplit = wordGuess.getSplitWord();
+
+    const lettersOnly = fullSplit.filter(([_, isLetter]) => isLetter);
+    // Max number of letters is lettersOnly.length - lockedCount,
+    // as hint (locked) letters are not in the hidden input
+    // field anymore
+    //const lockedCount = locked.filter((v) => v).length;
+    const maxTypedLength = lettersOnly.length - wordGuess.getHintLettersCount();
+
+    // Restrict typed input to number of letters
+    if (typed.length > maxTypedLength) {
+        typed = typed.slice(0, maxTypedLength);
         hiddenInput.value = typed;
     }
 
-    const oldGuess = wordGuess.getGuess();
+    const newGuess: string[] = [];
+    let typedIndex = 0;
 
-    if (typed.length < oldGuess.length) {
-        // Protect locked (hint) letters
-        const oldLetters = oldGuess.split("");
-        const newLetters: string[] = [];
-
-        for (let i = 0; i < oldLetters.length; i++) {
-            if (locked[i]) {
-                newLetters.push(oldLetters[i]!);
-            } else {
-                if (newLetters.length < typed.length) {
-                    newLetters.push(typed[newLetters.length]!);
-                }
-            }
+    for (let i = 0; i < fullSplit.length; i++) {
+        const [char, isLetter] = fullSplit[i]!;
+        if (!isLetter) {
+            // Special char stays visible
+            newGuess[i] = char;
+            continue;
         }
 
-        wordGuess.setGuessFromString(newLetters.join(""));
-        hiddenInput.value = newLetters.join("");
+        if (locked[i]) {
+            // Keep locked letter
+            newGuess[i] = wordGuess.getGuess()[i]!;
+            continue;
+        }
 
-        // Set the mobile cursor to the end of the text after backspace
-        setTimeout(() => {
-            hiddenInput.setSelectionRange(hiddenInput.value.length, hiddenInput.value.length);
-        }, 0);
-    } else {
-        wordGuess.setGuessFromString(typed);
+        // Use next typed letter or blank
+        const next = typed[typedIndex];
+
+        // Stop immediately when typed has no more characters
+        if (next === undefined) {
+            break;
+        }
+        newGuess[i] = next;
+        typedIndex++;
     }
 
+    // Save guess
+    wordGuess.setGuessFromString(newGuess.join(""));
+
+    // Hidden input always = letters only
+    hiddenInput.value = typed;
+
+    setTimeout(() => {
+        hiddenInput.setSelectionRange(hiddenInput.value.length, hiddenInput.value.length);
+    }, 0);
+
+    // Render
     wordGuess.render(letterSlots);
 }
 
@@ -256,19 +275,15 @@ function handleUseLetterHint(): void {
     const wordGuess = gameSession.getCurrentWordGuess();
     const done = wordGuess.useLetterHint();
 
-    hiddenInput.value = wordGuess.getGuess();
+    //hiddenInput.value = wordGuess.getGuess();
+    hiddenInput.value = "";
     wordGuess.render(letterSlots);
 
     if (done) {
         // word completed with hints, move to next word
         handleAnswer(wordGuess);
     }
-    if (!isMobile()) {
-        // Focus back to input from the button. Do not do this
-        // if using mobile device since this will pop the
-        // keyboard.
-        hiddenInput.focus();
-    }
+    focusHiddenInput();
 }
 
 /** Set current word's text hint */
@@ -281,24 +296,14 @@ function handleUseTextHint(): void {
     const currentWord = gameSession.getCurrentWord();
 
     textHint.textContent = currentWord.hint;
-    if (!isMobile()) {
-        // Focus back to input from the button. Do not do this
-        // if using mobile device since this will pop the
-        // keyboard.
-        hiddenInput.focus();
-    }
+    focusHiddenInput();
 }
 
 function handleUseVocalHint(): void {
     if (!gameSession) return;
     gameSession.useVocalHint();
     // Focus back to input from the button
-    if (!isMobile()) {
-        // Focus back to input from the button. Do not do this
-        // if using mobile device since this will pop the
-        // keyboard.
-        hiddenInput.focus();
-    }
+    focusHiddenInput();
 }
 
 /** Check if the user's answer is correct */
@@ -370,6 +375,17 @@ async function handleSkipWord(): Promise<void> {
     handleNextWordLogic(gameSession);
 }
 
+function generateParticles(gameSession: GameSession, color: string): void {
+    //const container = document.getElementById("word-guess-slots")!;
+    const spans = letterSlots.querySelectorAll(".letter-slot");
+
+    spans.forEach((span) => {
+        gameSession
+            .getCurrentWordGuess()
+            .createCaretParticles(span as HTMLElement, color, 1000, 25, 50);
+    });
+}
+
 /** Handle the user's guess when the answer btn is pressed */
 async function handleAnswer(wordGuess: WordGuess) {
     const answer = wordGuess.getGuess().toLowerCase();
@@ -430,6 +446,8 @@ function markAnswerResult(gameSession: GameSession, isCorrect: boolean) {
             gameSession.markCurrentCorrect();
         }
         guessCard.classList.add("correct");
+        // Generate green particles for a correct guess
+        generateParticles(gameSession, "limegreen");
     } else {
         gameSession.markIncorrectlyGuessed();
         guessCard.classList.add("wrong");
@@ -497,6 +515,31 @@ function moveCursorToEnd(input: HTMLInputElement) {
     input.setSelectionRange(length, length);
 }
 
+/** Set focus on the hidden input field if the
+ * user clicks inside the game dialog */
+function handleClickGameDialog(event: PointerEvent): void {
+    // On mobile we cannot prevent the default behaviour, as the
+    // mobile keyboard will then remain popped all the time.
+    // On PC we can as we want the input to be active all the time.
+    if (!isMobile()) {
+        event.preventDefault();
+    }
+
+    // Get the clicked element
+    const target = event.target as HTMLElement;
+
+    // Elements that were clicked and should be ignored
+    const interactiveSelector = ["button", "summary", "details", "input", "a"].join(",");
+
+    // If the clicked element is any of the ones in the list, skip
+    if (target.closest(interactiveSelector)) {
+        return;
+    }
+
+    // Otherwise, focus on the input
+    focusHiddenInput();
+}
+
 /** Wire up events to react to the game being started. */
 export function initializeGameContainer(): void {
     window.addEventListener("category-selected", handleGameStart);
@@ -505,17 +548,15 @@ export function initializeGameContainer(): void {
     window.addEventListener("show-results", handleGameOver);
     closeButton.addEventListener("click", handleDialogClose);
 
+    // Focus on the input field if the dialog is clicked
+    guessCard.addEventListener("pointerdown", handleClickGameDialog);
+
     answerButton.addEventListener("click", () => {
         if (!gameSession) return;
         const wordGuess = gameSession.getCurrentWordGuess();
         handleAnswer(wordGuess);
         // Focus back to input from the button
-        if (!isMobile()) {
-            // Focus back to input from the button. Do not do this
-            // if using mobile device since this will pop the
-            // keyboard.
-            hiddenInput.focus();
-        }
+        focusHiddenInput();
     });
 
     // No suggestions
@@ -548,4 +589,14 @@ export function initializeGameContainer(): void {
     hiddenInput.addEventListener("focus", () => moveCursorToEnd(hiddenInput));
     hiddenInput.addEventListener("click", () => moveCursorToEnd(hiddenInput));
     hiddenInput.addEventListener("keyup", () => moveCursorToEnd(hiddenInput));
+
+    // Enable the caret blink when the input is focused
+    hiddenInput.addEventListener("focus", () => {
+        letterSlots.classList.add("caret-enabled");
+    });
+
+    // Disable the blink when the focus is lost
+    hiddenInput.addEventListener("blur", () => {
+        letterSlots.classList.remove("caret-enabled");
+    });
 }

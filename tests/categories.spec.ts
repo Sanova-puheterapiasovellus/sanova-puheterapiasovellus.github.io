@@ -1,5 +1,6 @@
 import { expect, type Page, test } from "@playwright/test";
-import { Word, wordsData } from "../src/data/word-data-model.ts";
+import { type Word, wordsData } from "../src/data/word-data-model.ts";
+import { splitWord } from "../src/utils/wordSplitUtils.ts";
 
 test("Test Clothes Categories", async ({ page }) => {
     await page.goto("/index.html");
@@ -22,7 +23,35 @@ test("Test Clothes Categories", async ({ page }) => {
         const word = wordList?.find((p) => imgSrcText?.includes(p.image))?.name;
         expect(word).not.toBeUndefined();
         expect(word).not.toBeNull();
-        await page.locator("#hidden-input").fill(word);
+
+        // Create a Word object
+        const wordObj: Word = {
+            name: word!,
+            image: "noImage",
+            image_credit: "noCredits",
+            hint: "noHint",
+        };
+
+        // Use the split to check any special characters
+        const split: [string, boolean][] = splitWord(wordObj);
+
+        // True, if the word contains any special chars, such as "-"
+        const hasSpecialChars = split.some(([_, isLetter]) => !isLetter);
+
+        // Combine a string form the normal letters
+        const combined = split
+            .filter(([_, isLetter]) => isLetter)
+            .map(([char]) => char)
+            .join("");
+
+        if (hasSpecialChars) {
+            // Fill the input field without any special characters
+            // if the word contains any
+            await page.locator("#hidden-input").fill(combined);
+        } else {
+            await page.locator("#hidden-input").fill(word);
+        }
+
         await page.locator("#word-guess-submit").click();
         if (count <= numWords - 1) {
             await expect(page.locator(".letter-slot").first()).toHaveText("_");
