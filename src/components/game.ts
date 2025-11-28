@@ -209,14 +209,8 @@ function handleInputEvent(): void {
     // Max number of letters is lettersOnly.length - lockedCount,
     // as hint (locked) letters are not in the hidden input
     // field anymore
-    const lockedCount = locked.filter((v) => v).length;
-    const maxTypedLength = lettersOnly.length - lockedCount;
-
-    console.log("Typed letters len:", typed.length);
-    console.log("Locked length:", lockedCount);
-    console.log("Can be written:", maxTypedLength);
-    console.log("Only letters count:", lettersOnly.length);
-    console.log("==");
+    //const lockedCount = locked.filter((v) => v).length;
+    const maxTypedLength = lettersOnly.length - wordGuess.getHintLettersCount();
 
     // Restrict typed input to number of letters
     if (typed.length > maxTypedLength) {
@@ -229,7 +223,6 @@ function handleInputEvent(): void {
 
     for (let i = 0; i < fullSplit.length; i++) {
         const [char, isLetter] = fullSplit[i]!;
-
         if (!isLetter) {
             // Special char stays visible
             newGuess[i] = char;

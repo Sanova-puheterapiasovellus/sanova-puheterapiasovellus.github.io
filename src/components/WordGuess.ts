@@ -12,6 +12,7 @@ export class WordGuess {
     private anyHintsUsed: boolean = false;
     private wordObject: Word;
     private splitWord: [string, boolean][] = [];
+    //private typedLettersCount: number = 0;
 
     /** Initialize a WordGuess object with current guess being
      * empty, i.e. no letter written. No letter hints used, so
@@ -31,6 +32,21 @@ export class WordGuess {
 
     getHintsUsed(): boolean {
         return this.anyHintsUsed;
+    }
+
+    getHintLettersCount(): number {
+        let hintLetterCount = 0;
+        for (let i = 0; i < this.locked.length; i++) {
+            if (this.locked[i] && this.splitWord[i]![1]) {
+                // This index is locked and has a normal
+                // letter, so we can count that as a hint
+                // letter. Do not count the locked special
+                // characters
+                hintLetterCount++;
+            }
+        }
+
+        return hintLetterCount;
     }
 
     updateStatus(newStatus: WordGuessStatus): void {
@@ -130,7 +146,12 @@ export class WordGuess {
             if (guessArray[i] === wordArray[i]) {
                 correctLettersLength++;
             } else {
-                break;
+                if (this.splitWord[i]![1]) {
+                    break;
+                } else {
+                    // Always calculate special character as a correct one
+                    correctLettersLength++;
+                }
             }
         }
 
@@ -143,9 +164,9 @@ export class WordGuess {
         // Starting from the left, lock every correct letter
         for (let i = 0; i < correctLettersLength; i++) {
             // Only lock the letter if it is not a special one.
-            if (this.splitWord[i]![1]) {
-                this.locked[i] = true;
-            }
+            //if (this.splitWord[i]![1]) {
+            this.locked[i] = true;
+            //}
             this.currentGuess[i] = this.word[i]!;
         }
 
@@ -157,7 +178,8 @@ export class WordGuess {
         // skip that character and give the next character as hint
         // after that.
         if (nextIndex < this.word.length && this.splitWord[nextIndex]![1] === false) {
-            //this.locked[nextIndex] = true;
+            this.locked[nextIndex] = true;
+            this.currentGuess[nextIndex] = this.splitWord[nextIndex]![0];
             nextIndex++;
         }
 
