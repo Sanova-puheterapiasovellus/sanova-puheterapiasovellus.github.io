@@ -236,7 +236,13 @@ function handleInputEvent(): void {
         }
 
         // Use next typed letter or blank
-        newGuess[i] = typed[typedIndex] ?? "_";
+        const next = typed[typedIndex];
+
+        // Stop immediately when typed has no more characters
+        if (next === undefined) {
+            break;
+        }
+        newGuess[i] = next;
         typedIndex++;
     }
 
