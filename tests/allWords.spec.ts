@@ -28,7 +28,7 @@ test.describe("Test All Words", () => {
         await page.locator("#hidden-input").fill(word);
         await page.locator("#word-guess-submit").click();
 
-        await expect(page.locator("#all-words-dialog")).toBeVisible();
+        await expect(page.locator("#all-words-page")).toBeVisible();
 
         await page.close();
     });
@@ -62,7 +62,7 @@ test.describe("Test All Words", () => {
         await page.locator("#hidden-input").fill(word);
         await page.locator("#word-guess-submit").click();
 
-        await expect(page.locator("#all-words-dialog")).toBeVisible();
+        await expect(page.locator("#all-words-page")).toBeVisible();
 
         await page.close();
     });
