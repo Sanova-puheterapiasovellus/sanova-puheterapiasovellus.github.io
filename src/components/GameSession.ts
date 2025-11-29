@@ -14,7 +14,6 @@ export class GameSession {
     private letterHintsCounter: number = 0;
 
     private gameModeRandom: boolean = false;
-    private outOfWords: boolean = false;
     private isReplay: boolean = false;
 
     private currentWordGuess: WordGuess | null = null;
@@ -231,17 +230,10 @@ export class GameSession {
 
     /** Check if game is over, i.e. are there any more words to be guessed */
     isGameOver(): boolean {
-        if (this.getUnguessedCount() === 1) {
-            // Game will always be considered over if the user
-            // has only selected one word. This way the game ends
-            // as soon as the user answers correctly
+        if (this.getUnguessedCount() === 0) {
             return true;
         }
-        if (this.outOfWords) {
-            return true;
-        } else {
-            return false;
-        }
+        return false;
     }
 
     /** Get the amount of guessed words, no matter if guessed correctly or not
@@ -271,12 +263,6 @@ export class GameSession {
 
     /** Get the next word (in the order the list defines) to be guessed and create a new WordGuess object */
     getNextWordOrder(): Word {
-        const totalWords = this.getTotalWordCount();
-        const guessedWordsCount = totalWords - this.getUnguessedCount();
-
-        if (guessedWordsCount === totalWords - 1) {
-            this.outOfWords = true;
-        }
         this.wordGuessIndex++;
         this.currentWordGuess = this.wordGuessList[this.wordGuessIndex]!;
         this.currentWord = this.currentWordGuess.getWordObject();
@@ -289,13 +275,6 @@ export class GameSession {
         const notGuessed = this.wordGuessList.filter(
             (wg) => wg.getStatus() === WordGuessStatus.NOT_GUESSED,
         );
-
-        const totalWords = this.getTotalWordCount();
-        const guessedWordsCount = totalWords - this.getUnguessedCount();
-
-        if (guessedWordsCount === totalWords - 1) {
-            this.outOfWords = true;
-        }
 
         const randomIndex = Math.floor(Math.random() * notGuessed.length);
         const randomWordGuess = notGuessed[randomIndex]!;

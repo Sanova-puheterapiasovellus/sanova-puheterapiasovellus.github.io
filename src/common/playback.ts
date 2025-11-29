@@ -1,5 +1,8 @@
 import { type AudioSegment, offsetsData } from "../data/offset-data-model";
 
+/** Lazily initialized context for syllable playback. */
+let audioContext: AudioContext | undefined;
+
 /** All previously loaded audio snippets as there's a reasonable finite amount of them. */
 const snippetCache = new Map<string, Promise<AudioBuffer>>();
 
@@ -18,6 +21,12 @@ async function loadCachedValue<T>(
     storage.set(key, promise);
 
     return promise;
+}
+
+/** Lazily initialize the global audio context object. */
+function getGlobalAudioContext(): AudioContext {
+    audioContext ??= new AudioContext();
+    return audioContext;
 }
 
 /**
@@ -109,11 +118,11 @@ function audioBufferSubset(
 /** Cached load of an individual sound clip in it's raw form. */
 export function loadSoundClip(
     signal: AbortSignal,
-    context: AudioContext,
     name: string,
+    context: AudioContext = getGlobalAudioContext(),
 ): Promise<AudioBuffer> {
     return loadCachedValue(snippetCache, name, async () => {
-        const response = await fetch(`sounds/${name}.mp3`, { signal });
+        const response = await fetch(`/sounds/${name}.mp3`, { signal });
         if (!response.ok) {
             throw new Error(`failed to fetch sound clip for ${name}`, {
                 cause: response,
@@ -124,18 +133,28 @@ export function loadSoundClip(
     });
 }
 
-/** Build up a cached syllable sound out of configured segments of individual character sounds. */
-async function formSyllableSound(
+/** Load a syllable sound or constrtruct one from character sounds. */
+async function getSyllableSound(
     cancellation: AbortSignal,
     context: AudioContext,
-    value: string,
+    name: string,
 ): Promise<AudioBuffer> {
-    return loadCachedValue(snippetCache, value, async () =>
-        combineAudioBuffers(
+    return loadCachedValue(snippetCache, name, async () => {
+        if (name in offsetsData) {
+            const buffer = await loadSoundClip(cancellation, name, context);
+            const meta = offsetsData[name];
+            if (meta === undefined) {
+                return buffer;
+            }
+
+            return audioBufferSubset(context, buffer, meta);
+        }
+
+        return combineAudioBuffers(
             context,
             await Promise.all(
-                value.split("").map(async (character) => {
-                    const buffer = await loadSoundClip(cancellation, context, character);
+                name.split("").map(async (character) => {
+                    const buffer = await loadSoundClip(cancellation, character, context);
                     const meta = offsetsData[character];
                     if (meta === undefined) {
                         return buffer;
@@ -144,8 +163,13 @@ async function formSyllableSound(
                     return audioBufferSubset(context, buffer, meta);
                 }),
             ),
-        ),
-    );
+        );
+    });
+}
+
+/** Transition the context from a suspended state as needed. */
+function ensureReadyForPlayback(context: AudioContext): Promise<void> {
+    return context.state === "suspended" ? context.resume() : Promise.resolve();
 }
 
 /** Play back audio buffer and wait for it to finish. */
@@ -169,13 +193,14 @@ async function waitFullPlayback(
 /** Spell out the given syllables with a separation in seconds. */
 export async function playSyllableSounds(
     cancellation: AbortSignal,
-    context: AudioContext,
     syllables: string[],
     separation: number,
+    context: AudioContext = getGlobalAudioContext(),
 ): Promise<void> {
-    const segments = await Promise.all(
-        syllables.map((name) => formSyllableSound(cancellation, context, name)),
-    );
+    const [_, segments] = await Promise.all([
+        ensureReadyForPlayback(context),
+        Promise.all(syllables.map((name) => getSyllableSound(cancellation, context, name))),
+    ]);
 
     await waitFullPlayback(
         cancellation,

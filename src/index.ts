@@ -5,7 +5,6 @@ import { initializeAllWords } from "./components/allwords.ts";
 import { initializeCategorySelector } from "./components/categories.ts";
 import { initializeGameContainer } from "./components/game.ts";
 import { initializeImageCreditsDialog } from "./components/imageCredits.ts";
-import { initializeManagementDialog } from "./components/management.ts";
 import { initializeHeader } from "./components/navbar.ts";
 import { initializeNotificationSystem } from "./components/notifications.ts";
 
@@ -16,7 +15,6 @@ initializeCategorySelector();
 initializeGameContainer();
 initializeAllWords(route);
 initializeNotificationSystem();
-initializeManagementDialog(route);
 initializeImageCreditsDialog();
 
 dispatchInternalNotification(document.body, "Testi-ilmoitus", "Lisätietoja");

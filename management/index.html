@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fi">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sanova - Hallintapaneeli</title>
+        <script type="module" src="../src/management.ts"></script>
+    </head>
+    <body>
+        <header>
+            <h1>Hallintapaneeli</h1>
+
+            <p>
+                Tällä sivulla pystyt muokkaamaan sovelluksen käyttämiä tiedostoja GitHub
+                lähdevarastossa.
+            </p>
+        </header>
+
+        <main>
+            <form>
+                <fieldset>
+                    <legend>Kirjautuminen</legend>
+
+                    <label>
+                        GitHub Access Token
+                        <input id="auth-token" type="password" autocomplete="off" required>
+                    </label>
+
+                    <aside>
+                        <a id="auth-link" href="https://github.com/login/oauth/authorize" hidden>
+                            Kirjaudu automaattisesti GitHubin avulla
+                        </a>
+                    </aside>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Äänivihjeet</legend>
+
+                    <label>
+                        Äännetiedosto muokattavaksi
+                        <select id="sound-selection" required></select>
+                    </label>
+
+                    <label>
+                        Äänteen alkukohta sekunneissa
+                        <input id="sound-start" type="number" min="0" step="0.001" required>
+                    </label>
+
+                    <label>
+                        Äänteen loppukohta sekunneissa
+                        <input id="sound-end" type="number" min="0" step="0.001" required>
+                    </label>
+
+                    <aside>
+                        <details>
+                            <summary>
+                                <span id="missing-sound-count"></span>
+                                puuttuvaa tavuääntä.
+
+                                <p>
+                                    <small>
+                                        Puuttuvat äänet luodaan koneellisesti äännetiedostoilla ja
+                                        ne kuulostavat epäluonnollisilta.
+                                    </small>
+                                </p>
+                            </summary>
+
+                            <ul id="missing-sound-list" class="sounds"></ul>
+                        </details>
+                    </aside>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Sanalista</legend>
+
+                    <ul id="category-list" class="words"></ul>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Muutokset</legend>
+
+                    <label>
+                        Haaran nimi
+                        <input id="branch-name" type="text">
+                    </label>
+
+                    <button type="submit">Tee muutokset</button>
+
+                    <aside>
+                        <a id="pull-request" hidden>Luodut muutokset GitHubissa</a>
+                    </aside>
+                </fieldset>
+            </form>
+        </main>
+
+        <dialog id="edit-category" closedby="none">
+            <form>
+                <input id="category-index" type="hidden">
+
+                <label>
+                    Kategorian nimi
+                    <input id="category-name" type="text" required>
+                </label>
+
+                <label>
+                    Uusi kuvatiedosto
+                    <input id="category-image" type="file" accept="image/png">
+                </label>
+
+                <label>
+                    Kuvan lähde
+                    <textarea id="category-credit" type="text" required></textarea>
+                </label>
+
+                <button type="submit">Valmis</button>
+            </form>
+        </dialog>
+
+        <dialog id="edit-word" closedby="none">
+            <form>
+                <input id="word-index" type="hidden">
+                <input id="word-category" type="hidden">
+
+                <label>
+                    Sanan nimi
+                    <input id="word-name" type="text" required>
+                </label>
+
+                <label>
+                    Kuvaileva vihje
+                    <textarea id="word-hint" required></textarea>
+                </label>
+
+                <label>
+                    Uusi kuvatiedosto
+                    <input id="word-image" type="file" accept="image/png">
+                </label>
+
+                <label>
+                    Kuvan lähde
+                    <textarea id="word-credit" type="text" required></textarea>
+                </label>
+
+                <button type="submit">Valmis</button>
+            </form>
+        </dialog>
+    </body>
+</html>

@@ -1,0 +1,83 @@
+/* Define general layout details. */
+:root {
+    --general-spacing: 0.5rem;
+    --category-size: 25ch;
+    --sound-size: 5ch;
+}
+
+/* Center the contents to achieve reasonable width on larger screens. */
+html {
+    display: grid;
+    place-items: center;
+}
+
+/* Make form section padding similar to other values. */
+fieldset {
+    padding: var(--general-spacing);
+
+    > * {
+        padding-block-start: calc(var(--general-spacing) / 2);
+        padding-block-end: calc(var(--general-spacing) / 2);
+    }
+}
+
+/* Reset typical list styling. */
+ul {
+    list-style: none;
+    padding: 0%;
+}
+
+/* Define word list layout. */
+ul.words {
+    /* Allow entries to fit side by side. */
+    display: grid;
+    gap: var(--general-spacing);
+    grid-template-columns: repeat(auto-fit, minmax(var(--category-size), 1fr));
+
+    /* Let child contents participate in the grid. */
+    li {
+        display: contents;
+    }
+
+    /* Make open category section take full width. */
+    details[open] {
+        grid-column: 1 / -1;
+
+        /* Ensure gap before starting category content. */
+        summary {
+            padding-block-end: var(--general-spacing);
+        }
+    }
+}
+
+/* Display missing syllable sounds list as grid. */
+ul.sounds {
+    display: grid;
+    gap: var(--general-spacing);
+    grid-template-columns: repeat(auto-fit, minmax(var(--sound-size), 1fr));
+}
+
+/* Lay out buttons evenly and with enough space. */
+section {
+    gap: var(--general-spacing);
+    display: flex;
+    padding-block-start: var(--general-spacing);
+
+    /* Expand to fit space. */
+    button {
+        flex: 1 1 auto;
+    }
+}
+
+/* Don't try and shove form fields in single line. */
+label,
+input,
+select,
+textarea {
+    display: block;
+}
+
+/* Mark deleted items by overlining text. */
+.removed span {
+    text-decoration: line-through;
+}

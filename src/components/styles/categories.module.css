@@ -27,3 +27,15 @@
     padding-top: 20px;
     font-size: 16px;
 }
+
+@media (max-width: 456px) {
+    .card {
+        min-height: 100%;
+    }
+
+    .card > img {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1 / 1;
+    }
+}
