@@ -6,27 +6,21 @@ import { gameSession } from "./game.ts";
 
 const playButton = expectElement("word-guess-syllable-hint", HTMLButtonElement);
 
-let determinedSyllables: string[] | undefined;
 let playbackContext: AudioContext | undefined;
 let playbackCancellation: AbortController | undefined;
 
-/** Set the played syllable hint word. */
-export function setSyllableHintWord(word: string): void {
-    determinedSyllables = splitToSyllables(word).toArray();
-}
-
 /** Play back the syllable sounds when requested. */
-async function handlePlayback(_: Event): Promise<void> {
+export async function handlePlayback(syllables: string[]): Promise<void> {
     // This should get caught earlier, so might as well ignore it.
-    if (!gameSession || determinedSyllables === undefined || determinedSyllables.length === 0) {
+    if (!gameSession || syllables === undefined || syllables.length === 0) {
         return;
     }
     const syllablesToPlayCount = Math.min(
         gameSession.getVocalHintsUsedForCurrentWord(),
-        determinedSyllables.length,
+        syllables.length,
     );
 
-    const syllablesToPlay = determinedSyllables.slice(0, syllablesToPlayCount);
+    const syllablesToPlay = syllables.slice(0, syllablesToPlayCount);
     // Audio contexts can only be initialized while handling user input.
     playbackContext ??= new AudioContext();
 
@@ -47,9 +41,4 @@ async function handlePlayback(_: Event): Promise<void> {
         playbackCancellation = undefined;
         playButton.disabled = false;
     }
-}
-
-/** Connect syllable hint player events. */
-export function initializeSyllableHintPlayer() {
-    playButton.addEventListener("click", handlePlayback);
 }

@@ -17,8 +17,8 @@ import "./styles/game.css";
 import { lockPageScroll, unlockPageScroll } from "../common/preventScroll.ts";
 import { splitToSyllables } from "../utils/syllable-split.ts";
 import { showCreditsModal } from "./imageCredits.ts";
-import { playWord } from "./syllablePlayer.ts";
-import { setSyllableHintWord } from "./syllablesHint.ts";
+import { getFinnishVoice, playWord } from "./syllablePlayer.ts";
+import { handlePlayback } from "./syllablesHint.ts";
 import type { WordGuess } from "./WordGuess";
 import { showWordGuessResults } from "./wordGuessResults.ts";
 import { WordGuessStatus } from "./wordStatus.ts";
@@ -85,7 +85,6 @@ function handleGameStart(event: CategorySelectedEvent): void {
     gameSession.setGameModeRandom(); // Show words in random order
     const word = gameSession.getNextWord();
     textHint.textContent = "";
-    setSyllableHintWord(word.name);
 
     dispatchWordSelection(window, word, 0);
 }
@@ -148,8 +147,6 @@ function handleWordSelected(event: WordSelectedEvent): void {
         // No word was set, set it here
         gameSession.setCurrentWordIndex(0);
     }
-
-    setSyllableHintWord(gameSession.getCurrentWord().name);
 
     guessDialog.showModal();
     guessCard.scrollTop = 0; //reset scroll position of game to top when game opens
@@ -289,7 +286,7 @@ function handleUseTextHint(): void {
     }
 }
 
-function handleUseVocalHint(): void {
+async function handleUseVocalHint(): Promise<void> {
     if (!gameSession) return;
     gameSession.useVocalHint();
     const word: string = gameSession.getCurrentWord().name;
@@ -298,7 +295,9 @@ function handleUseVocalHint(): void {
         gameSession.setLastHintWord(word);
         gameSession.setPlayedFullSyllablesOnce(false);
     }
-    playWord(syllables);
+    const fiVoice = await getFinnishVoice();
+    await (fiVoice ? playWord(syllables) : handlePlayback(syllables));
+
     // Focus back to input from the button
     if (!isMobile()) {
         // Focus back to input from the button. Do not do this
@@ -388,7 +387,6 @@ async function handleSkipWord(): Promise<void> {
     resetTextHint();
     gameSession.resetVocalHints();
     updateGameProgressCounter();
-    setSyllableHintWord(nextWord.name);
     setImage();
 
     setupWordInput();
@@ -460,7 +458,6 @@ async function handleAnswer(wordGuess: WordGuess) {
     gameSession.resetVocalHints();
     updateGameProgressCounter();
     resetTextHint();
-    setSyllableHintWord(nextWord.name);
     setImage();
 
     setupWordInput();

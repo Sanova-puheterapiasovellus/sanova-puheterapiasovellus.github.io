@@ -21,7 +21,7 @@ function loadVoices(): Promise<SpeechSynthesisVoice[]> {
 }
 
 /** Return a finnish voice */
-async function getFinnishVoice() {
+export async function getFinnishVoice() {
     const voices = (await loadVoices()).filter((v) => v.lang.startsWith("fi"));
     voices.forEach((v) => {
         console.log(v.name);
@@ -30,8 +30,9 @@ async function getFinnishVoice() {
         return null;
     }
 
-    let voice = voices.find((v) => v.name === "Satu");
-    if (!voice) voice = voices[0];
+    const preferredVoices = ["Satu"];
+    const voice = voices.find((v) => preferredVoices.includes(v.name));
+    if (!voice) return null;
 
     return voice;
 }
@@ -55,7 +56,6 @@ async function playSyllable(syllable: string) {
 
     const voice = await getFinnishVoice();
     if (!voice) {
-        alert("Ei löytynyt suomenkielisiä TTS-ääniä.");
         return;
     }
 
