@@ -1,4 +1,4 @@
-#image-credits {
+#game-instructions {
     max-width: 90vw;
     max-height: 90vh;
     padding: 2rem;
@@ -7,7 +7,7 @@
     background: white;
 }
 
-#image-credits[open] {
+#game-instructions[open] {
     display: flex;
     position: fixed;
     inset: 50% auto auto 50%;
@@ -17,6 +17,11 @@
     overflow: hidden;
 }
 
-.image-credits-header {
+#game-instructions-text b {
+    display: block;
+    margin-top: 6px;
+}
+
+.game-instructions-header {
     padding-bottom: 12px;
 }

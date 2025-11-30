@@ -15,7 +15,9 @@ import { type Category, getImagePath, type Word, wordsData } from "../data/word-
 import { GameSession } from "./GameSession";
 import "./styles/game.css";
 import { lockPageScroll, unlockPageScroll } from "../common/preventScroll.ts";
+import { GAME_INSTRUCTIONS } from "../data/game-instructions.ts";
 import { splitToSyllables } from "../utils/syllable-split.ts";
+import { showInstructionsModal } from "./gameInstructions.ts";
 import { showCreditsModal } from "./imageCredits.ts";
 import { getFinnishVoice, playWord } from "./syllablePlayer.ts";
 import { handlePlayback } from "./syllablesHint.ts";
@@ -37,6 +39,10 @@ const textHint = expectElement("text-hint", HTMLDivElement);
 const guessProgressCounter = expectElement("word-guess-progress-counter", HTMLDivElement);
 const imageCreditsButton = expectElement("word-guess-image-credits-button", HTMLElement);
 const skipButton = expectElement("skip-word", HTMLButtonElement);
+const instructionsOpenButton = expectElement(
+    "word-guess-game-instructions-button",
+    HTMLButtonElement,
+);
 
 // Keep track of the game progress, initially null
 export let gameSession: GameSession | null = null;
@@ -517,6 +523,10 @@ function handleImageCredits(): void {
     showCreditsModal(currentWord.image_credit);
 }
 
+function handleGameInstructions(): void {
+    if (!gameSession) return;
+    showInstructionsModal(GAME_INSTRUCTIONS);
+}
 function moveCursorToEnd(input: HTMLInputElement) {
     const length = input.value.length;
     input.setSelectionRange(length, length);
@@ -589,6 +599,7 @@ export function initializeGameContainer(): void {
     syllableHintButton.addEventListener("click", handleUseVocalHint);
     imageCreditsButton.addEventListener("click", handleImageCredits);
     skipButton.addEventListener("click", handleSkipWord);
+    instructionsOpenButton.addEventListener("click", handleGameInstructions);
 
     hiddenInput.addEventListener("input", handleInputEvent);
 

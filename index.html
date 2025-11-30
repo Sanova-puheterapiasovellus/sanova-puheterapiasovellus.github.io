@@ -33,13 +33,23 @@
                 <div id="word-guess-card-content">
                     <h3>Sanaharjoittelu</h3>
                     <div id="word-guess-progress-counter"></div>
-                    <button
-                        id="word-guess-image-credits-button"
-                        type="button"
-                        class="word-guess-image-credits-button"
-                    >
-                        <span> Tekijänoikeustiedot </span>
-                    </button>
+                    <div class="word-guess-button-row">
+                        <button
+                            id="word-guess-game-instructions-button"
+                            type="button"
+                            class="word-guess-game-instructions-button"
+                        >
+                            <img src="/assets/icons/help_24dp.svg" alt="Ohjeet" class="icon">
+                            <span> Ohjeet </span>
+                        </button>
+                        <button
+                            id="word-guess-image-credits-button"
+                            type="button"
+                            class="word-guess-image-credits-button"
+                        >
+                            <span> Tekijänoikeustiedot </span>
+                        </button>
+                    </div>
                     <img id="word-guess-image" src="placeholder.png" alt="placeholder">
                     <!--<div id="word-guess-slots"></div>-->
                     <div id="word-guess-slots"></div>
@@ -100,6 +110,18 @@
                     <h2>Kuvan tekijänoikeustiedot</h2>
                 </header>
                 <div id="image-credits-text"></div>
+            </article>
+        </dialog>
+
+        <dialog id="game-instructions" closedby="any">
+            <button id="game-instructions-close" type="button" class="dialog-close-button">
+                <img src="/assets/icons/close_36dp.svg">
+            </button>
+            <article>
+                <header class="game-instructions-header">
+                    <h2>Pelin ohjeet</h2>
+                </header>
+                <div id="game-instructions-text"></div>
             </article>
         </dialog>
 

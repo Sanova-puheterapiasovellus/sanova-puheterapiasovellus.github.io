@@ -34,7 +34,8 @@
     min-width: 40px;
 }
 
-#word-guess-card-content .word-guess-image-credits-button {
+#word-guess-card-content .word-guess-image-credits-button,
+#word-guess-card-content .word-guess-game-instructions-button {
     padding-top: 12px;
     border: none;
     background: transparent;
@@ -42,10 +43,18 @@
     cursor: pointer;
     text-decoration: underline;
     transition: color 0.2s ease;
+    margin-right: 10px;
 }
 
-#word-guess-card-content .word-guess-image-credits-button:hover {
+#word-guess-card-content .word-guess-image-credits-button:hover,
+#word-guess-card-content .word-guess-game-instructions-button:hover {
     color: #005fa3;
+}
+.word-guess-game-instructions-button .icon {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    filter: brightness(0) saturate(100%) invert(0);
 }
 
 #word-guess-card-content .word-guess-button,
