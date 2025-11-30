@@ -1,5 +1,4 @@
 export const GAME_INSTRUCTIONS = `
-<h3>Pelin ohjeet</h3>
 <b>Tavoite:</b>
 <p>Kirjoita kuvassa näkyvän asian nimi oikein</p>
 <b>Pelaaminen:</b>

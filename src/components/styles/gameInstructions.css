@@ -16,11 +16,12 @@
     align-items: center;
     overflow: hidden;
 }
-#game-instructions-text h3 {
-    margin-bottom: 12px;
-}
 
 #game-instructions-text b {
     display: block;
     margin-top: 6px;
+}
+
+.game-instructions-header {
+    padding-bottom: 12px;
 }
