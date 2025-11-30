@@ -15,8 +15,10 @@ import { type Category, getImagePath, type Word, wordsData } from "../data/word-
 import { GameSession } from "./GameSession";
 import "./styles/game.css";
 import { lockPageScroll, unlockPageScroll } from "../common/preventScroll.ts";
+import { splitToSyllables } from "../utils/syllable-split.ts";
 import { showCreditsModal } from "./imageCredits.ts";
-import { setSyllableHintWord } from "./syllablesHint.ts";
+import { getFinnishVoice, playWord } from "./syllablePlayer.ts";
+import { handlePlayback } from "./syllablesHint.ts";
 import type { WordGuess } from "./WordGuess";
 import { showWordGuessResults } from "./wordGuessResults.ts";
 import { WordGuessStatus } from "./wordStatus.ts";
@@ -86,7 +88,6 @@ function handleGameStart(event: CategorySelectedEvent): void {
     gameSession.setGameModeRandom(); // Show words in random order
     const word = gameSession.getNextWord();
     textHint.textContent = "";
-    setSyllableHintWord(word.name);
 
     dispatchWordSelection(window, word, 0);
 }
@@ -151,8 +152,6 @@ function handleWordSelected(event: WordSelectedEvent): void {
         // No word was set, set it here
         gameSession.setCurrentWordIndex(0);
     }
-
-    setSyllableHintWord(gameSession.getCurrentWord().name);
 
     guessDialog.showModal();
     guessCard.scrollTop = 0; //reset scroll position of game to top when game opens
@@ -299,9 +298,18 @@ function handleUseTextHint(): void {
     focusHiddenInput();
 }
 
-function handleUseVocalHint(): void {
+async function handleUseVocalHint(): Promise<void> {
     if (!gameSession) return;
     gameSession.useVocalHint();
+    const word: string = gameSession.getCurrentWord().name;
+    const syllables: string[] = Array.from(splitToSyllables(word));
+    if (gameSession.getLastHintWord() !== word) {
+        gameSession.setLastHintWord(word);
+        gameSession.setPlayedFullSyllablesOnce(false);
+    }
+    const fiVoice = await getFinnishVoice();
+    await (fiVoice ? playWord(syllables) : handlePlayback(syllables));
+
     // Focus back to input from the button
     focusHiddenInput();
 }
@@ -496,7 +504,6 @@ function handleNextWordLogic(gameSession: GameSession) {
     gameSession.resetVocalHints();
     updateGameProgressCounter();
     resetTextHint();
-    setSyllableHintWord(nextWord.name);
     setImage();
 
     setupWordInput();
