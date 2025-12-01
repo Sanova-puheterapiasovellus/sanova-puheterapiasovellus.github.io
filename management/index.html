@@ -27,9 +27,41 @@
                     </label>
 
                     <aside>
-                        <a id="auth-link" href="https://github.com/login/oauth/authorize" hidden>
-                            Kirjaudu automaattisesti GitHubin avulla
-                        </a>
+                        <details>
+                            <summary>Ohjeet</summary>
+
+                            <p>
+                                Valitettavasti teknisistä rajoitteista johtuen tunnistautuminen on
+                                hieman epäkäytännöllinen prosessi. Sivun käyttämiseen tarvitset
+                                sopivan kirjautumistunnuksen, jonka voit luoda GitHubin
+                                käyttäjäasetuksista.
+
+                                <a
+                                    href="https://github.com/settings/personal-access-tokens/new"
+                                    target="_blank"
+                                >
+                                    (suora linkki)
+                                </a>
+                            </p>
+
+                            <p>
+                                Omistajaksi on asetettava projektin organisaatio, tunnukselle on
+                                annettava pääsy lähdevarastoon, oikeudet muokata sisältöä sekä luoda
+                                vetopyyntöjä.
+
+                                <a href="/assets/help/github-token-creation.png" target="_blank">
+                                    (esimerkki tarvittavista asetuksista)
+                                </a>
+                            </p>
+
+                            <p>
+                                Voit kuitenkin myös yrittää
+                                <a id="auth-link" href="https://github.com/login/oauth/authorize">
+                                    kirjautua automaattisesti GitHubin avulla
+                                </a>
+                                sillä se saattaa tulla mahdolliseksi tulevaisuudessa.
+                            </p>
+                        </details>
                     </aside>
                 </fieldset>
 
