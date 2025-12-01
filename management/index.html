@@ -125,13 +125,13 @@
             </form>
         </main>
 
-        <dialog id="edit-category" closedby="none">
+        <dialog id="edit-category" closedby="any">
             <form>
                 <input id="category-index" type="hidden">
 
                 <label>
                     Kategorian nimi
-                    <input id="category-name" type="text" required>
+                    <input id="category-name" type="text">
                 </label>
 
                 <label>
@@ -141,26 +141,26 @@
 
                 <label>
                     Kuvan lähde
-                    <textarea id="category-credit" type="text" required></textarea>
+                    <textarea id="category-credit" type="text"></textarea>
                 </label>
 
                 <button type="submit">Valmis</button>
             </form>
         </dialog>
 
-        <dialog id="edit-word" closedby="none">
+        <dialog id="edit-word" closedby="any">
             <form>
                 <input id="word-index" type="hidden">
                 <input id="word-category" type="hidden">
 
                 <label>
                     Sanan nimi
-                    <input id="word-name" type="text" required>
+                    <input id="word-name" type="text">
                 </label>
 
                 <label>
                     Kuvaileva vihje
-                    <textarea id="word-hint" required></textarea>
+                    <textarea id="word-hint"></textarea>
                 </label>
 
                 <label>
@@ -170,7 +170,7 @@
 
                 <label>
                     Kuvan lähde
-                    <textarea id="word-credit" type="text" required></textarea>
+                    <textarea id="word-credit" type="text"></textarea>
                 </label>
 
                 <button type="submit">Valmis</button>

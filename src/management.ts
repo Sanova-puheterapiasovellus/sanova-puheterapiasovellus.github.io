@@ -216,7 +216,6 @@ function selectWord(category: Entry<Category>, current: Partial<Word>, existing?
     wordName.value = current.name ?? "";
     wordName.disabled = existing !== undefined;
     wordHint.value = current.hint ?? "";
-    wordImage.required = !current.image;
     wordCredit.value = current.image_credit ?? "";
 }
 
@@ -226,7 +225,6 @@ function selectCategory(current: Partial<Category>, existing?: number): void {
     categoryIndex.value = (existing ?? -1).toString(10);
     categoryName.value = current.name ?? "";
     categoryName.disabled = existing !== undefined;
-    categoryImage.required = !current.image;
     categoryCredit.value = current.image_credit ?? "";
 }
 
@@ -297,11 +295,25 @@ function buildCategory(category: Entry<Category>): HTMLLIElement {
     return categoryItem;
 }
 
-/** Handle a word being created or updated. */
-function wordChanged(event: SubmitEvent): void {
-    event.preventDefault();
-    wordDialog.requestClose();
+/** Capture the value of a image file input. */
+function captureImage(input: HTMLInputElement): string {
+    if (input.value === "") {
+        return "";
+    }
 
+    const file = input.files?.[0];
+    if (file === undefined) {
+        return "";
+    }
+
+    const name = `${wordName.value}.png`;
+    addedImages.set(name, file);
+
+    return name;
+}
+
+/** Handle a word being created or updated. */
+function wordEdited(_: Event): void {
     const index = Number.parseInt(wordIndex.value, 10);
     const category = Number.parseInt(wordCategory.value, 10);
 
@@ -311,10 +323,14 @@ function wordChanged(event: SubmitEvent): void {
     }
 
     if (index === -1) {
+        if (wordName.value === "") {
+            return;
+        }
+
         const index = parent.words.length;
         const value: Word = {
             name: wordName.value,
-            image: `${wordName.value}.png`,
+            image: captureImage(wordImage),
             image_credit: wordCredit.value,
             hint: wordHint.value,
         };
@@ -340,15 +356,19 @@ function wordChanged(event: SubmitEvent): void {
 
     wordsChanged = true;
     entry.name = wordName.value;
+    entry.hint = wordHint.value;
+    entry.image ||= captureImage(wordImage);
+    entry.image_credit = wordCredit.value;
 }
 
 /** Handle a category being created or updated. */
-function categoryChanged(event: SubmitEvent): void {
-    event.preventDefault();
-    categoryDialog.requestClose();
-
+function categoryEdited(_: Event): void {
     const index = Number.parseInt(categoryIndex.value, 10);
     if (index === -1) {
+        if (categoryName.value === "") {
+            return;
+        }
+
         const index = wordList.length;
         const value: Category = {
             name: categoryName.value,
@@ -375,6 +395,8 @@ function categoryChanged(event: SubmitEvent): void {
 
     wordsChanged = true;
     entry.name = categoryName.value;
+    entry.image ||= captureImage(categoryImage);
+    entry.image_credit = categoryCredit.value;
 }
 
 /** Build up dynamic state and connect events for using the management page. */
@@ -383,8 +405,16 @@ async function initializeState(): Promise<void> {
     soundStart.addEventListener("change", handleSoundOffsetChange);
     soundEnd.addEventListener("change", handleSoundOffsetChange);
     managementForm.addEventListener("submit", handleFormSubmit);
-    wordForm.addEventListener("submit", wordChanged);
-    categoryForm.addEventListener("submit", categoryChanged);
+    wordDialog.addEventListener("close", wordEdited);
+    wordForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        wordDialog.requestClose();
+    });
+    categoryDialog.addEventListener("close", categoryEdited);
+    categoryForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        categoryDialog.requestClose();
+    });
 
     for (const key in offsetsData) {
         soundSelection.appendChild(
