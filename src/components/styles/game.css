@@ -83,7 +83,8 @@
     background-color: var(--bg-card-btns-hover);
 }
 
-#word-guess-card-content .word-guess-button:hover {
+#word-guess-card-content .word-guess-button:hover,
+#word-guess-text-hint.toggled {
     background-color: var(--bg-card-btns);
     box-shadow:
         0 4px 8px hsla(0, 0%, 0%, 0.25),
@@ -94,11 +95,13 @@
     color: var(--bg);
 }
 
-#word-guess-card-content .word-guess-button:hover > span {
+#word-guess-card-content .word-guess-button:hover > span,
+#word-guess-text-hint.toggled > span {
     color: var(--bg-light);
 }
 
-#word-guess-card-content .word-guess-button:hover img.icon {
+#word-guess-card-content .word-guess-button:hover img.icon,
+#word-guess-text-hint.toggled img.icon {
     filter: brightness(0) saturate(100%) invert(1);
     transition: filter 0.25s ease;
 }
@@ -289,6 +292,7 @@
     animation: shake 0.4s ease;
 }
 
+/*
 #word-guess-text-hint summary {
     display: flex;
     align-items: center;
@@ -343,6 +347,7 @@
 #word-guess-text-hint summary:hover img.icon {
     filter: brightness(0) saturate(100%) invert(1);
 }
+*/
 
 #text-hint {
     color: var(--text-muted);

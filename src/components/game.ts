@@ -30,7 +30,7 @@ const guessCard = expectElement("word-guess-card", HTMLDivElement);
 const closeButton = expectElement("word-guess-close", HTMLButtonElement);
 const answerButton = expectElement("word-guess-submit", HTMLButtonElement);
 const letterHintButton = expectElement("word-guess-letter-hint", HTMLButtonElement);
-const textHintDetails = expectElement("word-guess-text-hint", HTMLDetailsElement);
+const textHintButton = expectElement("word-guess-text-hint", HTMLButtonElement);
 const syllableHintButton = expectElement("word-guess-syllable-hint", HTMLButtonElement);
 const wordImage = expectElement("word-guess-image", HTMLImageElement);
 const letterSlots = expectElement("word-guess-slots", HTMLDivElement);
@@ -291,18 +291,23 @@ function handleUseLetterHint(): void {
     focusHiddenInput();
 }
 
-/** Set current word's text hint */
-function handleUseTextHint(): void {
+let isTextHintVisible = false;
+textHintButton.addEventListener("click", () => {
     if (!gameSession) return;
-    if (textHintDetails.open) {
+
+    isTextHintVisible = !isTextHintVisible;
+
+    if (isTextHintVisible) {
         gameSession.useTextHint();
+        const currentWord = gameSession.getCurrentWord();
+        textHint.textContent = currentWord.hint;
+        textHintButton.classList.add("toggled");
+    } else {
+        textHint.textContent = "";
+        textHintButton.classList.remove("toggled");
     }
-
-    const currentWord = gameSession.getCurrentWord();
-
-    textHint.textContent = currentWord.hint;
     focusHiddenInput();
-}
+});
 
 async function handleUseVocalHint(): Promise<void> {
     if (!gameSession) return;
@@ -337,15 +342,8 @@ function setButtonsEnabled(enabled: boolean): void {
     setDetailsEnabled(enabled);
 }
 
-let detailsEnabled = true;
 function setDetailsEnabled(enabled: boolean): void {
-    detailsEnabled = enabled;
-    const summary = textHintDetails.querySelector("summary");
-    if (!summary) return;
-    summary.style.cursor = "pointer";
-    textHintDetails.addEventListener("click", (e) => {
-        if (!detailsEnabled) e.preventDefault();
-    });
+    textHintButton.disabled = !enabled;
 }
 
 function getGameResults(gameSession: GameSession): GameResults {
@@ -367,7 +365,7 @@ function delay(ms: number): Promise<void> {
 }
 
 function resetTextHint() {
-    if (textHintDetails) textHintDetails.open = false;
+    textHint.textContent = "";
     gameSession?.resetTextHintFlag();
 }
 
@@ -595,7 +593,6 @@ export function initializeGameContainer(): void {
     });
 
     letterHintButton.addEventListener("click", handleUseLetterHint);
-    textHintDetails.addEventListener("toggle", handleUseTextHint);
     syllableHintButton.addEventListener("click", handleUseVocalHint);
     imageCreditsButton.addEventListener("click", handleImageCredits);
     skipButton.addEventListener("click", handleSkipWord);
