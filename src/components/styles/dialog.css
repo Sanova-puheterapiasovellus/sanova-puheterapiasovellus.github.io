@@ -1,0 +1,11 @@
+#game-instructions-text b {
+    display: block;
+    margin-top: 6px;
+}
+
+@media (max-width: 456px) {
+    #game-instructions {
+        min-width: 70vw;
+        max-height: 80vh;
+    }
+}
