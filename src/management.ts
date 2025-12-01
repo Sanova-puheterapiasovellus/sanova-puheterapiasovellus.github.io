@@ -1,14 +1,6 @@
 import "./management.css";
 import { buildHtml, expectElement } from "./common/dom";
-import {
-    addOrUpdateFile,
-    attemptPreExistingToken,
-    createBranch,
-    createPullRequest,
-    ensureFileDeleted,
-    handleAuthorizationRedirect,
-    initiateAuthorizationFlow,
-} from "./common/github";
+import { AuthorizationClient, ManagementClient } from "./common/github";
 import { loadSoundClip } from "./common/playback";
 import { type AudioSegment, offsetsData } from "./data/offset-data-model";
 import { type Category, type Data, type Word, wordsData } from "./data/word-data-model";
@@ -102,34 +94,37 @@ function handleSoundOffsetChange(_: Event): void {
 async function handleFormSubmit(event: SubmitEvent): Promise<void> {
     event.preventDefault();
 
+    const repository = new ManagementClient(authToken.value);
+    const actions = [] as (() => Promise<void>)[];
+
     const branchName = customBranch.value.length !== 0 ? customBranch.value : undefined;
     if (branchName !== undefined) {
-        await createBranch(branchName, authToken.value);
+        actions.push(() => repository.createBranch(branchName));
     }
 
     if (soundsChanged) {
-        await addOrUpdateFile(
-            "sound offset refinement",
-            "src/data/offset-data.json",
-            JSON.stringify(soundOffsets, undefined, 4),
-            authToken.value,
-            branchName,
+        actions.push(() =>
+            repository.addOrUpdateFile(
+                "sound offset refinement",
+                "src/data/offset-data.json",
+                JSON.stringify(soundOffsets, undefined, 4),
+                branchName,
+            ),
         );
     }
 
-    await Promise.all(
-        addedImages.entries().map(async ([name, file]) => {
+    for (const [name, file] of addedImages) {
+        actions.push(async () => {
             const data = await file.bytes();
 
-            await addOrUpdateFile(
+            await repository.addOrUpdateFile(
                 "image asset change",
                 `public/assets/images/${name}`,
                 String.fromCharCode(...data),
-                authToken.value,
                 branchName,
             );
-        }),
-    );
+        });
+    }
 
     if (wordsChanged || removedWords.size !== 0) {
         const unneededImages = new Set<string>();
@@ -159,31 +154,33 @@ async function handleFormSubmit(event: SubmitEvent): Promise<void> {
             }))
             .toArray();
 
-        await addOrUpdateFile(
-            "word data refinement",
-            "src/data/word-data.json",
-            JSON.stringify({ categories } satisfies Data, undefined, 4),
-            authToken.value,
-            branchName,
+        actions.push(() =>
+            repository.addOrUpdateFile(
+                "word data refinement",
+                "src/data/word-data.json",
+                JSON.stringify({ categories } satisfies Data, undefined, 4),
+                branchName,
+            ),
         );
 
-        await Promise.all(
-            unneededImages
-                .values()
-                .filter(Boolean)
-                .map((name) =>
-                    ensureFileDeleted(
-                        "unneeded image asset",
-                        `src/assets/images/${name}`,
-                        authToken.value,
-                        branchName,
-                    ),
+        for (const name of unneededImages) {
+            actions.push(() =>
+                repository.ensureFileDeleted(
+                    "unneeded image asset",
+                    `src/assets/images/${name}`,
+                    branchName,
                 ),
-        );
+            );
+        }
+    }
+
+    for (const callback of actions) {
+        await callback();
+        await ManagementClient.waitBetweenRequests();
     }
 
     if (branchName !== undefined) {
-        const url = await createPullRequest("requested changes", branchName, authToken.value);
+        const url = await repository.createPullRequest("requested changes", branchName);
         pullRequest.href = url;
         pullRequest.hidden = false;
     }
@@ -191,17 +188,19 @@ async function handleFormSubmit(event: SubmitEvent): Promise<void> {
 
 /** Handle authorization flow or prepare for allowing it. */
 async function authorizationFlow(): Promise<string | undefined> {
-    const existing = await attemptPreExistingToken();
+    const token = new AuthorizationClient();
+
+    const existing = await token.attemptExisting();
     if (existing !== undefined) {
         return existing;
     }
 
     const search = new URLSearchParams(location.search);
     if (search.size !== 0) {
-        return handleAuthorizationRedirect(search);
+        return token.handleRedirect(search);
     }
 
-    const parameters = await initiateAuthorizationFlow();
+    const parameters = await token.initiateFlow();
     authLink.href += `?${parameters.toString()}`;
     authLink.hidden = false;
     return;

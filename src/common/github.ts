@@ -19,304 +19,364 @@ declare global {
     }
 }
 
-/** Create a branch based on the existing state of another one. */
-export async function createBranch(
-    name: string,
-    token: string,
-    base: string = defaultBranch,
-    repository: string = projectRepository,
-): Promise<void> {
-    const findResponse = await fetch(`${ghRepoApiBase}/${repository}/git/ref/heads/${base}`, {
-        method: "get",
-        headers: {
-            accept: ghJsonContentType,
-            authorization: `Bearer ${token}`,
-            version: ghApiVersion,
-        },
-    });
+/** Class for managing a GitHub repository through the REST API. */
+export class ManagementClient {
+    #token: string;
+    #repository: string;
 
-    if (!findResponse.ok) {
-        throw new Error("unsuccessful api response", { cause: findResponse });
+    constructor(token: string, repository = projectRepository) {
+        this.#token = token;
+        this.#repository = repository;
     }
 
-    const { object: sha } = await findResponse.json();
+    /** Wait for an appropriate time between mutative requests. */
+    static waitBetweenRequests(duration = 1000): Promise<void> {
+        return new Promise((resolve) => window.setTimeout(resolve, duration));
+    }
 
-    const createResponse = await fetch(`${ghRepoApiBase}/${repository}/git/ref/heads/${base}`, {
-        method: "post",
-        headers: {
-            "content-type": jsonContentType,
-            accept: ghJsonContentType,
-            authorization: `Bearer ${token}`,
-            version: ghApiVersion,
-        },
-        body: JSON.stringify({
-            ref: `refs/heads/${name}`,
-            sha,
-        }),
-    });
+    /** Get suitable timeout value that GitHub provided. */
+    static #determineProvidedTimeout(headers: Headers): number | null {
+        // Handle being provided a number of seconds to wait for.
+        const duration = headers.get("retry-after");
+        if (duration !== null) {
+            return Number.parseInt(duration, 10) * 1000;
+        }
 
-    if (!createResponse.ok) {
-        throw new Error("unsuccessful api response", { cause: findResponse });
+        // Handle being given a timestamp to repeat after.
+        if (headers.get("x-ratelimit-remaining") === "0") {
+            const when = headers.get("x-ratelimit-reset");
+            if (when !== null) {
+                return Number.parseInt(when, 10) * 1000 - Date.now();
+            }
+        }
+
+        return null;
+    }
+
+    /** Middleware function for handling request timeouts. */
+    static async #withTimeoutMiddleware(
+        request: Request,
+        retries = 3,
+        timeout = 60 * 1000,
+    ): Promise<Response> {
+        let response: Response;
+        let attempt = 0;
+        do {
+            response = await fetch(request);
+
+            // We only care about GitHub's rate limit responses, and yes, it's
+            // not an entirely semantically correct status code.
+            if (response.status !== 403) {
+                break;
+            }
+
+            // Check if GitHub specified a timeout value.
+            let wait = ManagementClient.#determineProvidedTimeout(request.headers);
+
+            // Default to exponentially growing timeout.
+            if (wait === null) {
+                wait = timeout = timeout * 2 ** attempt;
+            }
+
+            // Actually do the waiting and notify user.
+            await ManagementClient.waitBetweenRequests(wait);
+        } while (attempt++ < retries);
+        return response;
+    }
+
+    /** Create a branch based on the existing state of another one. */
+    async createBranch(name: string, base: string = defaultBranch): Promise<void> {
+        const findResponse = await ManagementClient.#withTimeoutMiddleware(
+            new Request(`${ghRepoApiBase}/${this.#repository}/git/ref/heads/${base}`, {
+                method: "get",
+                headers: {
+                    accept: ghJsonContentType,
+                    authorization: `Bearer ${this.#token}`,
+                    version: ghApiVersion,
+                },
+            }),
+        );
+
+        if (!findResponse.ok) {
+            throw new Error("unsuccessful api response", { cause: findResponse });
+        }
+
+        const { object: sha } = await findResponse.json();
+
+        const createResponse = await ManagementClient.#withTimeoutMiddleware(
+            new Request(`${ghRepoApiBase}/${this.#repository}/git/ref/heads/${base}`, {
+                method: "post",
+                headers: {
+                    "content-type": jsonContentType,
+                    accept: ghJsonContentType,
+                    authorization: `Bearer ${this.#token}`,
+                    version: ghApiVersion,
+                },
+                body: JSON.stringify({
+                    ref: `refs/heads/${name}`,
+                    sha,
+                }),
+            }),
+        );
+
+        if (!createResponse.ok) {
+            throw new Error("unsuccessful api response", { cause: findResponse });
+        }
+    }
+
+    /** Add or update a file in the repository in a single commit. */
+    async addOrUpdateFile(
+        reason: string,
+        path: string,
+        content: string,
+        branch: string = defaultBranch,
+    ): Promise<void> {
+        const response = await ManagementClient.#withTimeoutMiddleware(
+            new Request(`${ghRepoApiBase}/${this.#repository}/contents/${path}`, {
+                method: "put",
+                headers: {
+                    "content-type": jsonContentType,
+                    accept: ghJsonContentType,
+                    authorization: `Bearer ${this.#token}`,
+                    version: ghApiVersion,
+                },
+                body: JSON.stringify({
+                    branch,
+                    message: `sanova-management: ${reason}`,
+                    content: btoa(content),
+                }),
+            }),
+        );
+
+        if (!response.ok) {
+            throw new Error("unsuccessful api response", { cause: response });
+        }
+    }
+
+    /** Get the current file hash that deleting files needs for some reason. */
+    async #getFileHash(path: string, branch: string = defaultBranch): Promise<string | undefined> {
+        const response = await ManagementClient.#withTimeoutMiddleware(
+            new Request(`${ghRepoApiBase}/${this.#repository}/contents/${path}?ref=${branch})}`, {
+                method: "get",
+                headers: {
+                    "content-type": jsonContentType,
+                    accept: ghRawFileJsonContentType,
+                    authorization: `Bearer ${this.#token}`,
+                    version: ghApiVersion,
+                },
+            }),
+        );
+
+        if (response.status === 404) {
+            return undefined;
+        }
+
+        if (!response.ok) {
+            throw new Error("unsuccessful api response", { cause: response });
+        }
+
+        const { sha } = await response.json();
+        return sha;
+    }
+
+    /** Delete a file from the repository. */
+    async ensureFileDeleted(
+        reason: string,
+        path: string,
+        branch: string = defaultBranch,
+    ): Promise<void> {
+        const sha = await this.#getFileHash(path, branch);
+        if (sha === undefined) {
+            return;
+        }
+
+        const response = await ManagementClient.#withTimeoutMiddleware(
+            new Request(`${ghRepoApiBase}/${this.#repository}/contents/${path}`, {
+                method: "delete",
+                headers: {
+                    "content-type": jsonContentType,
+                    accept: ghJsonContentType,
+                    authorization: `Bearer ${this.#token}`,
+                    version: ghApiVersion,
+                },
+                body: JSON.stringify({
+                    sha,
+                    branch,
+                    message: `sanova-management: ${reason}`,
+                }),
+            }),
+        );
+
+        if (!response.ok) {
+            throw new Error("unsuccessful api response", { cause: response });
+        }
+    }
+
+    /** Create a pull request and return a link to it. */
+    async createPullRequest(reason: string, branch: string): Promise<string> {
+        const response = await ManagementClient.#withTimeoutMiddleware(
+            new Request(`${ghRepoApiBase}/${this.#repository}/pulls`, {
+                method: "post",
+                headers: {
+                    "content-type": jsonContentType,
+                    accept: ghJsonContentType,
+                    authorization: `Bearer ${this.#token}`,
+                    version: ghApiVersion,
+                },
+                body: JSON.stringify({
+                    title: `sanova-management: ${reason}`,
+                    head: branch,
+                    base: defaultBranch,
+                }),
+            }),
+        );
+
+        if (!response.ok) {
+            throw new Error("unsuccessful api response", { cause: response });
+        }
+
+        const { html_url } = await response.json();
+        return html_url;
     }
 }
 
-/** Add or update a file in the repository in a single commit. */
-export async function addOrUpdateFile(
-    reason: string,
-    path: string,
-    content: string,
-    token: string,
-    branch: string = defaultBranch,
-    repository: string = projectRepository,
-): Promise<void> {
-    const response = await fetch(`${ghRepoApiBase}/${repository}/contents/${path}`, {
-        method: "put",
-        headers: {
-            "content-type": jsonContentType,
-            accept: ghJsonContentType,
-            authorization: `Bearer ${token}`,
-            version: ghApiVersion,
-        },
-        body: JSON.stringify({
-            branch,
-            message: `sanova-management: ${reason}`,
-            content: btoa(content),
-        }),
-    });
+/** Class for managing a GitHub authorization flow.  */
+export class AuthorizationClient {
+    #id: string;
+    #redirect: string;
 
-    if (!response.ok) {
-        throw new Error("unsuccessful api response", { cause: response });
+    constructor(id: string = defaultClientId, redirect: string = defaultRedirectUri) {
+        this.#id = id;
+        this.#redirect = redirect;
     }
-}
 
-/** Get the current file hash that deleting files needs for some reason. */
-async function getFileHash(
-    path: string,
-    token: string,
-    branch: string = defaultBranch,
-    repository: string = projectRepository,
-): Promise<string | undefined> {
-    const response = await fetch(
-        `${ghRepoApiBase}/${repository}/contents/${path}?ref=${branch})}`,
-        {
-            method: "get",
+    /** Handle older browsers lacking nice encoding methods. */
+    static #toBase64Url(buffer: Uint8Array): string {
+        return (
+            buffer.toBase64?.({ alphabet: "base64url", omitPadding: true }) ??
+            btoa(String.fromCharCode(...buffer))
+                .replace(/\+/g, "-")
+                .replace(/\//g, "_")
+                .replace(/=+$/, "")
+        );
+    }
+
+    /** Generate a PKCE verifier and challenge. */
+    static async #generatePkce(): Promise<[string, string]> {
+        const verifier = AuthorizationClient.#toBase64Url(
+            crypto.getRandomValues(new Uint8Array(32)),
+        );
+
+        // yes it's weird that we're supposed to hash the base64url encoded value
+        // instead of the actual random data, I guess it leaves the spec a bit more
+        // flexible to generating suitable random data some other way
+        const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(verifier));
+        const challenge = AuthorizationClient.#toBase64Url(new Uint8Array(digest));
+
+        return [verifier, challenge];
+    }
+
+    /** Store received tokens and return the access token. */
+    static async #handleTokenResponse(response: Response): Promise<string> {
+        const data = await response.json();
+
+        await Promise.all([
+            cookieStore.set({
+                name: cookieAccessToken,
+                value: data.access_token,
+                expires: data.expires_in,
+            }),
+            cookieStore.set({
+                name: cookieRefreshToken,
+                value: data.refresh_token,
+                expires: data.refresh_token_expires_in,
+            }),
+        ]);
+
+        return data.access_token;
+    }
+
+    /** Build up query parameters for authorizing. */
+    async initiateFlow(): Promise<URLSearchParams> {
+        const state = crypto.randomUUID();
+        const [verifier, challenge] = await AuthorizationClient.#generatePkce();
+
+        await Promise.all([
+            cookieStore.set(cookieAuthState, state),
+            cookieStore.set(cookiePkceVerifier, verifier),
+        ]);
+
+        return new URLSearchParams({
+            client_id: this.#id,
+            redirect_uri: this.#redirect,
+            state,
+            code_challenge: challenge,
+            code_challenge_method: "S256",
+        });
+    }
+
+    /** Handle having been redirected back to our application. */
+    async handleRedirect(query: URLSearchParams): Promise<string> {
+        const code = query.get("code");
+        const [state, verifier] = await Promise.all([
+            cookieStore.get(cookieAuthState),
+            cookieStore.get(cookiePkceVerifier),
+        ]);
+
+        if (code === null || verifier === null || query.get("state") !== state?.value) {
+            throw new Error("invalid oauth state");
+        }
+
+        const response = await fetch("https://github.com/login/oauth/access_token", {
+            method: "post",
             headers: {
-                "content-type": jsonContentType,
-                accept: ghRawFileJsonContentType,
-                authorization: `Bearer ${token}`,
-                version: ghApiVersion,
+                "Content-Type": jsonContentType,
+                Accept: jsonContentType,
             },
-        },
-    );
+            body: JSON.stringify({
+                client_id: this.#id,
+                code,
+                redirect_uri: this.#redirect,
+                code_verifier: verifier.value,
+            }),
+        });
 
-    if (response.status === 404) {
-        return undefined;
+        if (!response.ok) {
+            throw new Error("unsuccessful api response", { cause: response });
+        }
+
+        return AuthorizationClient.#handleTokenResponse(response);
     }
 
-    if (!response.ok) {
-        throw new Error("unsuccessful api response", { cause: response });
+    /** Attempt to use previously stored access or refresh token. */
+    async attemptExisting(): Promise<string | undefined> {
+        const access = await cookieStore.get(cookieAccessToken);
+        if (access !== null) {
+            return access.value;
+        }
+
+        const refresh = await cookieStore.get(cookieRefreshToken);
+        if (refresh === null) {
+            return;
+        }
+
+        const response = await fetch("https://github.com/login/oauth/access_token", {
+            method: "post",
+            headers: {
+                "Content-Type": jsonContentType,
+                Accept: jsonContentType,
+            },
+            body: JSON.stringify({
+                client_id: this.#id,
+                grant_type: "refresh_token",
+                refresh_token: refresh.value,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error("unsuccessful api response", { cause: response });
+        }
+
+        return AuthorizationClient.#handleTokenResponse(response);
     }
-
-    const { sha } = await response.json();
-    return sha;
-}
-
-/** Delete a file from the repository. */
-export async function ensureFileDeleted(
-    reason: string,
-    path: string,
-    token: string,
-    branch: string = defaultBranch,
-    repository: string = projectRepository,
-): Promise<void> {
-    const sha = await getFileHash(path, token, branch, repository);
-    if (sha === undefined) {
-        return;
-    }
-
-    const response = await fetch(`${ghRepoApiBase}/${repository}/contents/${path}`, {
-        method: "delete",
-        headers: {
-            "content-type": jsonContentType,
-            accept: ghJsonContentType,
-            authorization: `Bearer ${token}`,
-            version: ghApiVersion,
-        },
-        body: JSON.stringify({
-            sha,
-            branch,
-            message: `sanova-management: ${reason}`,
-        }),
-    });
-
-    if (!response.ok) {
-        throw new Error("unsuccessful api response", { cause: response });
-    }
-}
-
-/** Create a pull request and return a link to it. */
-export async function createPullRequest(
-    reason: string,
-    branch: string,
-    token: string,
-    repository: string = projectRepository,
-): Promise<string> {
-    const response = await fetch(`${ghRepoApiBase}/${repository}/pulls`, {
-        method: "post",
-        headers: {
-            "content-type": jsonContentType,
-            accept: ghJsonContentType,
-            authorization: `Bearer ${token}`,
-            version: ghApiVersion,
-        },
-        body: JSON.stringify({
-            title: `sanova-management: ${reason}`,
-            head: branch,
-            base: defaultBranch,
-        }),
-    });
-
-    if (!response.ok) {
-        throw new Error("unsuccessful api response", { cause: response });
-    }
-
-    const { html_url } = await response.json();
-    return html_url;
-}
-
-/** Handle older browsers lacking nice encoding methods. */
-function toBase64Url(buffer: Uint8Array): string {
-    return (
-        buffer.toBase64?.({ alphabet: "base64url", omitPadding: true }) ??
-        btoa(String.fromCharCode(...buffer))
-            .replace(/\+/g, "-")
-            .replace(/\//g, "_")
-            .replace(/=+$/, "")
-    );
-}
-
-/** Generate a PKCE verifier and challenge. */
-async function generatePkce(): Promise<[string, string]> {
-    const verifier = toBase64Url(crypto.getRandomValues(new Uint8Array(32)));
-
-    // yes it's weird that we're supposed to hash the base64url encoded value
-    // instead of the actual random data, I guess it leaves the spec a bit more
-    // flexible to generating suitable random data some other way
-    const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(verifier));
-    const challenge = toBase64Url(new Uint8Array(digest));
-
-    return [verifier, challenge];
-}
-
-/** Build up query parameters for authorizing. */
-export async function initiateAuthorizationFlow(
-    clientId = defaultClientId,
-    redirectUri = defaultRedirectUri,
-): Promise<URLSearchParams> {
-    const state = crypto.randomUUID();
-    const [verifier, challenge] = await generatePkce();
-
-    await Promise.all([
-        cookieStore.set(cookieAuthState, state),
-        cookieStore.set(cookiePkceVerifier, verifier),
-    ]);
-
-    return new URLSearchParams({
-        client_id: clientId,
-        redirect_uri: redirectUri,
-        state,
-        code_challenge: challenge,
-        code_challenge_method: "S256",
-    });
-}
-
-/** Store received tokens and return the access token. */
-async function handleTokenEndpointResponse(response: Response): Promise<string> {
-    const data = await response.json();
-
-    await Promise.all([
-        cookieStore.set({
-            name: cookieAccessToken,
-            value: data.access_token,
-            expires: data.expires_in,
-        }),
-        cookieStore.set({
-            name: cookieRefreshToken,
-            value: data.refresh_token,
-            expires: data.refresh_token_expires_in,
-        }),
-    ]);
-
-    return data.access_token;
-}
-
-/** Handle having been redirected back to our application. */
-export async function handleAuthorizationRedirect(
-    query: URLSearchParams,
-    clientId = defaultClientId,
-    redirectUri = defaultRedirectUri,
-): Promise<string> {
-    const code = query.get("code");
-    const [state, verifier] = await Promise.all([
-        cookieStore.get(cookieAuthState),
-        cookieStore.get(cookiePkceVerifier),
-    ]);
-
-    if (code === null || verifier === null || query.get("state") !== state?.value) {
-        throw new Error("invalid oauth state");
-    }
-
-    const response = await fetch("https://github.com/login/oauth/access_token", {
-        method: "post",
-        headers: {
-            "Content-Type": jsonContentType,
-            Accept: jsonContentType,
-        },
-        body: JSON.stringify({
-            client_id: clientId,
-            code,
-            redirect_uri: redirectUri,
-            code_verifier: verifier.value,
-        }),
-    });
-
-    if (!response.ok) {
-        throw new Error("unsuccessful api response", { cause: response });
-    }
-
-    return handleTokenEndpointResponse(response);
-}
-
-/** Attempt to use previously stored access or refresh token. */
-export async function attemptPreExistingToken(
-    clientId = defaultClientId,
-): Promise<string | undefined> {
-    const access = await cookieStore.get(cookieAccessToken);
-    if (access !== null) {
-        return access.value;
-    }
-
-    const refresh = await cookieStore.get(cookieRefreshToken);
-    if (refresh === null) {
-        return;
-    }
-
-    const response = await fetch("https://github.com/login/oauth/access_token", {
-        method: "post",
-        headers: {
-            "Content-Type": jsonContentType,
-            Accept: jsonContentType,
-        },
-        body: JSON.stringify({
-            client_id: clientId,
-            grant_type: "refresh_token",
-            refresh_token: refresh.value,
-        }),
-    });
-
-    if (!response.ok) {
-        throw new Error("unsuccessful api response", { cause: response });
-    }
-
-    return handleTokenEndpointResponse(response);
 }
