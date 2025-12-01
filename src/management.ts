@@ -1,5 +1,5 @@
 import "./management.css";
-import { buildHtml, expectElement } from "./common/dom";
+import { buildHtml, debounceEvent, expectElement } from "./common/dom";
 import { AuthorizationClient, ManagementClient } from "./common/github";
 import { loadSoundClip } from "./common/playback";
 import { type AudioSegment, offsetsData } from "./data/offset-data-model";
@@ -8,6 +8,8 @@ import { splitToSyllables } from "./utils/syllable-split";
 
 /** Item that has a known array position. */
 type Entry<T> = { value: T; index: number };
+
+const cookieManualToken = "manual_token";
 
 const authLink = expectElement("#auth-link", HTMLAnchorElement, document.body);
 const managementForm = expectElement("form", HTMLFormElement, document.body);
@@ -415,11 +417,15 @@ async function initializeState(): Promise<void> {
         soundSelection.selectedIndex = -1;
     });
 
-    const token = await authorizationFlow();
-    if (token !== undefined) {
-        authToken.value = token;
-        authLink.hidden = true;
-    }
+    // Try and figure out the current access token.
+    authToken.value =
+        (await authorizationFlow()) ?? (await cookieStore.get(cookieManualToken))?.value ?? "";
+
+    // Persist access token if manually changed.
+    authToken.addEventListener(
+        "input",
+        debounceEvent(async (_) => cookieStore.set(cookieManualToken, authToken.value)),
+    );
 }
 
 initializeState();

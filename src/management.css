@@ -5,10 +5,16 @@
     --sound-size: 5ch;
 }
 
-/* Center the contents to achieve reasonable width on larger screens. */
+/* Center the contents on the page for reasonable look on large screens. */
 html {
     display: grid;
     place-items: center;
+}
+
+/* Limit width but ensure size includes collapsed sections. */
+body {
+    width: 100%;
+    max-width: 100ch;
 }
 
 /* Make form section padding similar to other values. */
