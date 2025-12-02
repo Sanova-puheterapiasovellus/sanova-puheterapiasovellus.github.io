@@ -261,20 +261,21 @@ function selectCategory(current: Category, existing?: number): void {
 
     categoryMain.replaceChildren(
         buildHtml("option", { value: "" }),
-        ...current.words
-            .filter((word) => word.image.file !== "")
-            .map(({ name }, index) =>
-                buildHtml("option", { value: index.toString(10), innerHTML: name }),
-            ),
+        ...current.words.map(({ name }, index) =>
+            buildHtml("option", {
+                value: index.toString(10),
+                innerHTML: name,
+            }),
+        ),
     );
 
     categoryCredit.value = getCategoryImage(current).credit;
     if ("word" in current.image) {
         categoryImage.disabled = categoryCredit.disabled = true;
-        categoryMain.value = current.image.word.toString(10);
+        categoryMain.selectedIndex = current.image.word + 1;
     } else {
         categoryImage.disabled = categoryCredit.disabled = false;
-        categoryMain.value = "";
+        categoryMain.selectedIndex = 0;
     }
 }
 
@@ -411,10 +412,6 @@ function wordEdited(_: Event): void {
         throw new Error("invalid word selection");
     }
 
-    if (entry.name === wordName.value) {
-        return;
-    }
-
     wordsChanged = true;
     entry.name = wordName.value;
     entry.hint = wordHint.value;
@@ -452,10 +449,6 @@ function categoryEdited(_: Event): void {
         throw new Error("invalid category selection");
     }
 
-    if (entry.name === categoryName.value) {
-        return;
-    }
-
     wordsChanged = true;
     entry.name = categoryName.value;
 
@@ -490,7 +483,7 @@ async function initializeState(): Promise<void> {
     }
 
     const missingSyllableSounds = new Set(
-        wordsData.categories
+        wordList
             .values()
             .flatMap((category) => category.words.values())
             .flatMap((word) => splitToSyllables(word.name)),
@@ -501,7 +494,7 @@ async function initializeState(): Promise<void> {
         missingSoundList.appendChild(buildHtml("li", { innerText: value }));
     }
 
-    for (const [index, value] of wordsData.categories.entries()) {
+    for (const [index, value] of wordList.entries()) {
         categoryList.appendChild(buildCategory({ value, index }));
     }
 
