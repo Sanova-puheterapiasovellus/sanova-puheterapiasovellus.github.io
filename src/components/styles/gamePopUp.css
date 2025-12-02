@@ -7,7 +7,7 @@
     background: white;
 }
 
-.dialog.open {
+.dialog[open] {
     display: flex;
     position: fixed;
     inset: 50% auto auto 50%;
@@ -17,6 +17,18 @@
     overflow: scroll;
 }
 
-.popupHeader {
+.popup-header {
     padding-bottom: 12px;
+}
+
+#game-instructions-text b {
+    display: block;
+    margin-top: 6px;
+}
+
+@media (max-width: 456px) {
+    #game-instructions {
+        min-width: 70vw;
+        max-height: 80vh;
+    }
 }
