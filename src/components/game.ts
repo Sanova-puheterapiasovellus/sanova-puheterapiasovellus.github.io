@@ -93,7 +93,7 @@ function handleGameStart(event: CategorySelectedEvent): void {
 
     gameSession.setGameModeRandom(); // Show words in random order
     const word = gameSession.getNextWord();
-    textHint.textContent = "";
+    resetTextHint();
 
     dispatchWordSelection(window, word, 0);
 }
@@ -291,11 +291,11 @@ function handleUseLetterHint(): void {
     focusHiddenInput();
 }
 
-let isTextHintVisible = false;
-textHintButton.addEventListener("click", () => {
+/** Set current word's text hint */
+function handleUseTextHint() {
     if (!gameSession) return;
 
-    isTextHintVisible = !isTextHintVisible;
+    const isTextHintVisible = !textHintButton.classList.contains("toggled");
 
     if (isTextHintVisible) {
         gameSession.useTextHint();
@@ -307,7 +307,7 @@ textHintButton.addEventListener("click", () => {
         textHintButton.classList.remove("toggled");
     }
     focusHiddenInput();
-});
+}
 
 async function handleUseVocalHint(): Promise<void> {
     if (!gameSession) return;
@@ -361,6 +361,7 @@ function delay(ms: number): Promise<void> {
 
 function resetTextHint() {
     textHint.textContent = "";
+    textHintButton.classList.remove("toggled");
     gameSession?.resetTextHintFlag();
 }
 
@@ -590,6 +591,7 @@ export function initializeGameContainer(): void {
     letterHintButton.addEventListener("click", handleUseLetterHint);
     syllableHintButton.addEventListener("click", handleUseVocalHint);
     imageCreditsButton.addEventListener("click", handleImageCredits);
+    textHintButton.addEventListener("click", handleUseTextHint);
     skipButton.addEventListener("click", handleSkipWord);
     instructionsOpenButton.addEventListener("click", handleGameInstructions);
 
