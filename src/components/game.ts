@@ -162,7 +162,7 @@ function handleWordSelected(event: WordSelectedEvent): void {
     guessDialog.showModal();
     guessCard.scrollTop = 0; //reset scroll position of game to top when game opens
     lockPageScroll();
-    textHint.textContent = "";
+    resetTextHint();
     updateGameProgressCounter();
     setupWordInput();
 
@@ -500,7 +500,6 @@ function processGameOver(gameSession: GameSession) {
  */
 function handleNextWordLogic(gameSession: GameSession) {
     const nextWord: Word = gameSession.getNextWord();
-    textHint.textContent = "";
     gameSession.resetVocalHints();
     updateGameProgressCounter();
     resetTextHint();
