@@ -1,5 +1,5 @@
 import { expectElement } from "../common/dom";
-import "./styles/imageCredits.css";
+import "./styles/gamePopUp.css";
 
 const imageCredits = expectElement("image-credits-text", HTMLElement);
 const imageCreditsDialog = expectElement("image-credits", HTMLDialogElement);

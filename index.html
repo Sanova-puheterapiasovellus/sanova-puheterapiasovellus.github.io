@@ -75,17 +75,11 @@
                         <img src="/assets/icons/ear_sound_22dp.svg" alt="Tavuvihje" class="icon">
                         <span>Tavuvihje</span>
                     </button>
-                    <details id="word-guess-text-hint">
-                        <summary>
-                            <img
-                                src="/assets/icons/book_5_22dp.svg"
-                                alt="Kuvaileva vihje"
-                                class="icon"
-                            >
-                            <span>Kuvaileva vihje</span>
-                        </summary>
-                        <div id="text-hint"></div>
-                    </details>
+                    <button id="word-guess-text-hint" type="button" class="word-guess-button">
+                        <img src="/assets/icons/book_5_22dp.svg" alt="Kuvaileva vihje" class="icon">
+                        <span>Kuvaileva vihje</span>
+                    </button>
+                    <div id="text-hint"></div>
                 </div>
             </div>
         </dialog>
@@ -101,24 +95,24 @@
             <button id="word-guess-replay" type="button">Pelaa väärin menneet uudelleen</button>
         </dialog>-->
 
-        <dialog id="image-credits" closedby="any">
+        <dialog id="image-credits" class="popup" closedby="any">
             <button id="image-credits-close" type="button" class="dialog-close-button">
                 <img src="/assets/icons/close_36dp.svg">
             </button>
             <article>
-                <header class="image-credits-header">
+                <header class="popup-header">
                     <h2>Kuvan tekijänoikeustiedot</h2>
                 </header>
                 <div id="image-credits-text"></div>
             </article>
         </dialog>
 
-        <dialog id="game-instructions" closedby="any">
+        <dialog id="game-instructions" class="popup" closedby="any">
             <button id="game-instructions-close" type="button" class="dialog-close-button">
                 <img src="/assets/icons/close_36dp.svg">
             </button>
             <article>
-                <header class="game-instructions-header">
+                <header class="popup-header">
                     <h2>Pelin ohjeet</h2>
                 </header>
                 <div id="game-instructions-text"></div>

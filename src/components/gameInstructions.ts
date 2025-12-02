@@ -1,5 +1,5 @@
 import { expectElement } from "../common/dom";
-import "./styles/gameInstructions.css";
+import "./styles/gamePopUp.css";
 
 const gameInstructions = expectElement("game-instructions-text", HTMLElement);
 const gameInstructionsDialog = expectElement("game-instructions", HTMLDialogElement);
