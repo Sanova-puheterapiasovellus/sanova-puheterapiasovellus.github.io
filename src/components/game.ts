@@ -314,7 +314,12 @@ async function handleUseVocalHint(): Promise<void> {
         gameSession.setPlayedFullSyllablesOnce(false);
     }
     const fiVoice = await getFinnishVoice();
-    await (fiVoice ? playWord(syllables) : handlePlayback(syllables));
+    const useFallBack = gameSession.getCurrentWord().fallBackPlayer === true;
+    if (!useFallBack && fiVoice) {
+        await playWord(syllables, fiVoice);
+    } else {
+        await handlePlayback(syllables);
+    }
 
     // Focus back to input from the button
     focusHiddenInput();

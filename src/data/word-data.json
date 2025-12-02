@@ -178,7 +178,8 @@
                     "name": "neule",
                     "image": "neule.png",
                     "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
-                    "hint": "Ylävartaloon puettava lämmin vaate, joka voi olla tehty esimerkiksi villasta"
+                    "hint": "Ylävartaloon puettava lämmin vaate, joka voi olla tehty esimerkiksi villasta",
+                    "fallBackPlayer": true
                 },
                 {
                     "name": "alusvaatteet",
@@ -245,13 +246,15 @@
                     "name": "pakkanen",
                     "image": "pakkanen.png",
                     "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
-                    "hint": "Talvella oleva kylmä säätila, kun lämpömittari näyttää miinusta"
+                    "hint": "Talvella oleva kylmä säätila, kun lämpömittari näyttää miinusta",
+                    "fallBackPlayer": true
                 },
                 {
                     "name": "helle",
                     "image": "helle.png",
                     "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
-                    "hint": "Kesällä oleva lämmin säätila, jolloin lämpömittari näyttää vähintään +25 astetta"
+                    "hint": "Kesällä oleva lämmin säätila, jolloin lämpömittari näyttää vähintään +25 astetta",
+                    "fallBackPlayer": true
                 }
             ]
         },
@@ -379,7 +382,8 @@
                     "name": "palomies",
                     "image": "palomies.png",
                     "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
-                    "hint": "Henkilö, joka sammuttaa tulipaloja ja pelastaa ihmisiä"
+                    "hint": "Henkilö, joka sammuttaa tulipaloja ja pelastaa ihmisiä",
+                    "fallBackPlayer": true
                 },
                 {
                     "name": "maalari",
@@ -458,7 +462,8 @@
                     "name": "bussi",
                     "image": "bussi.png",
                     "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
-                    "hint": "Kulkuneuvo, joka kuljettaa monta matkustajaa kerralla kaupungissa tai pitkällä matkalla"
+                    "hint": "Kulkuneuvo, joka kuljettaa monta matkustajaa kerralla kaupungissa tai pitkällä matkalla",
+                    "fallBackPlayer": true
                 },
                 {
                     "name": "polkupyörä",
@@ -476,7 +481,8 @@
                     "name": "potkulauta",
                     "image": "potkulauta.png",
                     "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
-                    "hint": "Kulkuneuvo, jota liikutetaan potkimalla jalalla maata"
+                    "hint": "Kulkuneuvo, jota liikutetaan potkimalla jalalla maata",
+                    "fallBackPlayer": true
                 },
                 {
                     "name": "pakettiauto",
@@ -713,7 +719,8 @@
                     "name": "hammasharja",
                     "image": "hammasharja.png",
                     "image_credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)",
-                    "hint": "Väline hampaiden puhdistamiseen"
+                    "hint": "Väline hampaiden puhdistamiseen",
+                    "fallBackPlayer": true
                 },
                 {
                     "name": "juomapullo",

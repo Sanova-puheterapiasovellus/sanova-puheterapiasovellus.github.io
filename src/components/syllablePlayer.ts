@@ -23,9 +23,6 @@ function loadVoices(): Promise<SpeechSynthesisVoice[]> {
 /** Return a finnish voice */
 export async function getFinnishVoice() {
     const voices = (await loadVoices()).filter((v) => v.lang.startsWith("fi"));
-    voices.forEach((v) => {
-        console.log(v.name);
-    });
     if (voices.length === 0) {
         return null;
     }
@@ -48,21 +45,11 @@ function speak(text: string, voice: SpeechSynthesisVoice): Promise<void> {
     });
 }
 
-async function playSyllable(syllable: string) {
-    if (!("speechSynthesis" in window)) {
-        alert("Puheentunnistus ei ole käytettävissä tässä selaimessa.");
-        return;
-    }
-
-    const voice = await getFinnishVoice();
-    if (!voice) {
-        return;
-    }
-
+async function playSyllable(syllable: string, voice: SpeechSynthesisVoice) {
     return speak(syllable, voice);
 }
 
-export async function playWord(syllables: string[]) {
+export async function playWord(syllables: string[], voice: SpeechSynthesisVoice) {
     if (!syllables || syllables.length === 0) return;
     const syllablesToPlayCount = Math.min(
         gameSession?.getVocalHintsUsedForCurrentWord() ?? 0,
@@ -74,19 +61,19 @@ export async function playWord(syllables: string[]) {
         if (!gameSession?.getPlayedFullSyllablesOnce()) {
             gameSession?.setPlayedFullSyllablesOnce(true);
             for (const s of syllables) {
-                await playSyllable(s);
+                await playSyllable(s, voice);
             }
         }
         // Play entire word continuously
         else {
             const wholeWord = syllables.join("");
-            await playSyllable(wholeWord);
+            await playSyllable(wholeWord, voice);
         }
         return;
     }
     // Play limited amount of syllables
     const syllablesToPlay = syllables.slice(0, syllablesToPlayCount);
     for (const syllable of syllablesToPlay) {
-        await playSyllable(syllable);
+        await playSyllable(syllable, voice);
     }
 }
