@@ -1,4 +1,4 @@
-.dialog {
+.popup {
     max-width: 90vw;
     max-height: 90vh;
     padding: 2rem;
@@ -7,7 +7,7 @@
     background: white;
 }
 
-.dialog[open] {
+.popup[open] {
     display: flex;
     position: fixed;
     inset: 50% auto auto 50%;
