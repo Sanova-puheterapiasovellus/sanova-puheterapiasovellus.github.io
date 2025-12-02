@@ -7,6 +7,7 @@ export interface Word {
     image: string;
     image_credit: string;
     hint: string;
+    fallBackPlayer?: boolean;
 }
 
 export interface Category {
