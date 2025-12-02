@@ -338,11 +338,6 @@ function setButtonsEnabled(enabled: boolean): void {
     letterHintButton.disabled = !enabled;
     syllableHintButton.disabled = !enabled;
     skipButton.disabled = !enabled;
-
-    setDetailsEnabled(enabled);
-}
-
-function setDetailsEnabled(enabled: boolean): void {
     textHintButton.disabled = !enabled;
 }
 
