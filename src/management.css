@@ -1,8 +1,6 @@
 /* Define general layout details. */
 :root {
     --general-spacing: 0.5rem;
-    --category-size: 25ch;
-    --sound-size: 5ch;
 }
 
 /* Center the contents on the page for reasonable look on large screens. */
@@ -12,7 +10,8 @@ html {
 }
 
 /* Limit width but ensure size includes collapsed sections. */
-body {
+body,
+dialog {
     width: 100%;
     max-width: 100ch;
 }
@@ -27,40 +26,45 @@ fieldset {
     }
 }
 
+/* Ensure text areas expand to fill space. */
+textarea {
+    width: 100%;
+}
+
 /* Reset typical list styling. */
 ul {
     list-style: none;
     padding: 0%;
-}
 
-/* Define word list layout. */
-ul.words {
-    /* Allow entries to fit side by side. */
+    /* Always use a grid layout instead. */
     display: grid;
     gap: var(--general-spacing);
-    grid-template-columns: repeat(auto-fit, minmax(var(--category-size), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(var(--child-size), 1fr));
 
-    /* Let child contents participate in the grid. */
-    li {
-        display: contents;
-    }
+    /* Define word list layout. */
+    &.words {
+        --child-size: 25ch;
 
-    /* Make open category section take full width. */
-    details[open] {
-        grid-column: 1 / -1;
+        /* Let child contents participate in the grid. */
+        li {
+            display: contents;
+        }
 
-        /* Ensure gap before starting category content. */
-        summary {
-            padding-block-end: var(--general-spacing);
+        /* Make open category section take full width. */
+        details[open] {
+            grid-column: 1 / -1;
+
+            /* Ensure gap before starting category content. */
+            summary {
+                padding-block-end: var(--general-spacing);
+            }
         }
     }
-}
 
-/* Display missing syllable sounds list as grid. */
-ul.sounds {
-    display: grid;
-    gap: var(--general-spacing);
-    grid-template-columns: repeat(auto-fit, minmax(var(--sound-size), 1fr));
+    /* Syllable sounds don't need as much space. */
+    &.sounds {
+        --child-size: 5ch;
+    }
 }
 
 /* Lay out buttons evenly and with enough space. */
