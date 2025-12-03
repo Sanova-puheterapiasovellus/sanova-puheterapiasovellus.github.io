@@ -1,6 +1,5 @@
 import "./index.css";
 import { reactiveHash } from "./common/dom.ts";
-import { dispatchInternalNotification } from "./common/events.ts";
 import { initializeAboutPage } from "./components/aboutpage.ts";
 import { initializeAllWords } from "./components/allwords.ts";
 import { initializeCategorySelector } from "./components/categories.ts";
@@ -20,5 +19,3 @@ initializeAboutPage(route);
 initializeNotificationSystem();
 initializeImageCreditsDialog();
 initializeGameInstructionsDialog();
-
-dispatchInternalNotification(document.body, "Testi-ilmoitus", "Lisätietoja");
