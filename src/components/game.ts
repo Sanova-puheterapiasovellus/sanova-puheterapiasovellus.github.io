@@ -6,11 +6,7 @@ import type {
     WordSelectedEvent,
     WordsSelectedEvent,
 } from "../common/events";
-import {
-    dispatchGameOver,
-    dispatchWordSelection,
-    dispatchWordsSelection,
-} from "../common/events.ts";
+import { dispatchCustomEvent } from "../common/events.ts";
 import { type Category, getImagePath, type Word, wordsData } from "../data/word-data-model.ts";
 import { GameSession } from "./GameSession";
 import "./styles/game.css";
@@ -84,18 +80,17 @@ function handleGameStart(event: CategorySelectedEvent): void {
 
     gameSession = new GameSession(categoryForSession);
     // Set the words to the game session object through the WordsSelected event
-    dispatchWordsSelection(
-        window,
+    dispatchCustomEvent("words-selected", {
         selections,
-        currentCategory.name === "random" ? null : currentCategory,
-        false,
-    );
+        category: currentCategory.name === "random" ? null : currentCategory,
+        isReplay: false,
+    });
 
     gameSession.setGameModeRandom(); // Show words in random order
     const word = gameSession.getNextWord();
     resetTextHint();
 
-    dispatchWordSelection(window, word, 0);
+    dispatchCustomEvent("word-selected", { word, index: 0 });
 }
 /** Helper function to pick random words */
 function pickRandom<T>(array: T[], count: number): T[] {
@@ -373,7 +368,6 @@ function resetTextHint() {
 async function handleSkipWord(): Promise<void> {
     if (!gameSession) return;
     gameSession.markCurrentSkipped();
-
     // Style the card to indicate skipping
     guessCard.classList.add("skip");
 
@@ -495,7 +489,7 @@ function processGameOver(gameSession: GameSession) {
         // even if there was only one word replayed
         showResults = true;
     }
-    dispatchGameOver(window, showResults, getGameResults(gameSession));
+    dispatchCustomEvent("show-results", { showResults, gameResults: getGameResults(gameSession) });
 }
 
 /**
