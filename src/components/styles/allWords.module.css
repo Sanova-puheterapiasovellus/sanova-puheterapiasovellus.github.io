@@ -103,6 +103,9 @@
 }
 
 @media (max-width: 456px) {
+    .header {
+        padding-top: 50px;
+    }
     .filters {
         flex-direction: column;
         max-width: calc(100vw - 60px);
