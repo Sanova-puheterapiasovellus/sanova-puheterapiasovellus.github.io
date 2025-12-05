@@ -17,8 +17,8 @@ function AboutPage(): HTMLElement {
             <p>Sovellus parantaa sananlöytämistä, tukee itsenäistä harjoittelua ja mahdollistaa harjoittelun paineettomasti omassa rauhassa. Sovellusta on helppo käyttää ja se sisältää arkipäiväisiä, hyödyllisiä sanoja.</p>
             <br>
             <p>Lähteet:</p>
-            <a id="open-sources" class="open-sources">Duodecim Terveyskirjasto, 2023; Evans ym., 2021; Fridriksson ym., 2018; Greenwood ym., 2010; Hashimoto, 2023; Quique ym., 2019; Roelofs, 2021</a>
-            <dialog id="sources-dialog" class="popup">
+            <button id="open-sources" type="button" class="text-link-button">Duodecim Terveyskirjasto, 2023; Evans ym., 2021; Fridriksson ym., 2018; Greenwood ym., 2010; Hashimoto, 2023; Quique ym., 2019; Roelofs, 2021</button>
+            <dialog id="sources-dialog" closedby="any" class="popup">
                 <button id="sources-close" type="button" class="dialog-close-button">
                     <img src="/assets/icons/close_36dp.svg">
                 </button>
@@ -55,7 +55,7 @@ export function initializeAboutPage(hash: Store<string>) {
             container.innerHTML = "";
             container.appendChild(AboutPage());
 
-            const openSources = expectElement("open-sources", HTMLAnchorElement);
+            const openSources = expectElement("open-sources", HTMLButtonElement);
             const sourcesDialog = expectElement("sources-dialog", HTMLDialogElement);
             const sourcesClose = expectElement("sources-close", HTMLButtonElement);
 
