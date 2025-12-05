@@ -3,7 +3,13 @@ import { buildHtml, debounceEvent, expectElement } from "./common/dom";
 import { AuthorizationClient, ManagementClient } from "./common/github";
 import { loadSoundClip } from "./common/playback";
 import { type AudioSegment, offsetsData } from "./data/offset-data-model";
-import { type Category, type Data, type Word, wordsData } from "./data/word-data-model";
+import {
+    type Category,
+    type Data,
+    getCategoryImage,
+    type Word,
+    wordsData,
+} from "./data/word-data-model";
 import { splitToSyllables } from "./utils/syllable-split";
 
 /** Item that has a known array position. */
@@ -34,6 +40,7 @@ const categoryDialog = expectElement("#edit-category", HTMLDialogElement, docume
 const categoryForm = expectElement("form", HTMLFormElement, categoryDialog);
 const categoryIndex = expectElement("#category-index", HTMLInputElement, categoryForm);
 const categoryName = expectElement("#category-name", HTMLInputElement, categoryForm);
+const categoryMain = expectElement("#category-main", HTMLSelectElement, categoryForm);
 const categoryImage = expectElement("#category-image", HTMLInputElement, categoryForm);
 const categoryCredit = expectElement("#category-credit", HTMLTextAreaElement, categoryForm);
 
@@ -132,23 +139,30 @@ async function handleFormSubmit(event: SubmitEvent): Promise<void> {
         const unneededImages = new Set<string>();
         const categories = wordList
             .values()
-            .filter(({ image }, category) => {
-                if (!removedWords.has([category, undefined])) {
+            .filter((category, index) => {
+                if (!removedWords.has([index, undefined])) {
                     return true;
                 }
 
-                unneededImages.add(image);
+                if ("word" in category.image) {
+                    for (const word of category.words) {
+                        unneededImages.add(word.image.file);
+                    }
+                } else {
+                    unneededImages.add(category.image.file);
+                }
+
                 return false;
             })
-            .map(({ words, ...rest }, category) => ({
+            .map(({ words, ...rest }, parent) => ({
                 words: words
                     .values()
-                    .filter(({ image }, word) => {
-                        if (!removedWords.has([category, word])) {
+                    .filter(({ image }, index) => {
+                        if (!removedWords.has([parent, index])) {
                             return true;
                         }
 
-                        unneededImages.add(image);
+                        unneededImages.add(image.file);
                         return false;
                     })
                     .toArray(),
@@ -208,24 +222,60 @@ async function authorizationFlow(): Promise<string | undefined> {
     return;
 }
 
+/** The word selection for the category image changed. */
+function categoryMainChanged(_: Event): void {
+    const index = Number.parseInt(categoryIndex.value, 10);
+    const entry = wordList[index];
+    if (entry === undefined) {
+        throw new Error("invalid category selection");
+    }
+
+    const selection = Number.parseInt(categoryMain.value, 10);
+    if (Number.isNaN(selection)) {
+        categoryImage.disabled = categoryCredit.disabled = false;
+        categoryCredit.value = "";
+    } else {
+        categoryImage.disabled = categoryCredit.disabled = true;
+        categoryCredit.value = getCategoryImage(entry).credit;
+    }
+}
+
 /** Open word editing dialog. */
-function selectWord(category: Entry<Category>, current: Partial<Word>, existing?: number): void {
+function selectWord(category: Entry<Category>, current: Word, existing?: number): void {
     wordDialog.showModal();
     wordIndex.value = (existing ?? -1).toString(10);
     wordCategory.value = category.index.toString(10);
-    wordName.value = current.name ?? "";
+    wordName.value = current.name;
     wordName.disabled = existing !== undefined;
-    wordHint.value = current.hint ?? "";
-    wordCredit.value = current.image_credit ?? "";
+    wordHint.value = current.hint;
+    wordCredit.value = current.image.credit;
 }
 
 /** Open category editing dialog. */
-function selectCategory(current: Partial<Category>, existing?: number): void {
+function selectCategory(current: Category, existing?: number): void {
     categoryDialog.showModal();
     categoryIndex.value = (existing ?? -1).toString(10);
-    categoryName.value = current.name ?? "";
+    categoryName.value = current.name;
     categoryName.disabled = existing !== undefined;
-    categoryCredit.value = current.image_credit ?? "";
+    categoryImage.disabled = categoryCredit.disabled = false;
+
+    categoryMain.replaceChildren(
+        buildHtml("option", { value: "" }),
+        ...current.words
+            .filter((word) => word.image.file !== "")
+            .map(({ name }, index) =>
+                buildHtml("option", { value: index.toString(10), innerHTML: name }),
+            ),
+    );
+
+    categoryCredit.value = getCategoryImage(current).credit;
+    if ("word" in current.image) {
+        categoryImage.disabled = categoryCredit.disabled = true;
+        categoryMain.value = current.image.word.toString(10);
+    } else {
+        categoryImage.disabled = categoryCredit.disabled = false;
+        categoryMain.value = "";
+    }
 }
 
 /** Build a word entry. */
@@ -262,8 +312,17 @@ function buildCategory(category: Entry<Category>): HTMLLIElement {
     const updateCategory = buildHtml("button", { type: "button" }, "Muokkaa kategoriaa");
     const deleteCategory = buildHtml("button", { type: "button" }, "Poista kategoria");
 
-    createWord.addEventListener("click", (_) => selectWord(category, {}));
     updateCategory.addEventListener("click", (_) => selectCategory(category.value, category.index));
+    createWord.addEventListener("click", (_) =>
+        selectWord(category, {
+            name: "",
+            hint: "",
+            image: {
+                file: "",
+                credit: "",
+            },
+        }),
+    );
 
     const categoryItem = buildHtml(
         "li",
@@ -330,9 +389,11 @@ function wordEdited(_: Event): void {
         const index = parent.words.length;
         const value: Word = {
             name: wordName.value,
-            image: captureImage(wordImage),
-            image_credit: wordCredit.value,
             hint: wordHint.value,
+            image: {
+                file: captureImage(wordImage),
+                credit: wordCredit.value,
+            },
         };
 
         parent.words.push(value);
@@ -357,8 +418,8 @@ function wordEdited(_: Event): void {
     wordsChanged = true;
     entry.name = wordName.value;
     entry.hint = wordHint.value;
-    entry.image ||= captureImage(wordImage);
-    entry.image_credit = wordCredit.value;
+    entry.image.file ||= captureImage(wordImage);
+    entry.image.credit = wordCredit.value;
 }
 
 /** Handle a category being created or updated. */
@@ -372,8 +433,10 @@ function categoryEdited(_: Event): void {
         const index = wordList.length;
         const value: Category = {
             name: categoryName.value,
-            image: `${categoryName.value}.png`,
-            image_credit: categoryCredit.value,
+            image: {
+                file: captureImage(categoryImage),
+                credit: categoryCredit.value,
+            },
             words: [],
         };
 
@@ -395,8 +458,11 @@ function categoryEdited(_: Event): void {
 
     wordsChanged = true;
     entry.name = categoryName.value;
-    entry.image ||= captureImage(categoryImage);
-    entry.image_credit = categoryCredit.value;
+
+    const selection = Number.parseInt(categoryMain.value, 10);
+    entry.image = Number.isNaN(selection)
+        ? { file: captureImage(categoryImage), credit: categoryCredit.value }
+        : { word: selection };
 }
 
 /** Build up dynamic state and connect events for using the management page. */
@@ -410,6 +476,7 @@ async function initializeState(): Promise<void> {
         event.preventDefault();
         wordDialog.requestClose();
     });
+    categoryMain.addEventListener("change", categoryMainChanged);
     categoryDialog.addEventListener("close", categoryEdited);
     categoryForm.addEventListener("submit", (event) => {
         event.preventDefault();
@@ -439,8 +506,17 @@ async function initializeState(): Promise<void> {
     }
 
     const addCategory = buildHtml("button", { type: "button" }, "Lisää kategoria");
-    addCategory.addEventListener("click", () => selectCategory({}));
     categoryList.parentNode?.appendChild(addCategory);
+    addCategory.addEventListener("click", () =>
+        selectCategory({
+            name: "",
+            image: {
+                file: "",
+                credit: "",
+            },
+            words: [],
+        }),
+    );
 
     // Make a deferred selection to ensure our event listener gets invoked.
     queueMicrotask(() => {
