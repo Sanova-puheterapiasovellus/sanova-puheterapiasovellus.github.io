@@ -26,6 +26,16 @@ fieldset {
     }
 }
 
+/* Show image preview figure inline. */
+figure {
+    margin: 0;
+
+    /* Don't let the image be overly large. */
+    img {
+        max-block-size: 25ch;
+    }
+}
+
 /* Ensure text areas expand to fill space. */
 textarea {
     width: 100%;
