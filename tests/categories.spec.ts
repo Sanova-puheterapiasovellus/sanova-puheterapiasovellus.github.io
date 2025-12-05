@@ -20,15 +20,17 @@ test("Test Clothes Categories", async ({ page }) => {
         const imgSrcText = await page.getAttribute("#word-guess-image", "src");
         expect(imgSrcText).toContain("/assets/");
         expect(wordList).not.toBeUndefined();
-        const word = wordList?.find((p) => imgSrcText?.includes(p.image))?.name;
+        const word = wordList?.find((p) => imgSrcText?.includes(p.image.file))?.name;
         expect(word).not.toBeUndefined();
         expect(word).not.toBeNull();
 
         // Create a Word object
         const wordObj: Word = {
             name: word!,
-            image: "noImage",
-            image_credit: "noCredits",
+            image: {
+                file: "noImage",
+                credit: "noCredits",
+            },
             hint: "noHint",
         };
 
