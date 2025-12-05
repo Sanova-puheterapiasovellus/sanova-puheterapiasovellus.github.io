@@ -22,7 +22,7 @@ test.describe("Test All Words", () => {
 
         const imgSrcText = await page.getAttribute("#word-guess-image", "src");
         expect(wordList).not.toBeUndefined();
-        const word = wordList?.find((p) => imgSrcText?.includes(p.image))?.name;
+        const word = wordList?.find((p) => imgSrcText?.includes(p.image.file))?.name;
         expect(word).not.toBeUndefined();
         expect(word).not.toBeNull();
         await page.locator("#hidden-input").fill(word);
@@ -56,7 +56,7 @@ test.describe("Test All Words", () => {
 
         const imgSrcText = await page.getAttribute("#word-guess-image", "src");
         expect(wordList).not.toBeUndefined();
-        const word = wordList?.find((p) => imgSrcText?.includes(p.image))?.name;
+        const word = wordList?.find((p) => imgSrcText?.includes(p.image.file))?.name;
         expect(word).not.toBeUndefined();
         expect(word).not.toBeNull();
         await page.locator("#hidden-input").fill(word);
