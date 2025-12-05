@@ -144,11 +144,11 @@ async function handleFormSubmit(event: SubmitEvent): Promise<void> {
                     return true;
                 }
 
-                if ("word" in category.image) {
-                    for (const word of category.words) {
-                        unneededImages.add(word.image.file);
-                    }
-                } else {
+                for (const word of category.words) {
+                    unneededImages.add(word.image.file);
+                }
+
+                if (!("word" in category.image)) {
                     unneededImages.add(category.image.file);
                 }
 
