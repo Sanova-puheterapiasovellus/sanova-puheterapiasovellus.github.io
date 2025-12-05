@@ -34,8 +34,7 @@
     min-width: 40px;
 }
 
-#word-guess-card-content .word-guess-image-credits-button,
-#word-guess-card-content .word-guess-game-instructions-button {
+.text-link-button {
     padding-top: 12px;
     border: none;
     background: transparent;
@@ -46,11 +45,11 @@
     margin-right: 10px;
 }
 
-#word-guess-card-content .word-guess-image-credits-button:hover,
-#word-guess-card-content .word-guess-game-instructions-button:hover {
+.text-link-button:hover {
     color: #005fa3;
 }
-.word-guess-game-instructions-button .icon {
+
+#word-guess-game-instructions-button .icon {
     width: 16px;
     height: 16px;
     vertical-align: middle;

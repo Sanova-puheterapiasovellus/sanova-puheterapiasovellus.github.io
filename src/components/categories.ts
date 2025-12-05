@@ -36,7 +36,7 @@ function createRandomCategoryEntry(): HTMLElement {
     li.innerHTML = `
         <button type="button" class="${styles.card}">
             <img src="${getImagePath(randomCategory.image)}" alt="Random sana"/>
-            <span>Satunnainen sana</span>
+            <span>Satunnaiset sanat</span>
         </button>
     `;
 

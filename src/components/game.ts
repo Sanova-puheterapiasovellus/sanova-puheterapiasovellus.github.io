@@ -11,7 +11,7 @@ import { type Category, getImagePath, type Word, wordsData } from "../data/word-
 import { GameSession } from "./GameSession";
 import "./styles/game.css";
 import { lockPageScroll, unlockPageScroll } from "../common/preventScroll.ts";
-import { GAME_INSTRUCTIONS } from "../data/game-instructions.ts";
+import { GAME_INSTRUCTIONS } from "../data/information-texts.ts";
 import { splitToSyllables } from "../utils/syllable-split.ts";
 import { showInstructionsModal } from "./gameInstructions.ts";
 import { showCreditsModal } from "./imageCredits.ts";

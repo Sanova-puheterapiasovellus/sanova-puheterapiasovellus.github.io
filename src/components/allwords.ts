@@ -9,7 +9,6 @@ import styles from "./styles/allWords.module.css";
 const categoriesPage = expectElement("categories-page", HTMLElement);
 const allWordsPage = expectElement("all-words-page", HTMLElement);
 const allWordsHeader = expectElement("all-words-header", HTMLElement);
-const allWordsFooter = expectElement("all-words-footer", HTMLElement);
 const mainviewHeader = expectElement("mainview", HTMLElement);
 
 const allWordsList = expectElement("all-words-list", HTMLUListElement);
@@ -20,7 +19,6 @@ const categoriesContainer = expectElement("category-filters", HTMLElement);
 allWordsPage.className = styles.page;
 allWordsList.className = styles.list;
 allWordsHeader.className = styles.header;
-allWordsFooter.className = styles.header;
 filtersSection.className = styles.filters;
 categoriesContainer.className = styles.categoryFilters;
 searchContainer.className = styles.searchContainer;
@@ -108,7 +106,8 @@ export function initializeAllWords(hash: Store<string>) {
     hash.filter((value) => value === "" || value === "#").subscribe(() => {
         categoriesPage.classList.remove("hidden");
         allWordsPage.classList.add("hidden");
-        mainviewHeader.style.paddingTop = `90px`;
+        // Return to inline style
+        mainviewHeader.style.paddingTop = "";
     });
 
     const categoryData = wordsData.categories.map((category) => ({

@@ -33,6 +33,7 @@ body {
 
 .mainview-main {
     padding-top: 90px;
+    padding-bottom: 90px;
 }
 
 .mainview-main > section ul {
@@ -66,7 +67,8 @@ ul#notification-list {
 
 @media (max-width: 480px) {
     .mainview-main {
-        padding-top: 10%;
+        padding-top: 50px;
+        padding-bottom: 150px;
     }
 
     .mainview-main > section ul {
