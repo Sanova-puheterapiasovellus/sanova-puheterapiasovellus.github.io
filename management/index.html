@@ -126,6 +126,11 @@
         </main>
 
         <dialog id="edit-category" closedby="any">
+            <figure>
+                <figcaption>Nykyinen kuva</figcaption>
+                <img id="category-image-preview">
+            </figure>
+
             <form>
                 <input id="category-index" type="hidden">
 
@@ -135,18 +140,18 @@
                 </label>
 
                 <label>
-                    Sanan kuva
-                    <select id="category-main"></select>
+                    Käytä sanan kuvaa
+                    <select id="category-word-image"></select>
                 </label>
 
                 <label>
                     Uusi kuvatiedosto
-                    <input id="category-image" type="file" accept="image/png">
+                    <input id="category-image-replacement" type="file" accept="image/png">
                 </label>
 
                 <label>
                     Kuvan lähde
-                    <textarea id="category-credit" type="text"></textarea>
+                    <textarea id="category-image-credit" type="text"></textarea>
                 </label>
 
                 <button type="submit">Valmis</button>
@@ -154,6 +159,11 @@
         </dialog>
 
         <dialog id="edit-word" closedby="any">
+            <figure>
+                <figcaption>Nykyinen kuva</figcaption>
+                <img id="word-image-preview">
+            </figure>
+
             <form>
                 <input id="word-index" type="hidden">
                 <input id="word-category" type="hidden">
@@ -169,13 +179,18 @@
                 </label>
 
                 <label>
+                    Käytä vanhaa tavutoistinta
+                    <input id="word-fallback-player" type="checkbox">
+                </label>
+
+                <label>
                     Uusi kuvatiedosto
-                    <input id="word-image" type="file" accept="image/png">
+                    <input id="word-image-replacement" type="file" accept="image/png">
                 </label>
 
                 <label>
                     Kuvan lähde
-                    <textarea id="word-credit" type="text"></textarea>
+                    <textarea id="word-image-credit" type="text"></textarea>
                 </label>
 
                 <button type="submit">Valmis</button>

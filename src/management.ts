@@ -7,6 +7,8 @@ import {
     type Category,
     type Data,
     getCategoryImage,
+    getImagePath,
+    type Image,
     type Word,
     wordsData,
 } from "./data/word-data-model";
@@ -30,19 +32,34 @@ const customBranch = expectElement("#branch-name", HTMLInputElement, managementF
 const pullRequest = expectElement("#pull-request", HTMLAnchorElement, managementForm);
 const wordDialog = expectElement("#edit-word", HTMLDialogElement, document.body);
 const wordForm = expectElement("form", HTMLFormElement, wordDialog);
+const wordImagePreview = expectElement("#word-image-preview", HTMLImageElement, wordDialog);
 const wordIndex = expectElement("#word-index", HTMLInputElement, wordForm);
 const wordCategory = expectElement("#word-category", HTMLInputElement, wordForm);
 const wordName = expectElement("#word-name", HTMLInputElement, wordForm);
 const wordHint = expectElement("#word-hint", HTMLTextAreaElement, wordForm);
-const wordImage = expectElement("#word-image", HTMLInputElement, wordForm);
-const wordCredit = expectElement("#word-credit", HTMLTextAreaElement, wordForm);
+const wordFallbackPlayer = expectElement("#word-fallback-player", HTMLInputElement, wordForm);
+const wordImageReplacement = expectElement("#word-image-replacement", HTMLInputElement, wordForm);
+const wordImageCredit = expectElement("#word-image-credit", HTMLTextAreaElement, wordForm);
 const categoryDialog = expectElement("#edit-category", HTMLDialogElement, document.body);
+const categoryImagePreview = expectElement(
+    "#category-image-preview",
+    HTMLImageElement,
+    categoryDialog,
+);
 const categoryForm = expectElement("form", HTMLFormElement, categoryDialog);
 const categoryIndex = expectElement("#category-index", HTMLInputElement, categoryForm);
 const categoryName = expectElement("#category-name", HTMLInputElement, categoryForm);
-const categoryMain = expectElement("#category-main", HTMLSelectElement, categoryForm);
-const categoryImage = expectElement("#category-image", HTMLInputElement, categoryForm);
-const categoryCredit = expectElement("#category-credit", HTMLTextAreaElement, categoryForm);
+const categoryWordImage = expectElement("#category-word-image", HTMLSelectElement, categoryForm);
+const categoryImageReplacement = expectElement(
+    "#category-image-replacement",
+    HTMLInputElement,
+    categoryForm,
+);
+const categoryImageCredit = expectElement(
+    "#category-image-credit",
+    HTMLTextAreaElement,
+    categoryForm,
+);
 
 let soundsChanged = false;
 const soundOffsets = structuredClone(offsetsData);
@@ -222,44 +239,73 @@ async function authorizationFlow(): Promise<string | undefined> {
     return;
 }
 
+/** Handle loading an image that might me one that the user has replaced. */
+function changeImage(
+    element: HTMLImageElement,
+    target: Image,
+    replacement = addedImages.get(target.file),
+): Promise<void> {
+    if (replacement === undefined) {
+        element.src = getImagePath(target);
+    } else {
+        element.src = URL.createObjectURL(replacement);
+    }
+
+    return element.src === "" ? Promise.resolve() : element.decode();
+}
+
 /** The word selection for the category image changed. */
-function categoryMainChanged(_: Event): void {
+function categoryMainChanged(_: Event): Promise<void> {
     const index = Number.parseInt(categoryIndex.value, 10);
     const entry = wordList[index];
     if (entry === undefined) {
         throw new Error("invalid category selection");
     }
 
-    const selection = Number.parseInt(categoryMain.value, 10);
+    const selection = Number.parseInt(categoryWordImage.value, 10);
     if (Number.isNaN(selection)) {
-        categoryImage.disabled = categoryCredit.disabled = false;
-        categoryCredit.value = "";
-    } else {
-        categoryImage.disabled = categoryCredit.disabled = true;
-        categoryCredit.value = getCategoryImage(entry).credit;
+        categoryImageReplacement.disabled = categoryImageCredit.disabled = false;
+        categoryImageCredit.value = "";
+
+        return changeImage(categoryImagePreview, getCategoryImage(entry));
     }
+
+    categoryImageReplacement.disabled = categoryImageCredit.disabled = true;
+    categoryImageCredit.value = getCategoryImage(entry).credit;
+
+    return changeImage(
+        categoryImagePreview,
+        entry.words[selection]?.image ?? { file: "", credit: "" },
+    );
 }
 
 /** Open word editing dialog. */
-function selectWord(category: Entry<Category>, current: Word, existing?: number): void {
-    wordDialog.showModal();
+async function selectWord(
+    category: Entry<Category>,
+    current: Word,
+    existing?: number,
+): Promise<void> {
     wordIndex.value = (existing ?? -1).toString(10);
     wordCategory.value = category.index.toString(10);
     wordName.value = current.name;
     wordName.disabled = existing !== undefined;
     wordHint.value = current.hint;
-    wordCredit.value = current.image.credit;
+    wordFallbackPlayer.checked = current.fallBackPlayer ?? false;
+    wordImageCredit.value = current.image.credit;
+
+    await changeImage(wordImagePreview, current.image);
+
+    wordDialog.showModal();
 }
 
 /** Open category editing dialog. */
-function selectCategory(current: Category, existing?: number): void {
-    categoryDialog.showModal();
+async function selectCategory(current: Category, existing?: number): Promise<void> {
     categoryIndex.value = (existing ?? -1).toString(10);
     categoryName.value = current.name;
     categoryName.disabled = existing !== undefined;
-    categoryImage.disabled = categoryCredit.disabled = false;
+    categoryImageReplacement.disabled = categoryImageCredit.disabled = false;
 
-    categoryMain.replaceChildren(
+    categoryWordImage.replaceChildren(
         buildHtml("option", { value: "" }),
         ...current.words.map(({ name }, index) =>
             buildHtml("option", {
@@ -269,14 +315,19 @@ function selectCategory(current: Category, existing?: number): void {
         ),
     );
 
-    categoryCredit.value = getCategoryImage(current).credit;
+    const image = getCategoryImage(current);
+    categoryImageCredit.value = image.credit;
     if ("word" in current.image) {
-        categoryImage.disabled = categoryCredit.disabled = true;
-        categoryMain.selectedIndex = current.image.word + 1;
+        categoryImageReplacement.disabled = categoryImageCredit.disabled = true;
+        categoryWordImage.selectedIndex = current.image.word + 1;
     } else {
-        categoryImage.disabled = categoryCredit.disabled = false;
-        categoryMain.selectedIndex = 0;
+        categoryImageReplacement.disabled = categoryImageCredit.disabled = false;
+        categoryWordImage.selectedIndex = 0;
     }
+
+    await changeImage(categoryImagePreview, image);
+
+    categoryDialog.showModal();
 }
 
 /** Build a word entry. */
@@ -356,12 +407,22 @@ function buildCategory(category: Entry<Category>): HTMLLIElement {
 }
 
 /** Capture the value of a image file input. */
-function captureImage(input: HTMLInputElement): string {
+function getInputFile(input: HTMLInputElement): File | undefined {
     if (input.value === "") {
-        return "";
+        return;
     }
 
     const file = input.files?.[0];
+    if (file === undefined) {
+        return;
+    }
+
+    return file;
+}
+
+/** Capture the value of a image file input as modified. */
+function captureImageModification(input: HTMLInputElement): string {
+    const file = getInputFile(input);
     if (file === undefined) {
         return "";
     }
@@ -391,9 +452,10 @@ function wordEdited(_: Event): void {
         const value: Word = {
             name: wordName.value,
             hint: wordHint.value,
+            fallBackPlayer: wordFallbackPlayer.checked,
             image: {
-                file: captureImage(wordImage),
-                credit: wordCredit.value,
+                file: captureImageModification(wordImageReplacement),
+                credit: wordImageCredit.value,
             },
         };
 
@@ -415,8 +477,9 @@ function wordEdited(_: Event): void {
     wordsChanged = true;
     entry.name = wordName.value;
     entry.hint = wordHint.value;
-    entry.image.file ||= captureImage(wordImage);
-    entry.image.credit = wordCredit.value;
+    entry.fallBackPlayer = wordFallbackPlayer.checked;
+    entry.image.file ||= captureImageModification(wordImageReplacement);
+    entry.image.credit = wordImageCredit.value;
 }
 
 /** Handle a category being created or updated. */
@@ -431,8 +494,8 @@ function categoryEdited(_: Event): void {
         const value: Category = {
             name: categoryName.value,
             image: {
-                file: captureImage(categoryImage),
-                credit: categoryCredit.value,
+                file: captureImageModification(categoryImageReplacement),
+                credit: categoryImageCredit.value,
             },
             words: [],
         };
@@ -452,9 +515,12 @@ function categoryEdited(_: Event): void {
     wordsChanged = true;
     entry.name = categoryName.value;
 
-    const selection = Number.parseInt(categoryMain.value, 10);
+    const selection = Number.parseInt(categoryWordImage.value, 10);
     entry.image = Number.isNaN(selection)
-        ? { file: captureImage(categoryImage), credit: categoryCredit.value }
+        ? {
+              file: captureImageModification(categoryImageReplacement),
+              credit: categoryImageCredit.value,
+          }
         : { word: selection };
 }
 
@@ -469,7 +535,7 @@ async function initializeState(): Promise<void> {
         event.preventDefault();
         wordDialog.requestClose();
     });
-    categoryMain.addEventListener("change", categoryMainChanged);
+    categoryWordImage.addEventListener("change", categoryMainChanged);
     categoryDialog.addEventListener("close", categoryEdited);
     categoryForm.addEventListener("submit", (event) => {
         event.preventDefault();
