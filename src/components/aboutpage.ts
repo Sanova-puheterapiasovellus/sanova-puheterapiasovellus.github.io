@@ -30,7 +30,7 @@ function AboutPage(): HTMLElement {
             </section>
 
             <section class="information-section">
-                <h2>Näkymä</h2>
+                <h2>Pelimuodot ja niiden aloitus</h2>
                 ${VIEW_INSTRUCTIONS}
             </section>
 

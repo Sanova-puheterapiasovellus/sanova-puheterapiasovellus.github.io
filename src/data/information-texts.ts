@@ -22,34 +22,38 @@ export const SANOVA_INFORMATION_SOURCES_DETAILED = `
 `;
 
 export const VIEW_INSTRUCTIONS = `
-adsjsadnjsdabnkdsbkjhdsabbsdhj
+<div class="information-content-block">
+    <p class="information-paragraph"><b>Kategoriat</b>-sivulla voit valita harjoiteltavaksi yhden kategorian kerrallaan. Kun valitset harjoiteltavan kategorian, uusi peli alkaa sisältäen kaikki valitun kategorian sanat satunnaisessa järjestyksessä.
+    Satunnaiset sanat -napista painamalla voit harjoitella 10 satunnaista sanaa kerralla.</p>
+
+    <p class="information-paragraph"><b>Kaikki sanat</b> -sivulla voit valita yksittäisen sanan harjoiteltavaksi. Sanat on esitetty sivulla pelkästään kuvilla, mutta tiettyjen sanojen etsiminen on silti mahdollista suodatuksella ja tekstihaulla.
+    Kysymysmerkki-napista painamalla voit harjoitella yhden satunnaisen sanan.
+    Sivun yläpalkista voit suodattaa sivulla näkyviä sanoja niiden kategorioiden perusteella. Tämän lisäksi tiettyjä sanoja voi myös hakea tekstikenttään kirjoittamalla. </p>
+</div>
 `;
 
 export const GAME_INSTRUCTIONS = `
 <div class="information-content-block">
-<h3>Tavoite:</h3>
-<p>Kirjoita kuvassa näkyvän asian nimi oikein</p>
+    <h3>Tavoite:</h3>
+    <p>Kirjoita kuvassa näkyvän asian nimi oikein</p>
 </div>
 
 <div class="information-content-block">
-<h3>Pelaaminen:</h3>
-<p>1. Kirjoita vastaus, mitä kuvassa on</p>
-<p>2. Paina vastaa, peli näyttää värin(vihreä oikein/punainen väärin) ja siirtyy
-automaattisesti seuraavaan sanaan</p>
-<p>3. Jos et tiedä sanaa, paina ohita sana ja peli siirtyy seuraavaan sanaan</p>
+    <h3>Pelaaminen:</h3>
+    <p>1. Kirjoita vastaus, mitä kuvassa on</p>
+    <p>2. Paina vastaa-nappia, peli näyttää tuloksen värillä (vihreä oikein, punainen väärin) ja siirtyy automaattisesti seuraavaan sanaan</p>
+    <p>3. Jos et tiedä sanaa, paina ohita sana -nappia, ja peli siirtyy seuraavaan sanaan</p>
 </div>
 
 <div class="information-content-block">
-<h3>Vihjeet:</h3>
-<p>1. Kirjainvihje lisää yhden oikean kirjaimen sanaan joka painalluksella</p>
-<p>2. Tavuvihje soittaa tavuja sanan alusta alkaen, lisäten uuden tavun jokaisella vihjeen painalluksella
-ja kun kaikki tavut on soitettu, soittaa vihje koko sanan seuraavilla painalluksilla</p>
-<p>3. Kuvaileva vihje näyttää kuvailevan tekstivihjeen sanasta</p>
+    <h3>Vihjeet:</h3>
+    <p>- Kirjainvihje lisää yhden oikean kirjaimen sanaan joka painalluksella</p>
+    <p>- Tavuvihje soittaa tavuja sanan alusta alkaen, lisäten uuden tavun jokaisella vihjeen painalluksella. Kun kaikki tavut on soitettu, soittaa vihje koko sanan seuraavilla painalluksilla</p>
+    <p>- Kuvaileva vihje näyttää kuvailevan tekstivihjeen sanasta</p>
 </div>
 
 <div class="information-content-block">
-<h3>Tulossivu:</h3>
-<p>Pelin jälkeen voit tarkastella, miten hyvin osasit sanat ja valita uudelleen harjoiteltavaksi
-ohitetut, väärin menneet tai vihjeillä ratkaistut sanat tai niiden yhdistelmän</p>
+    <h3>Tulossivu:</h3>
+    <p>Pelin jälkeen voit tarkastella, miten hyvin osasit sanat. Voit myös valita uudelleen harjoiteltavaksi sanoja eri vaihtoehdoista: ohitetut sanat, vihjeillä ratkaistut sanat sekä väärin menneet sanat. Näistä kategorioista voit valita haluamasi mukaan yhden tai useampia harjoiteltavaksi.</p>
 </div>
 `;
