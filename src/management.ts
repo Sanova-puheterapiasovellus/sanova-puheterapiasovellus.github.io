@@ -245,13 +245,18 @@ function changeImage(
     target: Image,
     replacement = addedImages.get(target.file),
 ): Promise<void> {
-    if (replacement === undefined) {
-        element.src = getImagePath(target);
-    } else {
+    if (replacement !== undefined) {
         element.src = URL.createObjectURL(replacement);
+        return element.decode();
     }
 
-    return element.src === "" ? Promise.resolve() : element.decode();
+    if (target.file === "") {
+        element.src = "";
+        return Promise.resolve();
+    }
+
+    element.src = getImagePath(target);
+    return element.decode();
 }
 
 /** The word selection for the category image changed. */
@@ -291,6 +296,7 @@ async function selectWord(
     wordName.disabled = existing !== undefined;
     wordHint.value = current.hint;
     wordFallbackPlayer.checked = current.fallBackPlayer ?? false;
+    wordImageReplacement.value = "";
     wordImageCredit.value = current.image.credit;
 
     await changeImage(wordImagePreview, current.image);
@@ -303,6 +309,7 @@ async function selectCategory(current: Category, existing?: number): Promise<voi
     categoryIndex.value = (existing ?? -1).toString(10);
     categoryName.value = current.name;
     categoryName.disabled = existing !== undefined;
+    categoryImageReplacement.value = "";
     categoryImageReplacement.disabled = categoryImageCredit.disabled = false;
 
     categoryWordImage.replaceChildren(
@@ -478,8 +485,12 @@ function wordEdited(_: Event): void {
     entry.name = wordName.value;
     entry.hint = wordHint.value;
     entry.fallBackPlayer = wordFallbackPlayer.checked;
-    entry.image.file ||= captureImageModification(wordImageReplacement);
     entry.image.credit = wordImageCredit.value;
+
+    const replacement = captureImageModification(wordImageReplacement);
+    if (replacement !== "") {
+        entry.image.file = replacement;
+    }
 }
 
 /** Handle a category being created or updated. */
