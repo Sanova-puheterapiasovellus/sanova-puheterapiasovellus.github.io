@@ -337,6 +337,23 @@ async function selectCategory(current: Category, existing?: number): Promise<voi
     categoryDialog.showModal();
 }
 
+/** Toggle a word or category's removal state. */
+function handleRemovalToggle(
+    this: HTMLButtonElement,
+    item: HTMLLIElement,
+    key: [number, number | undefined],
+): void {
+    if (removedWords.has(key)) {
+        this.innerText = key[1] === undefined ? "Poista kategoria" : "Poista sana";
+        item.classList.remove("removed");
+        removedWords.delete(key);
+    } else {
+        this.innerText = key[1] === undefined ? "Palauta kategoria" : "Palauta sana";
+        item.classList.add("removed");
+        removedWords.add(key);
+    }
+}
+
 /** Build a word entry. */
 function buildWord(category: Entry<Category>, word: Entry<Word>): HTMLLIElement {
     const updateWord = buildHtml("button", { type: "button" }, "Muokkaa sanaa");
@@ -353,14 +370,10 @@ function buildWord(category: Entry<Category>, word: Entry<Word>): HTMLLIElement 
     );
 
     updateWord.addEventListener("click", (_) => selectWord(category, word.value, word.index));
-    deleteWord.addEventListener("click", (_) => {
-        wordItem.classList.add("removed");
-        for (const element of wordItem.querySelectorAll("button")) {
-            element.disabled = true;
-        }
-
-        removedWords.add([category.index, word.index]);
-    });
+    deleteWord.addEventListener(
+        "click",
+        handleRemovalToggle.bind(deleteWord, wordItem, [category.index, word.index]),
+    );
 
     return wordItem;
 }
@@ -401,14 +414,10 @@ function buildCategory(category: Entry<Category>): HTMLLIElement {
         ),
     );
 
-    deleteCategory.addEventListener("click", (_) => {
-        categoryItem.classList.add("removed");
-        for (const element of categoryItem.querySelectorAll("button")) {
-            element.disabled = true;
-        }
-
-        removedWords.add([category.index, undefined]);
-    });
+    deleteCategory.addEventListener(
+        "click",
+        handleRemovalToggle.bind(deleteCategory, categoryItem, [category.index, undefined]),
+    );
 
     return categoryItem;
 }
