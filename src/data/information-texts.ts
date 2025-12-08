@@ -27,7 +27,7 @@ export const VIEW_INSTRUCTIONS = `
     Satunnaiset sanat -napista painamalla voit harjoitella 10 satunnaista sanaa kerralla.</p>
 
     <p class="information-paragraph"><b>Kaikki sanat</b> -sivulla voit valita yksittäisen sanan harjoiteltavaksi. Sanat on esitetty sivulla pelkästään kuvilla, mutta tiettyjen sanojen etsiminen on silti mahdollista suodatuksella ja tekstihaulla.
-    Kysymysmerkki-napista painamalla voit harjoitella yhden satunnaisen sanan.
+    Kysymysmerkki-napista painamalla voit harjoitella yhden näytöllä näkyvän satunnaisen sanan (haku ja suodatus vaikuttavat siis mahdollisiin sanoihin).
     Sivun yläpalkista voit suodattaa sivulla näkyviä sanoja niiden kategorioiden perusteella. Tämän lisäksi tiettyjä sanoja voi myös hakea tekstikenttään kirjoittamalla. </p>
 </div>
 `;
