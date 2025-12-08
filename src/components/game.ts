@@ -10,12 +10,13 @@ import { dispatchCustomEvent } from "../common/events.ts";
 import { type Category, getImagePath, type Word, wordsData } from "../data/word-data-model.ts";
 import { GameSession } from "./GameSession";
 import "./styles/game.css";
+import { getFinnishVoice } from "../common/playback.ts";
 import { lockPageScroll, unlockPageScroll } from "../common/preventScroll.ts";
 import { GAME_INSTRUCTIONS } from "../data/information-texts.ts";
 import { splitToSyllables } from "../utils/syllable-split.ts";
 import { showInstructionsModal } from "./gameInstructions.ts";
 import { showCreditsModal } from "./imageCredits.ts";
-import { getFinnishVoice, playWord } from "./syllablePlayer.ts";
+import { playWord } from "./syllablePlayer.ts";
 import { handlePlayback } from "./syllablesHint.ts";
 import type { WordGuess } from "./WordGuess";
 import { showWordGuessResults } from "./wordGuessResults.ts";
@@ -315,7 +316,7 @@ async function handleUseVocalHint(): Promise<void> {
     }
     const fiVoice = await getFinnishVoice();
     const useFallBack = gameSession.getCurrentWord().fallBackPlayer === true;
-    if (!useFallBack && fiVoice) {
+    if (!useFallBack && fiVoice !== undefined) {
         await playWord(syllables, fiVoice);
     } else {
         await handlePlayback(syllables);

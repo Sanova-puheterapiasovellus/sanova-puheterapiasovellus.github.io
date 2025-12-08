@@ -1,8 +1,14 @@
 import "./management.css";
 import { buildHtml, debounceEvent, expectElement } from "./common/dom";
 import { AuthorizationClient, ManagementClient } from "./common/github";
-import { loadSoundClip } from "./common/playback";
+import {
+    getFinnishVoice,
+    loadSoundClip,
+    playSyllableSounds,
+    synthesizeSpeech,
+} from "./common/playback";
 import { type AudioSegment, offsetsData } from "./data/offset-data-model";
+import { syllableSeparationSeconds } from "./data/syllable-player-config";
 import {
     type Category,
     type Data,
@@ -38,6 +44,8 @@ const wordCategory = expectElement("#word-category", HTMLInputElement, wordForm)
 const wordName = expectElement("#word-name", HTMLInputElement, wordForm);
 const wordHint = expectElement("#word-hint", HTMLTextAreaElement, wordForm);
 const wordFallbackPlayer = expectElement("#word-fallback-player", HTMLInputElement, wordForm);
+const wordPlaybackDemo = expectElement("#word-playback-demo", HTMLButtonElement, wordForm);
+const wordPlaybackWarning = expectElement("#word-playback-warning", HTMLParagraphElement, wordForm);
 const wordImageReplacement = expectElement("#word-image-replacement", HTMLInputElement, wordForm);
 const wordImageCredit = expectElement("#word-image-credit", HTMLTextAreaElement, wordForm);
 const categoryDialog = expectElement("#edit-category", HTMLDialogElement, document.body);
@@ -70,6 +78,7 @@ const removedWords = new Set<[number, number | undefined]>();
 const addedImages = new Map<string, File>();
 
 let loadMetadataCancellation: AbortController | undefined;
+let playbackDemoCancellation: AbortController | undefined;
 
 /** Load appropriate properties for the selected sound. */
 async function handleSoundSelectionChange(_: Event): Promise<void> {
@@ -282,6 +291,39 @@ function categoryMainChanged(_: Event): Promise<void> {
         categoryImagePreview,
         entry.words[selection]?.image ?? { file: "", credit: "" },
     );
+}
+
+/** Demo the syllable playback. */
+async function previewWordPlayback(_: Event): Promise<void> {
+    try {
+        playbackDemoCancellation?.abort("user didn't wait for full playback");
+        playbackDemoCancellation = new AbortController();
+
+        if (!wordFallbackPlayer.checked) {
+            const newPlayerVoice = await getFinnishVoice();
+            if (newPlayerVoice !== undefined) {
+                for (const syllable in splitToSyllables(wordName.value)) {
+                    await synthesizeSpeech(
+                        syllable,
+                        newPlayerVoice,
+                        playbackDemoCancellation.signal,
+                    );
+                }
+
+                return;
+            } else {
+                wordPlaybackWarning.hidden = false;
+            }
+        }
+
+        await playSyllableSounds(
+            playbackDemoCancellation.signal,
+            splitToSyllables(wordName.value).toArray(),
+            syllableSeparationSeconds,
+        );
+    } finally {
+        playbackDemoCancellation = undefined;
+    }
 }
 
 /** Open word editing dialog. */
@@ -555,6 +597,7 @@ async function initializeState(): Promise<void> {
         event.preventDefault();
         wordDialog.requestClose();
     });
+    wordPlaybackDemo.addEventListener("click", previewWordPlayback);
     categoryWordImage.addEventListener("change", categoryMainChanged);
     categoryDialog.addEventListener("close", categoryEdited);
     categoryForm.addEventListener("submit", (event) => {
