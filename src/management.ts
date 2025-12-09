@@ -220,7 +220,7 @@ async function handleFormSubmit(event: SubmitEvent): Promise<void> {
             actions.push(() =>
                 repository.ensureFileDeleted(
                     "unneeded image asset",
-                    `src/assets/images/${name}`,
+                    `public/assets/images/${name}`,
                     branchName,
                 ),
             );
