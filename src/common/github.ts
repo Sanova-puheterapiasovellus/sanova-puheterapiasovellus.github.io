@@ -7,8 +7,8 @@ const defaultClientId = "Iv23li2mrVytdGLl2X8W";
 const defaultRedirectUri = "https://sanova-puheterapiasovellus.github.io/management/";
 const ghApiVersion = "2022-11-28";
 const ghApiVersionKey = "x-github-api-version";
+const ghFileObjectJsonContentType = `application/vnd.github.object+json`;
 const ghJsonContentType = "application/vnd.github+json";
-const ghRawFileJsonContentType = `application/vnd.github.raw+json`;
 const ghRepoApiBase = "https://api.github.com/repos";
 const jsonContentType = "application/json";
 const projectRepository = "sanova-puheterapiasovellus/sanova-puheterapiasovellus.github.io";
@@ -99,7 +99,7 @@ export class ManagementClient {
         );
 
         if (!findResponse.ok) {
-            throw new Error("unsuccessful api response", { cause: findResponse });
+            throw new Error("unsuccessful api response", { cause: await findResponse.text() });
         }
 
         const {
@@ -123,7 +123,7 @@ export class ManagementClient {
         );
 
         if (!createResponse.ok) {
-            throw new Error("unsuccessful api response", { cause: await createResponse.json() });
+            throw new Error("unsuccessful api response", { cause: await createResponse.text() });
         }
     }
 
@@ -154,7 +154,7 @@ export class ManagementClient {
         );
 
         if (!response.ok) {
-            throw new Error("unsuccessful api response", { cause: response });
+            throw new Error("unsuccessful api response", { cause: await response.text() });
         }
     }
 
@@ -164,8 +164,7 @@ export class ManagementClient {
             new Request(`${ghRepoApiBase}/${this.#repository}/contents/${path}?ref=${branch}`, {
                 method: "get",
                 headers: {
-                    "content-type": jsonContentType,
-                    accept: ghRawFileJsonContentType,
+                    accept: ghFileObjectJsonContentType,
                     authorization: `Bearer ${this.#token}`,
                     [ghApiVersionKey]: ghApiVersion,
                 },
@@ -177,7 +176,7 @@ export class ManagementClient {
         }
 
         if (!response.ok) {
-            throw new Error("unsuccessful api response", { cause: response });
+            throw new Error("unsuccessful api response", { cause: await response.text() });
         }
 
         const { sha } = await response.json();
@@ -213,7 +212,7 @@ export class ManagementClient {
         );
 
         if (!response.ok) {
-            throw new Error("unsuccessful api response", { cause: response });
+            throw new Error("unsuccessful api response", { cause: await response.text() });
         }
     }
 
@@ -237,7 +236,7 @@ export class ManagementClient {
         );
 
         if (!response.ok) {
-            throw new Error("unsuccessful api response", { cause: response });
+            throw new Error("unsuccessful api response", { cause: await response.text() });
         }
 
         const { html_url } = await response.json();
@@ -347,7 +346,7 @@ export class AuthorizationClient {
         });
 
         if (!response.ok) {
-            throw new Error("unsuccessful api response", { cause: response });
+            throw new Error("unsuccessful api response", { cause: await response.text() });
         }
 
         return AuthorizationClient.#handleTokenResponse(response);
@@ -379,7 +378,7 @@ export class AuthorizationClient {
         });
 
         if (!response.ok) {
-            throw new Error("unsuccessful api response", { cause: response });
+            throw new Error("unsuccessful api response", { cause: await response.text() });
         }
 
         return AuthorizationClient.#handleTokenResponse(response);
