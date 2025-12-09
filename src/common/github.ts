@@ -102,10 +102,12 @@ export class ManagementClient {
             throw new Error("unsuccessful api response", { cause: findResponse });
         }
 
-        const { object: sha } = await findResponse.json();
+        const {
+            object: { sha },
+        } = await findResponse.json();
 
         const createResponse = await ManagementClient.#withTimeoutMiddleware(
-            new Request(`${ghRepoApiBase}/${this.#repository}/git/ref/heads/${base}`, {
+            new Request(`${ghRepoApiBase}/${this.#repository}/git/refs`, {
                 method: "post",
                 headers: {
                     "content-type": jsonContentType,
@@ -121,7 +123,7 @@ export class ManagementClient {
         );
 
         if (!createResponse.ok) {
-            throw new Error("unsuccessful api response", { cause: findResponse });
+            throw new Error("unsuccessful api response", { cause: await createResponse.json() });
         }
     }
 
