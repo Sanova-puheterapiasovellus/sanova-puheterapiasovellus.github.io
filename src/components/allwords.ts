@@ -1,7 +1,7 @@
 import { buildHtml, expectElement } from "../common/dom";
 import { dispatchCustomEvent } from "../common/events";
 import type { Store } from "../common/reactive.ts";
-import { getImagePath, type Word, wordsData } from "../data/word-data-model.ts";
+import { getCategoryImage, getImagePath, type Word, wordsData } from "../data/word-data-model.ts";
 import type { FilterOptions } from "./searchAndFilter";
 import { setupSearchAndFilter } from "./searchAndFilter";
 import styles from "./styles/allWords.module.css";
@@ -23,6 +23,12 @@ filtersSection.className = styles.filters;
 categoriesContainer.className = styles.categoryFilters;
 searchContainer.className = styles.searchContainer;
 
+const randomWord: Word = {
+    name: "random",
+    hint: "",
+    image: { file: "question.png", credit: "" },
+};
+
 function createImageEntry(word: Word, index: number): HTMLElement {
     const img = buildHtml("img", { src: getImagePath(word.image), alt: word.name });
     Object.assign(img.style, {
@@ -37,7 +43,7 @@ function createImageEntry(word: Word, index: number): HTMLElement {
 
 function createRandomEntry(filters: FilterOptions): HTMLElement {
     const img = buildHtml("img", {
-        src: getImagePath("question.png"),
+        src: getImagePath(randomWord.image),
         alt: "random",
     });
     Object.assign(img.style, {
@@ -112,7 +118,7 @@ export function initializeAllWords(hash: Store<string>) {
 
     const categoryData = wordsData.categories.map((category) => ({
         name: category.name,
-        imagePath: getImagePath(category.image),
+        imagePath: getImagePath(getCategoryImage(category)),
     }));
     setupSearchAndFilter(searchContainer, categoriesContainer, categoryData, renderAllImages);
 }

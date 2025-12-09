@@ -1,6 +1,11 @@
 import { expectElement } from "../common/dom";
 import { dispatchCustomEvent } from "../common/events";
-import { type Category, getImagePath, wordsData } from "../data/word-data-model.ts";
+import {
+    type Category,
+    getCategoryImage,
+    getImagePath,
+    wordsData,
+} from "../data/word-data-model.ts";
 import { capitalizeFirstLetter } from "../utils/stringUtils.ts";
 import styles from "./styles/categories.module.css";
 
@@ -9,8 +14,7 @@ const categoryList = expectElement("category-selector-list", HTMLUListElement);
 /** Data for random category */
 const randomCategory: Category = {
     name: "random",
-    image: "question.png",
-    image_credit: "",
+    image: { file: "question.png", credit: "" },
     words: [],
 };
 
@@ -20,7 +24,7 @@ function createCategoryEntry(category: Category): HTMLElement {
     const capitalizedName = capitalizeFirstLetter(category.name);
     li.innerHTML = `
         <button type="button" class="${styles.card}">
-            <img src="${getImagePath(category.image)}" alt="${capitalizedName || "Category image"}"/>
+            <img src="${getImagePath(getCategoryImage(category))}" alt="${capitalizedName || "Category image"}"/>
             <span>${capitalizedName}</span>
         </button>
     `;
@@ -35,7 +39,7 @@ function createRandomCategoryEntry(): HTMLElement {
     const li = document.createElement("li");
     li.innerHTML = `
         <button type="button" class="${styles.card}">
-            <img src="${getImagePath(randomCategory.image)}" alt="Random sana"/>
+            <img src="${getImagePath(getCategoryImage(randomCategory))}" alt="Random sana"/>
             <span>Satunnaiset sanat</span>
         </button>
     `;

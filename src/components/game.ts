@@ -512,7 +512,7 @@ function handleImageCredits(): void {
 
     const currentWord = gameSession.getCurrentWord();
 
-    showCreditsModal(currentWord.image_credit);
+    showCreditsModal(currentWord.image.credit);
 }
 
 function handleGameInstructions(): void {
