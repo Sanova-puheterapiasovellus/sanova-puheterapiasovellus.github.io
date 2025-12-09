@@ -134,6 +134,7 @@ export class ManagementClient {
         content: string,
         branch: string = defaultBranch,
     ): Promise<void> {
+        const sha = await this.#getFileHash(path, branch);
         const response = await ManagementClient.#withTimeoutMiddleware(
             new Request(`${ghRepoApiBase}/${this.#repository}/contents/${path}`, {
                 method: "put",
@@ -144,6 +145,7 @@ export class ManagementClient {
                     [ghApiVersionKey]: ghApiVersion,
                 },
                 body: JSON.stringify({
+                    sha,
                     branch,
                     message: `sanova-management: ${reason}`,
                     content: btoa(content),
@@ -159,7 +161,7 @@ export class ManagementClient {
     /** Get the current file hash that deleting files needs for some reason. */
     async #getFileHash(path: string, branch: string = defaultBranch): Promise<string | undefined> {
         const response = await ManagementClient.#withTimeoutMiddleware(
-            new Request(`${ghRepoApiBase}/${this.#repository}/contents/${path}?ref=${branch})}`, {
+            new Request(`${ghRepoApiBase}/${this.#repository}/contents/${path}?ref=${branch}`, {
                 method: "get",
                 headers: {
                     "content-type": jsonContentType,
