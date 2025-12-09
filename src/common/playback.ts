@@ -3,8 +3,58 @@ import { type AudioSegment, offsetsData } from "../data/offset-data-model";
 /** Lazily initialized context for syllable playback. */
 let audioContext: AudioContext | undefined;
 
+/** Available speech synthesis voices. */
+let cachedVoices: SpeechSynthesisVoice[] | undefined;
+
 /** All previously loaded audio snippets as there's a reasonable finite amount of them. */
 const snippetCache = new Map<string, Promise<AudioBuffer>>();
+
+/** Load available speech synthesis voices. */
+function loadVoices(): Promise<SpeechSynthesisVoice[]> {
+    if (cachedVoices !== undefined) {
+        return Promise.resolve(cachedVoices);
+    }
+
+    return new Promise((resolve) => {
+        cachedVoices = speechSynthesis.getVoices();
+        if (cachedVoices.length > 0) {
+            resolve(cachedVoices);
+            return;
+        }
+
+        speechSynthesis.addEventListener("voiceschanged", (_) => {
+            cachedVoices = speechSynthesis.getVoices();
+            resolve(cachedVoices);
+        });
+    });
+}
+
+/** Return a finnish voice. */
+export async function getFinnishVoice(): Promise<SpeechSynthesisVoice | undefined> {
+    const preferredVoices = ["Satu"];
+
+    return (await loadVoices())
+        .values()
+        .filter(({ lang }) => lang.startsWith("fi"))
+        .find(({ name }) => preferredVoices.includes(name));
+}
+
+/** Play back something with the speech synthesis API. */
+export async function synthesizeSpeech(
+    text: string,
+    voice: SpeechSynthesisVoice,
+    cancellation?: AbortSignal,
+): Promise<void> {
+    return new Promise((resolve) => {
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.voice = voice;
+        utter.lang = "fi-FI";
+        utter.rate = 0.8;
+        utter.addEventListener("end", () => resolve());
+        cancellation?.addEventListener("abort", () => speechSynthesis.cancel());
+        speechSynthesis.speak(utter);
+    });
+}
 
 /** The internal logic of doing an asynchronous cached load. */
 async function loadCachedValue<T>(

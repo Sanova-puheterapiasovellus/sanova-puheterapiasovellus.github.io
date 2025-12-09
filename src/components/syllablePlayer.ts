@@ -1,52 +1,8 @@
+import { synthesizeSpeech } from "../common/playback.ts";
 import { gameSession } from "./game.ts";
 
-let cachedVoices: SpeechSynthesisVoice[] | null = null;
-
-/** Load available speech synthesis voices */
-function loadVoices(): Promise<SpeechSynthesisVoice[]> {
-    if (cachedVoices) return Promise.resolve(cachedVoices);
-    return new Promise((resolve) => {
-        const voices = speechSynthesis.getVoices();
-        if (voices.length > 0) {
-            cachedVoices = voices;
-            resolve(voices);
-            return;
-        }
-        speechSynthesis.onvoiceschanged = () => {
-            const voicesNow = speechSynthesis.getVoices();
-            cachedVoices = voicesNow;
-            resolve(voicesNow);
-        };
-    });
-}
-
-/** Return a finnish voice */
-export async function getFinnishVoice() {
-    const voices = (await loadVoices()).filter((v) => v.lang.startsWith("fi"));
-    if (voices.length === 0) {
-        return null;
-    }
-
-    const preferredVoices = ["Satu"];
-    const voice = voices.find((v) => preferredVoices.includes(v.name));
-    if (!voice) return null;
-
-    return voice;
-}
-
-function speak(text: string, voice: SpeechSynthesisVoice): Promise<void> {
-    return new Promise((resolve) => {
-        const utter = new SpeechSynthesisUtterance(text);
-        utter.voice = voice;
-        utter.lang = "fi-FI";
-        utter.rate = 0.8;
-        utter.onend = () => resolve();
-        speechSynthesis.speak(utter);
-    });
-}
-
 async function playSyllable(syllable: string, voice: SpeechSynthesisVoice) {
-    return speak(syllable, voice);
+    return synthesizeSpeech(syllable, voice);
 }
 
 export async function playWord(syllables: string[], voice: SpeechSynthesisVoice) {

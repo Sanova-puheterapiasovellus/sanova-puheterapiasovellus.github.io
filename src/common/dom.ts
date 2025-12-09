@@ -142,3 +142,23 @@ export function reactiveHash(): Store<string> {
         });
     });
 }
+
+/** Helper function to debounce rapidly happening input events. */
+export function debounceEvent<E>(
+    handler: (event: E, signal: AbortSignal) => PromiseLike<void> | void,
+    delay = 300,
+): (event: E) => void {
+    let cancellation: AbortController | undefined;
+    let timeout: number | undefined;
+
+    return (event) => {
+        cancellation?.abort();
+        window.clearTimeout(timeout);
+
+        timeout = window.setTimeout(async () => {
+            cancellation = new AbortController();
+            await handler(event, cancellation.signal);
+            cancellation = undefined;
+        }, delay);
+    };
+}

@@ -27,28 +27,60 @@
                     </label>
 
                     <aside>
-                        <a id="auth-link" href="https://github.com/login/oauth/authorize" hidden>
-                            Kirjaudu automaattisesti GitHubin avulla
-                        </a>
+                        <details>
+                            <summary>Ohjeet</summary>
+
+                            <p>
+                                Valitettavasti teknisistä rajoitteista johtuen tunnistautuminen on
+                                hieman epäkäytännöllinen prosessi. Sivun käyttämiseen tarvitset
+                                sopivan kirjautumistunnuksen, jonka voit luoda GitHubin
+                                käyttäjäasetuksista.
+
+                                <a
+                                    href="https://github.com/settings/personal-access-tokens/new"
+                                    target="_blank"
+                                >
+                                    (suora linkki)
+                                </a>
+                            </p>
+
+                            <p>
+                                Omistajaksi on asetettava projektin organisaatio, tunnukselle on
+                                annettava pääsy lähdevarastoon, oikeudet muokata sisältöä sekä luoda
+                                vetopyyntöjä.
+
+                                <a href="/assets/help/github-token-creation.png" target="_blank">
+                                    (esimerkki tarvittavista asetuksista)
+                                </a>
+                            </p>
+
+                            <p>
+                                Voit kuitenkin myös yrittää
+                                <a id="auth-link" href="https://github.com/login/oauth/authorize">
+                                    kirjautua automaattisesti GitHubin avulla
+                                </a>
+                                sillä se saattaa tulla mahdolliseksi tulevaisuudessa.
+                            </p>
+                        </details>
                     </aside>
                 </fieldset>
 
-                <fieldset>
+                <fieldset hidden>
                     <legend>Äänivihjeet</legend>
 
                     <label>
                         Äännetiedosto muokattavaksi
-                        <select id="sound-selection" required></select>
+                        <select id="sound-selection"></select>
                     </label>
 
                     <label>
                         Äänteen alkukohta sekunneissa
-                        <input id="sound-start" type="number" min="0" step="0.001" required>
+                        <input id="sound-start" type="number" min="0" step="0.001">
                     </label>
 
                     <label>
                         Äänteen loppukohta sekunneissa
-                        <input id="sound-end" type="number" min="0" step="0.001" required>
+                        <input id="sound-end" type="number" min="0" step="0.001">
                     </label>
 
                     <aside>
@@ -93,52 +125,84 @@
             </form>
         </main>
 
-        <dialog id="edit-category" closedby="none">
+        <dialog id="edit-category" closedby="any">
+            <figure>
+                <figcaption>Nykyinen kuva</figcaption>
+                <img id="category-image-preview">
+            </figure>
+
             <form>
                 <input id="category-index" type="hidden">
 
                 <label>
                     Kategorian nimi
-                    <input id="category-name" type="text" required>
+                    <input id="category-name" type="text">
+                </label>
+
+                <label>
+                    Käytä sanan kuvaa
+                    <select id="category-word-image"></select>
                 </label>
 
                 <label>
                     Uusi kuvatiedosto
-                    <input id="category-image" type="file" accept="image/png">
+                    <input id="category-image-replacement" type="file" accept="image/png">
                 </label>
 
                 <label>
                     Kuvan lähde
-                    <textarea id="category-credit" type="text" required></textarea>
+                    <textarea id="category-image-credit" type="text"></textarea>
                 </label>
 
                 <button type="submit">Valmis</button>
             </form>
         </dialog>
 
-        <dialog id="edit-word" closedby="none">
+        <dialog id="edit-word" closedby="any">
+            <figure>
+                <figcaption>Nykyinen kuva</figcaption>
+                <img id="word-image-preview">
+            </figure>
+
             <form>
                 <input id="word-index" type="hidden">
                 <input id="word-category" type="hidden">
 
                 <label>
                     Sanan nimi
-                    <input id="word-name" type="text" required>
+                    <input id="word-name" type="text">
                 </label>
 
                 <label>
                     Kuvaileva vihje
-                    <textarea id="word-hint" required></textarea>
+                    <textarea id="word-hint"></textarea>
                 </label>
 
                 <label>
+                    Käytä vanhaa tavutoistinta
+                    <input id="word-fallback-player" type="checkbox">
+                </label>
+
+                <aside>
+                    <button id="word-playback-demo" type="button">
+                        Kokeile tavujen toistamista
+                    </button>
+
+                    <p id="word-playback-warning" hidden>
+                        <small>
+                            Selaimesi ei tue soveltuvaa ääntä parempaa tavutoistinta varten
+                        </small>
+                    </p>
+                </aside>
+
+                <label>
                     Uusi kuvatiedosto
-                    <input id="word-image" type="file" accept="image/png">
+                    <input id="word-image-replacement" type="file" accept="image/png">
                 </label>
 
                 <label>
                     Kuvan lähde
-                    <textarea id="word-credit" type="text" required></textarea>
+                    <textarea id="word-image-credit" type="text"></textarea>
                 </label>
 
                 <button type="submit">Valmis</button>
