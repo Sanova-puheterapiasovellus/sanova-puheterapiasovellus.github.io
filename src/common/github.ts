@@ -6,6 +6,7 @@ const defaultBranch = "main";
 const defaultClientId = "Iv23li2mrVytdGLl2X8W";
 const defaultRedirectUri = "https://sanova-puheterapiasovellus.github.io/management/";
 const ghApiVersion = "2022-11-28";
+const ghApiVersionKey = "x-github-api-version";
 const ghJsonContentType = "application/vnd.github+json";
 const ghRawFileJsonContentType = `application/vnd.github.raw+json`;
 const ghRepoApiBase = "https://api.github.com/repos";
@@ -92,7 +93,7 @@ export class ManagementClient {
                 headers: {
                     accept: ghJsonContentType,
                     authorization: `Bearer ${this.#token}`,
-                    version: ghApiVersion,
+                    [ghApiVersionKey]: ghApiVersion,
                 },
             }),
         );
@@ -110,7 +111,7 @@ export class ManagementClient {
                     "content-type": jsonContentType,
                     accept: ghJsonContentType,
                     authorization: `Bearer ${this.#token}`,
-                    version: ghApiVersion,
+                    [ghApiVersionKey]: ghApiVersion,
                 },
                 body: JSON.stringify({
                     ref: `refs/heads/${name}`,
@@ -138,7 +139,7 @@ export class ManagementClient {
                     "content-type": jsonContentType,
                     accept: ghJsonContentType,
                     authorization: `Bearer ${this.#token}`,
-                    version: ghApiVersion,
+                    [ghApiVersionKey]: ghApiVersion,
                 },
                 body: JSON.stringify({
                     branch,
@@ -162,7 +163,7 @@ export class ManagementClient {
                     "content-type": jsonContentType,
                     accept: ghRawFileJsonContentType,
                     authorization: `Bearer ${this.#token}`,
-                    version: ghApiVersion,
+                    [ghApiVersionKey]: ghApiVersion,
                 },
             }),
         );
@@ -197,7 +198,7 @@ export class ManagementClient {
                     "content-type": jsonContentType,
                     accept: ghJsonContentType,
                     authorization: `Bearer ${this.#token}`,
-                    version: ghApiVersion,
+                    [ghApiVersionKey]: ghApiVersion,
                 },
                 body: JSON.stringify({
                     sha,
@@ -221,7 +222,7 @@ export class ManagementClient {
                     "content-type": jsonContentType,
                     accept: ghJsonContentType,
                     authorization: `Bearer ${this.#token}`,
-                    version: ghApiVersion,
+                    [ghApiVersionKey]: ghApiVersion,
                 },
                 body: JSON.stringify({
                     title: `sanova-management: ${reason}`,
