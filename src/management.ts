@@ -74,7 +74,8 @@ const soundOffsets = structuredClone(offsetsData);
 
 let wordsChanged = false;
 const wordList = structuredClone(wordsData.categories);
-const removedWords = new Set<[number, number | undefined]>();
+const removedCategories = new Set<number>();
+const removedWords = new Map<number, Set<number>>();
 const addedImages = new Map<string, File>();
 
 let loadMetadataCancellation: AbortController | undefined;
@@ -166,7 +167,7 @@ async function handleFormSubmit(event: SubmitEvent): Promise<void> {
         const categories = wordList
             .values()
             .filter((category, index) => {
-                if (!removedWords.has([index, undefined])) {
+                if (!removedCategories.has(index)) {
                     return true;
                 }
 
@@ -184,7 +185,8 @@ async function handleFormSubmit(event: SubmitEvent): Promise<void> {
                 words: words
                     .values()
                     .filter(({ image }, index) => {
-                        if (!removedWords.has([parent, index])) {
+                        const categoryRemovals = removedWords.get(parent);
+                        if (categoryRemovals === undefined || !categoryRemovals.has(index)) {
                             return true;
                         }
 
@@ -379,20 +381,45 @@ async function selectCategory(current: Category, existing?: number): Promise<voi
     categoryDialog.showModal();
 }
 
-/** Toggle a word or category's removal state. */
-function handleRemovalToggle(
+/** Toggle a category's removal state. */
+function handleCategoryToggle(this: HTMLButtonElement, item: HTMLLIElement, index: number): void {
+    if (removedCategories.has(index)) {
+        this.innerText = "Poista kategoria";
+        item.classList.remove("removed");
+        removedCategories.delete(index);
+    } else {
+        this.innerText = "Palauta kategoria";
+        item.classList.add("removed");
+        removedCategories.add(index);
+    }
+}
+
+/** Toggle a word's removal state. */
+function handleWordToggle(
     this: HTMLButtonElement,
     item: HTMLLIElement,
-    key: [number, number | undefined],
+    parent: number,
+    index: number,
 ): void {
-    if (removedWords.has(key)) {
-        this.innerText = key[1] === undefined ? "Poista kategoria" : "Poista sana";
+    const categoryRemovals = (() => {
+        const existing = removedWords.get(parent);
+        if (existing !== undefined) {
+            return existing;
+        }
+
+        const created = new Set<number>();
+        removedWords.set(parent, created);
+        return created;
+    })();
+
+    if (categoryRemovals.has(index)) {
+        this.innerText = "Poista sana";
         item.classList.remove("removed");
-        removedWords.delete(key);
+        categoryRemovals.delete(index);
     } else {
-        this.innerText = key[1] === undefined ? "Palauta kategoria" : "Palauta sana";
+        this.innerText = "Palauta sana";
         item.classList.add("removed");
-        removedWords.add(key);
+        categoryRemovals.add(index);
     }
 }
 
@@ -414,7 +441,7 @@ function buildWord(category: Entry<Category>, word: Entry<Word>): HTMLLIElement 
     updateWord.addEventListener("click", (_) => selectWord(category, word.value, word.index));
     deleteWord.addEventListener(
         "click",
-        handleRemovalToggle.bind(deleteWord, wordItem, [category.index, word.index]),
+        handleWordToggle.bind(deleteWord, wordItem, category.index, word.index),
     );
 
     return wordItem;
@@ -458,7 +485,7 @@ function buildCategory(category: Entry<Category>): HTMLLIElement {
 
     deleteCategory.addEventListener(
         "click",
-        handleRemovalToggle.bind(deleteCategory, categoryItem, [category.index, undefined]),
+        handleCategoryToggle.bind(deleteCategory, categoryItem, category.index),
     );
 
     return categoryItem;
