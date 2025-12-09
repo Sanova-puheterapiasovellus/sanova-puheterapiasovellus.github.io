@@ -1,6 +1,5 @@
 import { expectElement } from "../common/dom.ts";
 import { playSyllableSounds } from "../common/playback.ts";
-import { syllableSeparationSeconds } from "../data/syllable-player-config.ts";
 import { gameSession } from "./game.ts";
 
 const playButton = expectElement("word-guess-syllable-hint", HTMLButtonElement);
@@ -22,15 +21,12 @@ export async function handlePlayback(syllables: string[]): Promise<void> {
 
     try {
         // Set up cancellation possibility and ensure the button can't be pressed early.
+        playbackCancellation?.abort("previous playback was somehow not finished");
         playbackCancellation = new AbortController();
         playButton.disabled = true;
 
         // Wait for the syllable sounds to be loaded and played to the end.
-        await playSyllableSounds(
-            playbackCancellation.signal,
-            syllablesToPlay,
-            syllableSeparationSeconds,
-        );
+        await playSyllableSounds(playbackCancellation.signal, syllablesToPlay);
     } finally {
         // Clear out cancellation and enable button regardless of outcome.
         playbackCancellation = undefined;
