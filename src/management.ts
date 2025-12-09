@@ -123,7 +123,16 @@ function handleSoundOffsetChange(_: Event): void {
     entry.end = soundEnd.valueAsNumber;
 
     // FIXME: this is a horrible idea and we need to track this some other way
-    soundsChanged = !audioSegmentsRoughlyEqual(entry, offsetsData[soundSelection.value]);
+    soundsChanged ||= !audioSegmentsRoughlyEqual(entry, offsetsData[soundSelection.value]);
+}
+
+/** Check if the word list has been changed in some way. */
+function wordListChanged(): boolean {
+    return (
+        wordsChanged ||
+        removedCategories.size !== 0 ||
+        removedWords.values().some((categoryRemovals) => categoryRemovals.size !== 0)
+    );
 }
 
 /** Make changes when requested. */
@@ -162,7 +171,7 @@ async function handleFormSubmit(event: SubmitEvent): Promise<void> {
         });
     }
 
-    if (wordsChanged || removedWords.size !== 0) {
+    if (wordListChanged()) {
         const unneededImages = new Set<string>();
         const categories = wordList
             .values()
