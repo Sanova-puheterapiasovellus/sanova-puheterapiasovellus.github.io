@@ -26,6 +26,7 @@ const guessDialog = expectElement("word-guess-dialog", HTMLDialogElement);
 const guessCard = expectElement("word-guess-card", HTMLDivElement);
 const closeButton = expectElement("word-guess-close", HTMLButtonElement);
 const answerButton = expectElement("word-guess-submit", HTMLButtonElement);
+const answerButtonIcon = answerButton.querySelector("img") as HTMLImageElement;
 const letterHintButton = expectElement("word-guess-letter-hint", HTMLButtonElement);
 const textHintButton = expectElement("word-guess-text-hint", HTMLButtonElement);
 const syllableHintButton = expectElement("word-guess-syllable-hint", HTMLButtonElement);
@@ -40,6 +41,8 @@ const instructionsOpenButton = expectElement(
     "word-guess-game-instructions-button",
     HTMLButtonElement,
 );
+
+const answerButtonDefaultIcon = "/assets/icons/reply_24dp.svg";
 
 // Keep track of the game progress, initially null
 export let gameSession: GameSession | null = null;
@@ -90,6 +93,7 @@ function handleGameStart(event: CategorySelectedEvent): void {
     gameSession.setGameModeRandom(); // Show words in random order
     const word = gameSession.getNextWord();
     resetTextHint();
+    answerButtonIcon.src = answerButtonDefaultIcon;
 
     dispatchCustomEvent("word-selected", { word, index: 0 });
 }
@@ -161,6 +165,7 @@ function handleWordSelected(event: WordSelectedEvent): void {
     resetTextHint();
     updateGameProgressCounter();
     setupWordInput();
+    answerButtonIcon.src = answerButtonDefaultIcon;
 
     setImage();
 }
@@ -454,11 +459,13 @@ function markAnswerResult(gameSession: GameSession, isCorrect: boolean) {
             gameSession.markCurrentCorrect();
         }
         guessCard.classList.add("correct");
+        answerButtonIcon.src = "/assets/icons/correct_answer.svg";
         // Generate green particles for a correct guess
         generateParticles(gameSession, "limegreen");
     } else {
         gameSession.markIncorrectlyGuessed();
         guessCard.classList.add("wrong");
+        answerButtonIcon.src = "/assets/icons/wrong_answer.svg";
     }
 }
 
@@ -474,6 +481,7 @@ async function delayBeforeNextWord(): Promise<void> {
 
     // Remove the indication of correct/wrong/skipped answer before moving to the next card
     guessCard.classList.remove("correct", "wrong", "skip");
+    answerButtonIcon.src = answerButtonDefaultIcon;
 }
 
 /**
