@@ -8,7 +8,6 @@ import {
     synthesizeSpeech,
 } from "./common/playback";
 import { type AudioSegment, offsetsData } from "./data/offset-data-model";
-import { syllableSeparationSeconds } from "./data/syllable-player-config";
 import {
     type Category,
     type Data,
@@ -332,7 +331,6 @@ async function previewWordPlayback(_: Event): Promise<void> {
         await playSyllableSounds(
             playbackDemoCancellation.signal,
             splitToSyllables(wordName.value).toArray(),
-            syllableSeparationSeconds,
         );
     } finally {
         playbackDemoCancellation = undefined;

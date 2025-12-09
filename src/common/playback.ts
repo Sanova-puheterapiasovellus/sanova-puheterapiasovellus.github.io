@@ -1,4 +1,11 @@
-import { type AudioSegment, offsetsData } from "../data/offset-data-model";
+import { offsetsData } from "../data/offset-data-model";
+import {
+    characterSeparation,
+    compressorOptions,
+    edgeFade,
+    startOffset,
+    syllableSeparation,
+} from "../data/syllable-player-config";
 
 /** Lazily initialized context for syllable playback. */
 let audioContext: AudioContext | undefined;
@@ -51,7 +58,7 @@ export async function synthesizeSpeech(
         utter.lang = "fi-FI";
         utter.rate = 0.8;
         utter.addEventListener("end", () => resolve());
-        cancellation?.addEventListener("abort", () => speechSynthesis.cancel());
+        cancellation?.addEventListener("abort", () => speechSynthesis.cancel(), { once: true });
         speechSynthesis.speak(utter);
     });
 }
@@ -79,92 +86,6 @@ function getGlobalAudioContext(): AudioContext {
     return audioContext;
 }
 
-/**
- * Determine the common sample rate, channel count and total length of audio snippets,
- * asserting that they're compatible with each other.
- */
-function analyzeAudioBuffers(values: Iterable<AudioBuffer>): {
-    length: number;
-    samples: number;
-    channels: number;
-} {
-    let length = 0;
-    let samples: number | undefined;
-    let channels: number | undefined;
-
-    for (const buffer of values) {
-        if (
-            (samples !== undefined && samples !== buffer.sampleRate) ||
-            (channels !== undefined && channels !== buffer.numberOfChannels)
-        ) {
-            throw new Error("format of audio segments must match for combining");
-        }
-
-        length += buffer.length;
-        samples = buffer.sampleRate;
-        channels = buffer.numberOfChannels;
-    }
-
-    if (samples === undefined || channels === undefined) {
-        throw new Error("more than one audio segment required for combining");
-    }
-
-    return { channels, length, samples };
-}
-
-/** Combine multiple audio buffers into one with optional empty space expressed in seconds. */
-function combineAudioBuffers(
-    context: AudioContext,
-    values: AudioBuffer[],
-    separation: number = 0,
-): AudioBuffer {
-    const { length, samples, channels } = analyzeAudioBuffers(values);
-
-    const middle = Math.floor(separation * samples);
-    const capacity = length + (values.length - 1) * middle;
-    const output = context.createBuffer(channels, capacity, samples);
-
-    let offset = 0;
-    for (const buffer of values) {
-        for (let index = 0; index < channels; index++) {
-            output.copyToChannel(buffer.getChannelData(index), index, offset);
-        }
-
-        offset += buffer.length + middle;
-    }
-
-    return output;
-}
-
-/**
- * Essentially an {@link Array#splice} but for audio buffers.
- *
- * Bit of an silly approach since it's an unnecessary temporary copy,
- * but that saves me from changing too much of the surrounding logic.
- */
-function audioBufferSubset(
-    context: AudioContext,
-    original: AudioBuffer,
-    offsets: AudioSegment,
-): AudioBuffer {
-    const startSample = Math.floor(original.sampleRate * offsets.start);
-    const endSample = Math.floor(original.sampleRate * offsets.end);
-
-    const output = context.createBuffer(
-        original.numberOfChannels,
-        endSample - startSample,
-        original.sampleRate,
-    );
-
-    for (let index = 0; index < original.numberOfChannels; index++) {
-        output
-            .getChannelData(index)
-            .set(original.getChannelData(index).subarray(startSample, endSample));
-    }
-
-    return output;
-}
-
 /** Cached load of an individual sound clip in it's raw form. */
 export function loadSoundClip(
     signal: AbortSignal,
@@ -183,38 +104,24 @@ export function loadSoundClip(
     });
 }
 
-/** Load a syllable sound or constrtruct one from character sounds. */
-async function getSyllableSound(
+/** Load required syllable sounds. */
+function loadSyllableSounds(
     cancellation: AbortSignal,
     context: AudioContext,
-    name: string,
-): Promise<AudioBuffer> {
-    return loadCachedValue(snippetCache, name, async () => {
-        if (name in offsetsData) {
-            const buffer = await loadSoundClip(cancellation, name, context);
-            const meta = offsetsData[name];
-            if (meta === undefined) {
-                return buffer;
-            }
-
-            return audioBufferSubset(context, buffer, meta);
-        }
-
-        return combineAudioBuffers(
-            context,
-            await Promise.all(
-                name.split("").map(async (character) => {
-                    const buffer = await loadSoundClip(cancellation, character, context);
-                    const meta = offsetsData[character];
-                    if (meta === undefined) {
-                        return buffer;
-                    }
-
-                    return audioBufferSubset(context, buffer, meta);
-                }),
+    syllables: string[],
+): Promise<{ name: string; buffer: AudioBuffer }[][]> {
+    return Promise.all(
+        syllables.map((syllable) =>
+            Promise.all(
+                syllable.split("").map((name) =>
+                    loadSoundClip(cancellation, name, context).then((buffer) => ({
+                        name,
+                        buffer,
+                    })),
+                ),
             ),
-        );
-    });
+        ),
+    );
 }
 
 /** Transition the context from a suspended state as needed. */
@@ -222,39 +129,98 @@ function ensureReadyForPlayback(context: AudioContext): Promise<void> {
     return context.state === "suspended" ? context.resume() : Promise.resolve();
 }
 
-/** Play back audio buffer and wait for it to finish. */
-async function waitFullPlayback(
-    cancellation: AbortSignal,
-    context: AudioContext,
-    buffer: AudioBuffer,
-): Promise<void> {
-    const source = context.createBufferSource();
-    source.buffer = buffer;
-    source.connect(context.destination);
-
-    return new Promise((resolve) => {
-        source.addEventListener("ended", (_) => resolve());
-        source.start();
-
-        cancellation.addEventListener("abort", (_) => source.stop());
-    });
-}
-
 /** Spell out the given syllables with a separation in seconds. */
 export async function playSyllableSounds(
     cancellation: AbortSignal,
     syllables: string[],
-    separation: number,
     context: AudioContext = getGlobalAudioContext(),
 ): Promise<void> {
+    // Load all sounds and wait to become ready up front.
     const [_, segments] = await Promise.all([
         ensureReadyForPlayback(context),
-        Promise.all(syllables.map((name) => getSyllableSound(cancellation, context, name))),
+        loadSyllableSounds(cancellation, context, syllables),
     ]);
 
-    await waitFullPlayback(
-        cancellation,
-        context,
-        combineAudioBuffers(context, segments, separation),
+    // Required state for scheduling playback.
+    let time = context.currentTime + startOffset;
+    let played = 0;
+    const nodes = [] as [AudioBufferSourceNode, GainNode][];
+    const { promise, resolve } = Promise.withResolvers<void>();
+
+    // Compress the dynamic range of our somewhat unequal sound clips.
+    const compressor = context.createDynamicsCompressor();
+    compressor.threshold.value = compressorOptions.threshold;
+    compressor.knee.value = compressorOptions.knee;
+    compressor.ratio.value = compressorOptions.ratio;
+    compressor.attack.value = compressorOptions.attack;
+    compressor.release.value = compressorOptions.release;
+    compressor.connect(context.destination);
+
+    // Create audio nodes for playing back the relevant sounds.
+    for (const sounds of segments) {
+        for (const { name, buffer } of sounds) {
+            const player = context.createBufferSource();
+            const fade = context.createGain();
+
+            // Use the actual offset that is configured for this sound.
+            const startOffset = offsetsData[name]?.start ?? 0;
+            const playDuration = (offsetsData[name]?.end ?? buffer.length) - startOffset;
+
+            // Calculate crossfade times for smoothing transitions.
+            const fadeIn = Math.min(edgeFade, playDuration * 0.49);
+            const fadeOut = Math.max(0, playDuration - fadeIn);
+
+            // Wire up playback with our crossfader.
+            fade.gain.value = 0;
+            player.buffer = buffer;
+            player.connect(fade).connect(compressor);
+
+            // Wire up fade in effect.
+            player.start(time, startOffset, playDuration);
+            fade.gain.setValueAtTime(0, time);
+            fade.gain.linearRampToValueAtTime(1, time + fadeIn);
+
+            // Wire up fade out effect.
+            fade.gain.setValueAtTime(1, time + fadeOut);
+            fade.gain.linearRampToValueAtTime(0, time + playDuration);
+
+            // Track the playback ending.
+            player.addEventListener(
+                "ended",
+                (_) => {
+                    // Resolve promise when all sounds have been played.
+                    if (++played === segments.length) {
+                        resolve();
+                    }
+                },
+                { signal: cancellation, once: true },
+            );
+
+            // Move forwards and keep hold of the audio nodes.
+            time += playDuration + characterSeparation;
+            nodes.push([player, fade]);
+        }
+
+        // Move forwards between syllables.
+        time += syllableSeparation;
+    }
+
+    // Wire up playback cancellation.
+    cancellation.addEventListener(
+        "abort",
+        (_) => {
+            // Cancel all pending playback and effects.
+            for (const [player, fade] of nodes) {
+                player.stop();
+                fade.gain.cancelScheduledValues(context.currentTime);
+            }
+
+            // Resolve promise to return.
+            resolve();
+        },
+        { once: true },
     );
+
+    // Wait for either cancellation or all clips finishing.
+    await promise;
 }
