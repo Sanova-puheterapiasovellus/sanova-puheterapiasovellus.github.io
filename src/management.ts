@@ -26,6 +26,8 @@ const cookieManualToken = "manual_token";
 
 const authLink = expectElement("#auth-link", HTMLAnchorElement, document.body);
 const managementForm = expectElement("form", HTMLFormElement, document.body);
+const submitButton = expectElement("button[type=submit]", HTMLButtonElement, managementForm);
+const operationProgress = expectElement("progress", HTMLProgressElement, managementForm);
 const authToken = expectElement("#auth-token", HTMLInputElement, managementForm);
 const authValidity = expectElement("#auth-validity", HTMLSpanElement, managementForm);
 const soundSelection = expectElement("#sound-selection", HTMLSelectElement, managementForm);
@@ -234,9 +236,15 @@ async function handleFormSubmit(event: SubmitEvent): Promise<void> {
         return;
     }
 
-    for (const callback of actions) {
+    // Actually run queued up operations and show progress.
+    submitButton.disabled = true;
+    operationProgress.max = actions.length;
+    operationProgress.hidden = false;
+    operationProgress.value = 0;
+    for (const [index, callback] of actions.entries()) {
         await callback();
         await ManagementClient.waitBetweenRequests();
+        operationProgress.value = index + 1;
     }
 
     if (branchName !== undefined) {
@@ -244,6 +252,10 @@ async function handleFormSubmit(event: SubmitEvent): Promise<void> {
         pullRequest.href = url;
         pullRequest.hidden = false;
     }
+
+    // Reset progress and button state.
+    operationProgress.hidden = true;
+    submitButton.disabled = false;
 }
 
 /** Handle authorization flow or prepare for allowing it. */
