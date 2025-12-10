@@ -261,6 +261,30 @@ export class AuthorizationClient {
         this.#redirect = redirect;
     }
 
+    /** Check if a token is still valid. */
+    static async checkToken(token: string): Promise<boolean> {
+        const response = await fetch("https://api.github.com/user", {
+            method: "get",
+            headers: {
+                accept: ghJsonContentType,
+                authorization: `Bearer ${token}`,
+                [ghApiVersionKey]: ghApiVersion,
+            },
+        });
+
+        switch (response.status) {
+            case 200:
+                return true;
+
+            case 401:
+            case 403:
+                return false;
+
+            default:
+                throw new Error("unsuccessful api response", { cause: await response.text() });
+        }
+    }
+
     /** Handle older browsers lacking nice encoding methods. */
     static #toBase64Url(buffer: Uint8Array): string {
         return (

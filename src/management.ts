@@ -27,6 +27,7 @@ const cookieManualToken = "manual_token";
 const authLink = expectElement("#auth-link", HTMLAnchorElement, document.body);
 const managementForm = expectElement("form", HTMLFormElement, document.body);
 const authToken = expectElement("#auth-token", HTMLInputElement, managementForm);
+const authValidity = expectElement("#auth-validity", HTMLSpanElement, managementForm);
 const soundSelection = expectElement("#sound-selection", HTMLSelectElement, managementForm);
 const soundStart = expectElement("#sound-start", HTMLInputElement, managementForm);
 const soundEnd = expectElement("#sound-end", HTMLInputElement, managementForm);
@@ -622,6 +623,17 @@ function categoryEdited(_: Event): void {
         : { word: selection };
 }
 
+/** Notify the user about if the access token is currently valid. */
+async function updateTokenValidity(): Promise<void> {
+    if (authToken.value === "") {
+        authValidity.innerText = "";
+    } else {
+        authValidity.innerText = (await AuthorizationClient.checkToken(authToken.value))
+            ? "Tunnus on toimiva ja vielä voimassa"
+            : "Tunnus on virheellinen tai erääntynyt";
+    }
+}
+
 /** Build up dynamic state and connect events for using the management page. */
 async function initializeState(): Promise<void> {
     soundSelection.addEventListener("change", handleSoundSelectionChange);
@@ -688,8 +700,12 @@ async function initializeState(): Promise<void> {
     // Persist access token if manually changed.
     authToken.addEventListener(
         "input",
-        debounceEvent(async (_) => cookieStore.set(cookieManualToken, authToken.value)),
+        debounceEvent((_) => cookieStore.set(cookieManualToken, authToken.value)),
     );
+
+    // Check validity after user moves focus.
+    authToken.addEventListener("change", updateTokenValidity);
+    await updateTokenValidity();
 }
 
 initializeState();

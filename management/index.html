@@ -24,6 +24,9 @@
                     <label>
                         GitHub Access Token
                         <input id="auth-token" type="password" autocomplete="off" required>
+                        <small>
+                            <span id="auth-validity"></span>
+                        </small>
                     </label>
 
                     <aside>
@@ -37,7 +40,7 @@
                                 käyttäjäasetuksista.
 
                                 <a
-                                    href="https://github.com/settings/personal-access-tokens/new"
+                                    href="https://github.com/settings/personal-access-tokens/new?target_name=sanova-puheterapiasovellus&contents=write&pull_requests=write"
                                     target="_blank"
                                 >
                                     (suora linkki)
@@ -47,7 +50,12 @@
                             <p>
                                 Omistajaksi on asetettava projektin organisaatio, tunnukselle on
                                 annettava pääsy lähdevarastoon, oikeudet muokata sisältöä sekä luoda
-                                vetopyyntöjä.
+                                vetopyyntöjä. Asetusten pitäisi olla automaattisesti täytettynä,
+                                mutta on myös suositeltavaa rajata oikeus pelkästään tarkalle
+                                lähdevarastolle, eli valitsemalla <em>only select repositories</em>
+                                ja pudotusvalinnasta<em>
+                                    sanova-puheterapiasovellus/sanova-puheterapiasovellus.github.io
+                                </em>
 
                                 <a href="/assets/help/github-token-creation.png" target="_blank">
                                     (esimerkki tarvittavista asetuksista)
