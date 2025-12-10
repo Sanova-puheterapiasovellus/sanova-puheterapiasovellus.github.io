@@ -49,13 +49,17 @@ export let gameSession: GameSession | null = null;
 
 /** Close the dialog as requested. */
 function handleDialogClose(_: Event): void {
+    // Close the guessing dialog
+    guessDialog.close();
+}
+
+/** Reset game dialog information when closed. */
+function handleGameClose(): void {
     // Set the gameSession null to avoid a situation where the user
     // would select a different category, but the words from previously
     // closed category would appear.
     gameSession = null;
-    // Close the guessing dialog
     unlockPageScroll();
-    guessDialog.close();
 }
 
 /** Focus on the input, user can write to the input after calling this */
@@ -565,6 +569,8 @@ export function initializeGameContainer(): void {
     window.addEventListener("words-selected", handleWordsSelected);
     window.addEventListener("show-results", handleGameOver);
     closeButton.addEventListener("click", handleDialogClose);
+
+    guessDialog.addEventListener("close", handleGameClose);
 
     // Focus on the input field if the dialog is clicked
     guessCard.addEventListener("pointerdown", handleClickGameDialog);
