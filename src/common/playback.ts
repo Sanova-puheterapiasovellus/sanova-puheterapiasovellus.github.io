@@ -1,14 +1,10 @@
-import { type AudioSegment, offsetsData } from "../data/offset-data-model";
+import { offsetsData } from "../data/offset-data-model";
 import {
     characterSeparation,
     compressorOptions,
     edgeFade,
-    reverbDecay,
-    reverbDuration,
-    reverbWetGain,
     startOffset,
     syllableSeparation,
-    targetLoudness,
 } from "../data/syllable-player-config";
 
 /** Lazily initialized context for syllable playback. */
@@ -133,42 +129,6 @@ function ensureReadyForPlayback(context: AudioContext): Promise<void> {
     return context.state === "suspended" ? context.resume() : Promise.resolve();
 }
 
-/** Tiny impulse response for short, subtle reverb. */
-function createImpulseResponse(context: AudioContext, duration: number, decay: number) {
-    const length = Math.max(1, Math.floor(duration * context.sampleRate));
-    const impulse = context.createBuffer(2, length, context.sampleRate);
-    for (let channel = 0; channel < impulse.numberOfChannels; channel++) {
-        const data = impulse.getChannelData(channel);
-        for (let sample = 0; sample < length; sample++) {
-            data[sample] = (Math.random() * 2 - 1) * (1 - sample / length) ** decay;
-        }
-    }
-
-    return impulse;
-}
-
-/** Rough root mean square based linear loudness measurement. */
-function measureApproximateLoudness(buffer: AudioBuffer, segment?: AudioSegment): number {
-    let startSample = 0;
-    let endSample = buffer.length;
-    if (segment !== undefined) {
-        startSample = Math.floor(segment.start * buffer.sampleRate);
-        endSample = Math.floor(segment.end * buffer.sampleRate);
-    }
-
-    let sumSquares = 0;
-    let totalSamples = 0;
-    for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
-        const data = buffer.getChannelData(channel);
-        for (let sample = startSample; sample < endSample; sample++) {
-            sumSquares += (data[sample] ?? 0) * (data[sample] ?? 0);
-        }
-        totalSamples += endSample - startSample;
-    }
-
-    return Math.sqrt(sumSquares / Math.max(1, totalSamples));
-}
-
 /** Spell out the given syllables with a separation in seconds. */
 export async function playSyllableSounds(
     cancellation: AbortSignal,
@@ -184,7 +144,7 @@ export async function playSyllableSounds(
     // Required state for scheduling playback.
     let time = context.currentTime + startOffset;
     let played = 0;
-    const nodes = [] as { player: AudioBufferSourceNode; fade: GainNode; normalize: GainNode }[];
+    const nodes = [] as [AudioBufferSourceNode, GainNode][];
     const { promise, resolve } = Promise.withResolvers<void>();
 
     // Compress the dynamic range of our somewhat unequal sound clips.
@@ -195,15 +155,6 @@ export async function playSyllableSounds(
     compressor.attack.value = compressorOptions.attack;
     compressor.release.value = compressorOptions.release;
     compressor.connect(context.destination);
-
-    // Add slight reverb for smoothing audio.
-    const consolver = context.createConvolver();
-    consolver.buffer = createImpulseResponse(context, reverbDuration, reverbDecay);
-    const wetness = context.createGain();
-    wetness.gain.value = reverbWetGain;
-    compressor.connect(consolver);
-    consolver.connect(wetness);
-    wetness.connect(context.destination);
 
     // Create audio nodes for playing back the relevant sounds.
     for (const sounds of segments) {
@@ -219,15 +170,10 @@ export async function playSyllableSounds(
             const fadeIn = Math.min(edgeFade, playDuration * 0.49);
             const fadeOut = Math.max(0, playDuration - fadeIn);
 
-            // Attempt to normalize volume between sounds.
-            const normalize = context.createGain();
-            normalize.gain.value =
-                targetLoudness / measureApproximateLoudness(buffer, offsetsData[name]);
-
-            // Wire up playback with our effects.
+            // Wire up playback with our crossfader.
             fade.gain.value = 0;
             player.buffer = buffer;
-            player.connect(normalize).connect(fade).connect(compressor);
+            player.connect(fade).connect(compressor);
 
             // Wire up fade in effect.
             player.start(time, startOffset, playDuration);
@@ -252,7 +198,7 @@ export async function playSyllableSounds(
 
             // Move forwards and keep hold of the audio nodes.
             time += playDuration + characterSeparation;
-            nodes.push({ player, fade, normalize });
+            nodes.push([player, fade]);
         }
 
         // Move forwards between syllables.
@@ -264,10 +210,9 @@ export async function playSyllableSounds(
         "abort",
         (_) => {
             // Cancel all pending playback and effects.
-            for (const { player, fade, normalize } of nodes) {
+            for (const [player, fade] of nodes) {
                 player.stop();
                 fade.gain.cancelScheduledValues(context.currentTime);
-                normalize.gain.cancelScheduledValues(context.currentTime);
             }
 
             // Resolve promise to return.
