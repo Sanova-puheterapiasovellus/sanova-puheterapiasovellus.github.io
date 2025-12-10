@@ -127,11 +127,15 @@ export class ManagementClient {
         }
     }
 
+    static #toBase64(data: Uint8Array): string {
+        return data.toBase64?.() ?? btoa(String.fromCharCode(...data));
+    }
+
     /** Add or update a file in the repository in a single commit. */
     async addOrUpdateFile(
         reason: string,
         path: string,
-        content: string,
+        content: string | Uint8Array,
         branch: string = defaultBranch,
     ): Promise<void> {
         const sha = await this.#getFileHash(path, branch);
@@ -148,7 +152,10 @@ export class ManagementClient {
                     sha,
                     branch,
                     message: `sanova-management: ${reason}`,
-                    content: btoa(content),
+                    content:
+                        content instanceof Uint8Array
+                            ? ManagementClient.#toBase64(content)
+                            : btoa(content),
                 }),
             }),
         );

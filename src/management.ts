@@ -152,7 +152,7 @@ async function handleFormSubmit(event: SubmitEvent): Promise<void> {
             repository.addOrUpdateFile(
                 "sound offset refinement",
                 "src/data/offset-data.json",
-                JSON.stringify(soundOffsets, undefined, 4),
+                new TextEncoder().encode(JSON.stringify(soundOffsets, undefined, 4)),
                 branchName,
             ),
         );
@@ -211,7 +211,9 @@ async function handleFormSubmit(event: SubmitEvent): Promise<void> {
             repository.addOrUpdateFile(
                 "word data refinement",
                 "src/data/word-data.json",
-                JSON.stringify({ categories } satisfies Data, undefined, 4),
+                new TextEncoder().encode(
+                    JSON.stringify({ categories } satisfies Data, undefined, 4),
+                ),
                 branchName,
             ),
         );
