@@ -1,8 +1,6 @@
 {
     "categories": [
         {
-            "name": "ruoat ja juomat",
-            "image": { "word": 0 },
             "words": [
                 {
                     "name": "banaani",
@@ -132,11 +130,13 @@
                         "credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)"
                     }
                 }
-            ]
+            ],
+            "name": "ruoat ja juomat",
+            "image": {
+                "word": 0
+            }
         },
         {
-            "name": "vaatteet",
-            "image": { "word": 1 },
             "words": [
                 {
                     "name": "housut",
@@ -251,11 +251,13 @@
                         "credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)"
                     }
                 }
-            ]
+            ],
+            "name": "vaatteet",
+            "image": {
+                "word": 1
+            }
         },
         {
-            "name": "säätilat",
-            "image": { "word": 1 },
             "words": [
                 {
                     "name": "vesisade",
@@ -331,11 +333,13 @@
                     },
                     "fallBackPlayer": true
                 }
-            ]
+            ],
+            "name": "säätilat",
+            "image": {
+                "word": 1
+            }
         },
         {
-            "name": "eläimet",
-            "image": { "word": 0 },
             "words": [
                 {
                     "name": "koira",
@@ -441,11 +445,13 @@
                         "credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)"
                     }
                 }
-            ]
+            ],
+            "name": "eläimet",
+            "image": {
+                "word": 0
+            }
         },
         {
-            "name": "ammatit",
-            "image": { "word": 1 },
             "words": [
                 {
                     "name": "poliisi",
@@ -536,11 +542,13 @@
                         "credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain). Pictures edited"
                     }
                 }
-            ]
+            ],
+            "name": "ammatit",
+            "image": {
+                "word": 1
+            }
         },
         {
-            "name": "kulkuneuvot",
-            "image": { "word": 1 },
             "words": [
                 {
                     "name": "auto",
@@ -643,13 +651,18 @@
                 {
                     "name": "vene",
                     "hint": "Kulkuneuvo, joka kulkee vedessä, usein moottorilla tai airoilla",
-                    "image": { "file": "vene.png", "credit": "Annakaisa Ojanen CC-BY-NC-SA 3.0" }
+                    "image": {
+                        "file": "vene.png",
+                        "credit": "Annakaisa Ojanen CC-BY-NC-SA 3.0"
+                    }
                 }
-            ]
+            ],
+            "name": "kulkuneuvot",
+            "image": {
+                "word": 1
+            }
         },
         {
-            "name": "tekeminen",
-            "image": { "word": 2 },
             "words": [
                 {
                     "name": "nukkua",
@@ -742,7 +755,10 @@
                 {
                     "name": "nauraa",
                     "hint": "Ilmaista iloa äänellä ja ilmeillä",
-                    "image": { "file": "nauraa.png", "credit": "Nana Sipola CC-BY-NC-SA 3.0" }
+                    "image": {
+                        "file": "nauraa.png",
+                        "credit": "Nana Sipola CC-BY-NC-SA 3.0"
+                    }
                 },
                 {
                     "name": "puhua",
@@ -776,11 +792,13 @@
                         "credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)"
                     }
                 }
-            ]
+            ],
+            "name": "tekeminen",
+            "image": {
+                "word": 2
+            }
         },
         {
-            "name": "harrastukset",
-            "image": { "word": 0 },
             "words": [
                 {
                     "name": "jalkapallo",
@@ -902,11 +920,13 @@
                         "credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)"
                     }
                 }
-            ]
+            ],
+            "name": "harrastukset",
+            "image": {
+                "word": 0
+            }
         },
         {
-            "name": "arkipäiväiset esineet",
-            "image": { "word": 1 },
             "words": [
                 {
                     "name": "kaukosäädin",
@@ -1037,7 +1057,56 @@
                         "credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)"
                     }
                 }
-            ]
+            ],
+            "name": "arkipäiväiset esineet",
+            "image": {
+                "word": 1
+            }
+        },
+        {
+            "words": [
+                {
+                    "name": "joulu",
+                    "hint": "",
+                    "fallBackPlayer": false,
+                    "image": {
+                        "file": "",
+                        "credit": ""
+                    }
+                },
+                {
+                    "name": "juhannus",
+                    "hint": "",
+                    "fallBackPlayer": false,
+                    "image": {
+                        "file": "",
+                        "credit": ""
+                    }
+                },
+                {
+                    "name": "vappu",
+                    "hint": "",
+                    "fallBackPlayer": false,
+                    "image": {
+                        "file": "",
+                        "credit": ""
+                    }
+                },
+                {
+                    "name": "pääsiäinen",
+                    "hint": "",
+                    "fallBackPlayer": false,
+                    "image": {
+                        "file": "",
+                        "credit": ""
+                    }
+                }
+            ],
+            "name": "juhlat",
+            "image": {
+                "file": "",
+                "credit": ""
+            }
         }
     ]
 }
