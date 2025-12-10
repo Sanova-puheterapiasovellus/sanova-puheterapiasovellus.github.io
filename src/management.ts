@@ -229,6 +229,11 @@ async function handleFormSubmit(event: SubmitEvent): Promise<void> {
         }
     }
 
+    // Don't actually create branch if there are no other changes.
+    if (branchName !== undefined && actions.length === 1) {
+        return;
+    }
+
     for (const callback of actions) {
         await callback();
         await ManagementClient.waitBetweenRequests();

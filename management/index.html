@@ -121,13 +121,40 @@
 
                     <label>
                         Haaran nimi
-                        <input id="branch-name" type="text">
+                        <input
+                            id="branch-name"
+                            type="text"
+                            pattern="^[a-z][a-z0-9]+([\-_][a-z0-9]+)*$"
+                            required
+                        >
+                        <small>
+                            Vain tavalliset kirjaimet sekä numerot ja väliviivat sallitaan
+                        </small>
                     </label>
 
                     <button type="submit">Tee muutokset</button>
 
                     <aside>
                         <a id="pull-request" hidden>Luodut muutokset GitHubissa</a>
+
+                        <details>
+                            <summary>Ohjeet</summary>
+
+                            <p>
+                                Kun muutokset on tehty saat näkyville linkin josta pääset
+                                tarkistamaan ne, tämän yhteydessä testien pitäisi automaattisesti
+                                lähteä suoritukseen ja näet jos muutokset jostain syystä estäisivät
+                                sovelluksen toiminnan.
+                            </p>
+
+                            <p>
+                                Tämän jälkeen, tai tarvittasessa myös ennen, voit painaa
+                                <em>Merge pull request</em>
+                                painiketta, jolloin muutokset liitetään päähaaraan, josta
+                                sovelluksen nettisivun pitäisi automaattisesti päivittyä hetken
+                                kuluttua. (tavallisesti korkeintaan muutamia minuutteja)
+                            </p>
+                        </details>
                     </aside>
                 </fieldset>
             </form>
