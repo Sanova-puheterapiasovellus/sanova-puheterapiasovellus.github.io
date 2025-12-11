@@ -20,6 +20,19 @@ declare global {
     }
 }
 
+/** Base class for errors around calling GitHub's API. */
+export class ApiError extends Error {
+    /** Extract error details from an unsuccessful response. */
+    static async of(response: Response): Promise<ApiError> {
+        const { message } = await response.json();
+        return new ApiError(message);
+    }
+
+    protected constructor(cause: string) {
+        super("unsuccessful GitHub REST API call", { cause });
+    }
+}
+
 /** Class for managing a GitHub repository through the REST API. */
 export class ManagementClient {
     #token: string;
@@ -99,7 +112,7 @@ export class ManagementClient {
         );
 
         if (!findResponse.ok) {
-            throw new Error("unsuccessful api response", { cause: await findResponse.text() });
+            throw ApiError.of(findResponse);
         }
 
         const {
@@ -123,7 +136,7 @@ export class ManagementClient {
         );
 
         if (!createResponse.ok) {
-            throw new Error("unsuccessful api response", { cause: await createResponse.text() });
+            throw ApiError.of(createResponse);
         }
     }
 
@@ -161,7 +174,7 @@ export class ManagementClient {
         );
 
         if (!response.ok) {
-            throw new Error("unsuccessful api response", { cause: await response.text() });
+            throw ApiError.of(response);
         }
     }
 
@@ -183,7 +196,7 @@ export class ManagementClient {
         }
 
         if (!response.ok) {
-            throw new Error("unsuccessful api response", { cause: await response.text() });
+            throw ApiError.of(response);
         }
 
         const { sha } = await response.json();
@@ -219,7 +232,7 @@ export class ManagementClient {
         );
 
         if (!response.ok) {
-            throw new Error("unsuccessful api response", { cause: await response.text() });
+            throw ApiError.of(response);
         }
     }
 
@@ -243,7 +256,7 @@ export class ManagementClient {
         );
 
         if (!response.ok) {
-            throw new Error("unsuccessful api response", { cause: await response.text() });
+            throw ApiError.of(response);
         }
 
         const { html_url } = await response.json();
@@ -281,7 +294,7 @@ export class AuthorizationClient {
                 return false;
 
             default:
-                throw new Error("unsuccessful api response", { cause: await response.text() });
+                throw ApiError.of(response);
         }
     }
 
@@ -377,7 +390,7 @@ export class AuthorizationClient {
         });
 
         if (!response.ok) {
-            throw new Error("unsuccessful api response", { cause: await response.text() });
+            throw ApiError.of(response);
         }
 
         return AuthorizationClient.#handleTokenResponse(response);
@@ -409,7 +422,7 @@ export class AuthorizationClient {
         });
 
         if (!response.ok) {
-            throw new Error("unsuccessful api response", { cause: await response.text() });
+            throw ApiError.of(response);
         }
 
         return AuthorizationClient.#handleTokenResponse(response);
