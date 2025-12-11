@@ -1,6 +1,6 @@
 import "./management.css";
 import { buildHtml, debounceEvent, expectElement } from "./common/dom";
-import { AuthorizationClient, ManagementClient } from "./common/github";
+import { AuthError, AuthorizationClient, ManagementClient, RemoteError } from "./common/github";
 import {
     getFinnishVoice,
     loadSoundClip,
@@ -70,6 +70,7 @@ const categoryImageCredit = expectElement(
     HTMLTextAreaElement,
     categoryForm,
 );
+const fatalError = expectElement("#fatal-error", HTMLDialogElement, document.body);
 
 let soundsChanged = false;
 const soundOffsets = structuredClone(offsetsData);
@@ -231,9 +232,17 @@ async function handleFormSubmit(event: SubmitEvent): Promise<void> {
         }
     }
 
-    // Don't actually create branch if there are no other changes.
-    if (branchName !== undefined && actions.length === 1) {
-        return;
+    if (branchName !== undefined) {
+        // Don't actually create branch if there are no other changes.
+        if (actions.length === 1) {
+            return;
+        }
+
+        actions.push(async () => {
+            const url = await repository.createPullRequest("requested changes", branchName);
+            pullRequest.href = url;
+            pullRequest.hidden = false;
+        });
     }
 
     // Actually run queued up operations and show progress.
@@ -242,15 +251,35 @@ async function handleFormSubmit(event: SubmitEvent): Promise<void> {
     operationProgress.hidden = false;
     operationProgress.value = 0;
     for (const [index, callback] of actions.entries()) {
-        await callback();
+        try {
+            await callback();
+        } catch (error) {
+            let message: string;
+            if (error instanceof AuthError) {
+                message = "Jokin on pielessä kirjautumisessa";
+            } else if (error instanceof RemoteError) {
+                message = "Jokin on pielessä GitHub palvelun puolella";
+            } else {
+                message = "Jokin on pielessä tavalla jota ei ole ennakoitu";
+            }
+
+            fatalError.showModal();
+            fatalError.appendChild(
+                buildHtml(
+                    "details",
+                    {},
+                    buildHtml("summary", { innerText: message }),
+                    buildHtml("pre", {
+                        innerText: error instanceof Error ? (error.stack ?? "") : "",
+                    }),
+                ),
+            );
+
+            return;
+        }
+
         await ManagementClient.waitBetweenRequests();
         operationProgress.value = index + 1;
-    }
-
-    if (branchName !== undefined) {
-        const url = await repository.createPullRequest("requested changes", branchName);
-        pullRequest.href = url;
-        pullRequest.hidden = false;
     }
 
     // Reset progress and button state.

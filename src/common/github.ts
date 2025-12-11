@@ -21,17 +21,39 @@ declare global {
 }
 
 /** Base class for errors around calling GitHub's API. */
-export class ApiError extends Error {
+export abstract class ApiError extends Error {
     /** Extract error details from an unsuccessful response. */
     static async of(response: Response): Promise<ApiError> {
         const { message } = await response.json();
-        return new ApiError(message);
+        switch (response.status) {
+            case 401:
+            case 403:
+                return new AuthError(message);
+
+            case 500:
+            case 502:
+            case 503:
+            case 504:
+                return new RemoteError(message);
+
+            default:
+                return new UnexpectedError(message);
+        }
     }
 
     protected constructor(cause: string) {
         super("unsuccessful GitHub REST API call", { cause });
     }
 }
+
+/** The token coudln't be used to do something. */
+export class AuthError extends ApiError {}
+
+/** Something is wrong with GitHub itself. */
+export class RemoteError extends ApiError {}
+
+/** Something completely unexpected went wrong. */
+export class UnexpectedError extends ApiError {}
 
 /** Class for managing a GitHub repository through the REST API. */
 export class ManagementClient {
@@ -78,9 +100,9 @@ export class ManagementClient {
         do {
             response = await fetch(request);
 
-            // We only care about GitHub's rate limit responses, and yes, it's
-            // not an entirely semantically correct status code.
-            if (response.status !== 403) {
+            // We only care about GitHub's rate limit responses, and yes, the
+            // primary one isn't entirely semantically correct.
+            if (response.status !== 403 && response.status !== 429) {
                 break;
             }
 
