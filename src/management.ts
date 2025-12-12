@@ -1,6 +1,6 @@
 import "./management.css";
 import { buildHtml, debounceEvent, expectElement } from "./common/dom";
-import { AuthorizationClient, ManagementClient } from "./common/github";
+import { AuthError, AuthorizationClient, ManagementClient, RemoteError } from "./common/github";
 import {
     getFinnishVoice,
     loadSoundClip,
@@ -26,7 +26,10 @@ const cookieManualToken = "manual_token";
 
 const authLink = expectElement("#auth-link", HTMLAnchorElement, document.body);
 const managementForm = expectElement("form", HTMLFormElement, document.body);
+const submitButton = expectElement("button[type=submit]", HTMLButtonElement, managementForm);
+const operationProgress = expectElement("progress", HTMLProgressElement, managementForm);
 const authToken = expectElement("#auth-token", HTMLInputElement, managementForm);
+const authValidity = expectElement("#auth-validity", HTMLSpanElement, managementForm);
 const soundSelection = expectElement("#sound-selection", HTMLSelectElement, managementForm);
 const soundStart = expectElement("#sound-start", HTMLInputElement, managementForm);
 const soundEnd = expectElement("#sound-end", HTMLInputElement, managementForm);
@@ -67,6 +70,7 @@ const categoryImageCredit = expectElement(
     HTMLTextAreaElement,
     categoryForm,
 );
+const fatalError = expectElement("#fatal-error", HTMLDialogElement, document.body);
 
 let soundsChanged = false;
 const soundOffsets = structuredClone(offsetsData);
@@ -151,7 +155,7 @@ async function handleFormSubmit(event: SubmitEvent): Promise<void> {
             repository.addOrUpdateFile(
                 "sound offset refinement",
                 "src/data/offset-data.json",
-                new TextEncoder().encode(JSON.stringify(soundOffsets, undefined, 4)),
+                `${new TextEncoder().encode(JSON.stringify(soundOffsets, undefined, 4))}\n`,
                 branchName,
             ),
         );
@@ -211,7 +215,7 @@ async function handleFormSubmit(event: SubmitEvent): Promise<void> {
                 "word data refinement",
                 "src/data/word-data.json",
                 new TextEncoder().encode(
-                    JSON.stringify({ categories } satisfies Data, undefined, 4),
+                    `${JSON.stringify({ categories } satisfies Data, undefined, 4)}\n`,
                 ),
                 branchName,
             ),
@@ -228,16 +232,59 @@ async function handleFormSubmit(event: SubmitEvent): Promise<void> {
         }
     }
 
-    for (const callback of actions) {
-        await callback();
-        await ManagementClient.waitBetweenRequests();
+    if (branchName !== undefined) {
+        // Don't actually create branch if there are no other changes.
+        if (actions.length === 1) {
+            return;
+        }
+
+        actions.push(async () => {
+            const url = await repository.createPullRequest("requested changes", branchName);
+            pullRequest.href = url;
+            pullRequest.hidden = false;
+        });
     }
 
-    if (branchName !== undefined) {
-        const url = await repository.createPullRequest("requested changes", branchName);
-        pullRequest.href = url;
-        pullRequest.hidden = false;
+    // Actually run queued up operations and show progress.
+    submitButton.disabled = true;
+    operationProgress.max = actions.length;
+    operationProgress.hidden = false;
+    operationProgress.value = 0;
+    for (const [index, callback] of actions.entries()) {
+        try {
+            await callback();
+        } catch (error) {
+            let message: string;
+            if (error instanceof AuthError) {
+                message = "Jokin on pielessä kirjautumisessa";
+            } else if (error instanceof RemoteError) {
+                message = "Jokin on pielessä GitHub palvelun puolella";
+            } else {
+                message = "Jokin on pielessä tavalla jota ei ole ennakoitu";
+            }
+
+            fatalError.showModal();
+            fatalError.appendChild(
+                buildHtml(
+                    "details",
+                    {},
+                    buildHtml("summary", { innerText: message }),
+                    buildHtml("pre", {
+                        innerText: error instanceof Error ? (error.stack ?? "") : "",
+                    }),
+                ),
+            );
+
+            return;
+        }
+
+        await ManagementClient.waitBetweenRequests();
+        operationProgress.value = index + 1;
     }
+
+    // Reset progress and button state.
+    operationProgress.hidden = true;
+    submitButton.disabled = false;
 }
 
 /** Handle authorization flow or prepare for allowing it. */
@@ -622,6 +669,17 @@ function categoryEdited(_: Event): void {
         : { word: selection };
 }
 
+/** Notify the user about if the access token is currently valid. */
+async function updateTokenValidity(): Promise<void> {
+    if (authToken.value === "") {
+        authValidity.innerText = "";
+    } else {
+        authValidity.innerText = (await AuthorizationClient.checkToken(authToken.value))
+            ? "Tunnus on toimiva ja vielä voimassa"
+            : "Tunnus on virheellinen tai erääntynyt";
+    }
+}
+
 /** Build up dynamic state and connect events for using the management page. */
 async function initializeState(): Promise<void> {
     soundSelection.addEventListener("change", handleSoundSelectionChange);
@@ -688,8 +746,12 @@ async function initializeState(): Promise<void> {
     // Persist access token if manually changed.
     authToken.addEventListener(
         "input",
-        debounceEvent(async (_) => cookieStore.set(cookieManualToken, authToken.value)),
+        debounceEvent((_) => cookieStore.set(cookieManualToken, authToken.value)),
     );
+
+    // Check validity after user moves focus.
+    authToken.addEventListener("change", updateTokenValidity);
+    await updateTokenValidity();
 }
 
 initializeState();

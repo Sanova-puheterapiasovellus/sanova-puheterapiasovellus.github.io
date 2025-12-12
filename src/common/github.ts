@@ -20,6 +20,41 @@ declare global {
     }
 }
 
+/** Base class for errors around calling GitHub's API. */
+export abstract class ApiError extends Error {
+    /** Extract error details from an unsuccessful response. */
+    static async of(response: Response): Promise<ApiError> {
+        const { message } = await response.json();
+        switch (response.status) {
+            case 401:
+            case 403:
+                return new AuthError(message);
+
+            case 500:
+            case 502:
+            case 503:
+            case 504:
+                return new RemoteError(message);
+
+            default:
+                return new UnexpectedError(message);
+        }
+    }
+
+    protected constructor(cause: string) {
+        super("unsuccessful GitHub REST API call", { cause });
+    }
+}
+
+/** The token coudln't be used to do something. */
+export class AuthError extends ApiError {}
+
+/** Something is wrong with GitHub itself. */
+export class RemoteError extends ApiError {}
+
+/** Something completely unexpected went wrong. */
+export class UnexpectedError extends ApiError {}
+
 /** Class for managing a GitHub repository through the REST API. */
 export class ManagementClient {
     #token: string;
@@ -65,9 +100,9 @@ export class ManagementClient {
         do {
             response = await fetch(request);
 
-            // We only care about GitHub's rate limit responses, and yes, it's
-            // not an entirely semantically correct status code.
-            if (response.status !== 403) {
+            // We only care about GitHub's rate limit responses, and yes, the
+            // primary one isn't entirely semantically correct.
+            if (response.status !== 403 && response.status !== 429) {
                 break;
             }
 
@@ -99,7 +134,7 @@ export class ManagementClient {
         );
 
         if (!findResponse.ok) {
-            throw new Error("unsuccessful api response", { cause: await findResponse.text() });
+            throw ApiError.of(findResponse);
         }
 
         const {
@@ -123,7 +158,7 @@ export class ManagementClient {
         );
 
         if (!createResponse.ok) {
-            throw new Error("unsuccessful api response", { cause: await createResponse.text() });
+            throw ApiError.of(createResponse);
         }
     }
 
@@ -161,7 +196,7 @@ export class ManagementClient {
         );
 
         if (!response.ok) {
-            throw new Error("unsuccessful api response", { cause: await response.text() });
+            throw ApiError.of(response);
         }
     }
 
@@ -183,7 +218,7 @@ export class ManagementClient {
         }
 
         if (!response.ok) {
-            throw new Error("unsuccessful api response", { cause: await response.text() });
+            throw ApiError.of(response);
         }
 
         const { sha } = await response.json();
@@ -219,7 +254,7 @@ export class ManagementClient {
         );
 
         if (!response.ok) {
-            throw new Error("unsuccessful api response", { cause: await response.text() });
+            throw ApiError.of(response);
         }
     }
 
@@ -243,7 +278,7 @@ export class ManagementClient {
         );
 
         if (!response.ok) {
-            throw new Error("unsuccessful api response", { cause: await response.text() });
+            throw ApiError.of(response);
         }
 
         const { html_url } = await response.json();
@@ -259,6 +294,30 @@ export class AuthorizationClient {
     constructor(id: string = defaultClientId, redirect: string = defaultRedirectUri) {
         this.#id = id;
         this.#redirect = redirect;
+    }
+
+    /** Check if a token is still valid. */
+    static async checkToken(token: string): Promise<boolean> {
+        const response = await fetch("https://api.github.com/user", {
+            method: "get",
+            headers: {
+                accept: ghJsonContentType,
+                authorization: `Bearer ${token}`,
+                [ghApiVersionKey]: ghApiVersion,
+            },
+        });
+
+        switch (response.status) {
+            case 200:
+                return true;
+
+            case 401:
+            case 403:
+                return false;
+
+            default:
+                throw ApiError.of(response);
+        }
     }
 
     /** Handle older browsers lacking nice encoding methods. */
@@ -353,7 +412,7 @@ export class AuthorizationClient {
         });
 
         if (!response.ok) {
-            throw new Error("unsuccessful api response", { cause: await response.text() });
+            throw ApiError.of(response);
         }
 
         return AuthorizationClient.#handleTokenResponse(response);
@@ -385,7 +444,7 @@ export class AuthorizationClient {
         });
 
         if (!response.ok) {
-            throw new Error("unsuccessful api response", { cause: await response.text() });
+            throw ApiError.of(response);
         }
 
         return AuthorizationClient.#handleTokenResponse(response);

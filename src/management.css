@@ -101,3 +101,9 @@ textarea {
 .removed span {
     text-decoration: line-through;
 }
+
+/* Expand progress to fill space. */
+progress {
+    width: 100%;
+    padding: 0;
+}
