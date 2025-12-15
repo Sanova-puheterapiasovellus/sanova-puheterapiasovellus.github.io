@@ -3,6 +3,10 @@
 Training application for Finnish individuals with Aphasia as a part of Tampere University's
 COMP.SE.610/620 project course.
 
+The application is available at [GitHub Pages][public].
+
+Owners of the repository can modify words and categories from the [management page][public-management].
+
 ## Project Structure
 
 The application is implemented as a minimal single page application using TypeScript and with Vite
@@ -19,7 +23,7 @@ After starting up the environment the application should be accessible on <http:
 
 ## Site Deployment
 
-GitHub actions is configured to publish the main branch to [here using GitHub Pages][public].
+GitHub actions is configured to publish the main branch to GitHub Pages.
 
 ## License Terms
 
@@ -28,3 +32,4 @@ audio) originate from Papunet's picture and sound banks, being under the CC BY-N
 
 [tutorial]: https://code.visualstudio.com/docs/devcontainers/tutorial/
 [public]: https://sanova-puheterapiasovellus.github.io/
+[public-management]: https://sanova-puheterapiasovellus.github.io/management/
