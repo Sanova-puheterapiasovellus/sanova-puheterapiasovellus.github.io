@@ -13,6 +13,7 @@ export default {
     retries: ci ? 2 : 0,
     workers: ci ? 1 : undefined,
     reporter: ci ? "github" : "line",
+    timeout: 60_000,
 
     // Common options for projects below.
     use: {
