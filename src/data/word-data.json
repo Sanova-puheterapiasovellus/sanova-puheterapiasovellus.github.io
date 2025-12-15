@@ -833,14 +833,6 @@
                     }
                 },
                 {
-                    "name": "koripallo",
-                    "hint": "Joukkuelaji, jossa heitetään palloa koriin",
-                    "image": {
-                        "file": "koripallo.png",
-                        "credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)"
-                    }
-                },
-                {
                     "name": "pesäpallo",
                     "hint": "Suomen kansallispeli, jossa lyödään palloa ja juostaan pesien välillä",
                     "image": {
@@ -853,14 +845,6 @@
                     "hint": "Sisällä pelattava mailapeli, jossa tehdään maaleja pallolla",
                     "image": {
                         "file": "salibandy.png",
-                        "credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)"
-                    }
-                },
-                {
-                    "name": "jääkiekko",
-                    "hint": "Joukkuepeli, jossa pelataan kiekolla jäällä ja tehdään maaleja",
-                    "image": {
-                        "file": "jaakiekko.png",
                         "credit": "Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC (BY-NC-SA). Owner: Government of Aragon (Spain)"
                     }
                 },
@@ -1061,6 +1045,24 @@
             "name": "arkipäiväiset esineet",
             "image": {
                 "word": 1
+            }
+        },
+        {
+            "words": [
+                {
+                    "name": "sana",
+                    "hint": "hähää",
+                    "fallBackPlayer": false,
+                    "image": {
+                        "file": "",
+                        "credit": ""
+                    }
+                }
+            ],
+            "name": "testikategoria",
+            "image": {
+                "file": "",
+                "credit": ""
             }
         }
     ]
